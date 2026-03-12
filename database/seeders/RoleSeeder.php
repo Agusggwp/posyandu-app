@@ -18,38 +18,41 @@ class RoleSeeder extends Seeder
                 'name' => 'admin',
                 'description' => 'Administrator sistem - Full Access',
                 'permissions' => [
-                    'manage_users',
-                    'manage_roles',
-                    'manage_keluarga',
-                    'manage_balita',
-                    'manage_ibu_hamil',
-                    'manage_lansia',
-                    'manage_pemeriksaan',
-                    'view_reports',
-                    'export_data',
-                    'manage_settings',
+                    'manage_users',        // Mengelola akun pengguna
+                    'manage_roles',        // Mengelola role
+                    'manage_keluarga',     // Menginput data ibu/keluarga
+                    'manage_balita',       // Menginput data balita
+                    'manage_ibu_hamil',    // Menginput data ibu hamil
+                    'manage_lansia',       // Menginput data lansia
+                    'manage_pemeriksaan',  // Menginput data pemeriksaan kesehatan
+                    'edit_pemeriksaan',    // Mengedit data pemeriksaan
+                    'view_data',           // Melihat data kesehatan
+                    'view_reports',        // Melihat laporan posyandu
+                    'delete_data',         // Menghapus data
+                    'export_data',         // Export data
+                    'manage_settings',     // Kelola pengaturan sistem
                 ]
             ],
             [
                 'name' => 'kader',
-                'description' => 'Kader Posyandu',
+                'description' => 'Kader Posyandu - Input data warga',
                 'permissions' => [
-                    'manage_keluarga',
-                    'manage_balita',
-                    'manage_ibu_hamil',
-                    'manage_lansia',
-                    'view_reports',
+                    'manage_keluarga',     // Menginput data ibu/keluarga
+                    'manage_balita',       // Menginput data balita
+                    'manage_ibu_hamil',    // Menginput data ibu hamil
+                    'manage_lansia',       // Menginput data lansia
+                    'view_data',           // Melihat data kesehatan
+                    'view_reports',        // Melihat laporan posyandu
                 ]
             ],
             [
                 'name' => 'bidan',
-                'description' => 'Bidan',
+                'description' => 'Bidan - Pemeriksaan kesehatan',
                 'permissions' => [
-                    'manage_balita',
-                    'manage_ibu_hamil',
-                    'manage_lansia',
-                    'manage_pemeriksaan',
-                    'view_reports',
+                    'manage_pemeriksaan',  // Menginput data pemeriksaan kesehatan
+                    'edit_pemeriksaan',    // Mengedit data pemeriksaan
+                    'view_data',           // Melihat data kesehatan
+                    'view_reports',        // Melihat laporan posyandu
                 ]
             ],
         ];

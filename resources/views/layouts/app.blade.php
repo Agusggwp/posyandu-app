@@ -136,10 +136,9 @@
                     <div class="flex items-center space-x-3">
                         @guest
                             @if (Route::has('login'))
-                                <a href="{{ route('login') }}" class="text-slate-700 hover:text-indigo-600 font-medium text-sm">Login</a>
-                            @endif
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-xl hover:shadow-lg transition-all duration-200 font-medium text-sm">Register</a>
+                                <a href="{{ route('login') }}" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 font-semibold text-sm">
+                                    🔐 Login
+                                </a>
                             @endif
                         @else
                             <div class="relative dropdown-container">

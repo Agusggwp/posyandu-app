@@ -1,7 +1,7 @@
 # Sistem Permission & Role
 
 ## Overview
-Aplikasi Posyandu telah dilengkapi dengan sistem permission untuk mengontrol akses user berdasarkan role mereka.
+Aplikasi Posyandu telah dilengkapi dengan sistem permission untuk mengontrol akses user berdasarkan role mereka sesuai dengan tabel hak akses.
 
 ## Role & Permissions
 
@@ -9,52 +9,100 @@ Aplikasi Posyandu telah dilengkapi dengan sistem permission untuk mengontrol aks
 Admin memiliki akses penuh ke semua fitur aplikasi.
 
 **Permissions:**
-- `manage_users` - Kelola data user
-- `manage_roles` - Kelola role dan permissions
-- `manage_keluarga` - Kelola data keluarga
-- `manage_balita` - Kelola data balita
-- `manage_ibu_hamil` - Kelola data ibu hamil
-- `manage_lansia` - Kelola data lansia
-- `manage_pemeriksaan` - Kelola data pemeriksaan
-- `view_reports` - Lihat laporan
-- `export_data` - Export data
+- `manage_users` - ✅ Mengelola akun pengguna
+- `manage_roles` - Mengelola role dan permissions  
+- `manage_keluarga` - ✅ Menginput data ibu/keluarga
+- `manage_balita` - ✅ Menginput data balita
+- `manage_ibu_hamil` - ✅ Menginput data ibu hamil
+- `manage_lansia` - ✅ Menginput data lansia
+- `manage_pemeriksaan` - ✅ Menginput data pemeriksaan kesehatan
+- `edit_pemeriksaan` - ✅ Mengedit data pemeriksaan
+- `view_data` - ✅ Melihat data kesehatan
+- `view_reports` - ✅ Melihat laporan posyandu
+- `delete_data` - ✅ Menghapus data
+- `export_data` - Export data (Excel/PDF)
 - `manage_settings` - Kelola pengaturan sistem
 
 **Login Credentials:**
 - Email: admin@posyandu.com
 - Password: password
 
+**Dapat Melakukan:**
+- ✅ Mengelola akun pengguna
+- ✅ Menginput data balita, ibu, ibu hamil, lansia
+- ✅ Menginput data pemeriksaan kesehatan
+- ✅ Mengedit data pemeriksaan
+- ✅ Melihat data kesehatan
+- ✅ Melihat laporan posyandu
+- ✅ Menghapus data (semua jenis)
+
 ---
 
 ### 2. **Kader**
-Kader dapat mengelola data warga dan melihat laporan.
+Kader dapat mengelola data warga (input data balita, ibu, ibu hamil, lansia) dan melihat laporan.
 
 **Permissions:**
-- `manage_keluarga` - Kelola data keluarga
-- `manage_balita` - Kelola data balita
-- `manage_ibu_hamil` - Kelola data ibu hamil
-- `manage_lansia` - Kelola data lansia
-- `view_reports` - Lihat laporan
+- `manage_keluarga` - ✅ Menginput data ibu/keluarga
+- `manage_balita` - ✅ Menginput data balita
+- `manage_ibu_hamil` - ✅ Menginput data ibu hamil
+- `manage_lansia` - ✅ Menginput data lansia
+- `view_data` - ✅ Melihat data kesehatan
+- `view_reports` - ✅ Melihat laporan posyandu
 
 **Login Credentials:**
 - Email: kader@posyandu.com
 - Password: password
 
+**Dapat Melakukan:**
+- ✅ Menginput data balita
+- ✅ Menginput data ibu
+- ✅ Menginput data ibu hamil
+- ✅ Menginput data lansia
+- ✅ Melihat data kesehatan
+- ✅ Melihat laporan posyandu
+- ❌ Menginput data pemeriksaan
+- ❌ Mengedit data pemeriksaan
+- ❌ Menghapus data
+
 ---
 
 ### 3. **Bidan**
-Bidan fokus pada pemeriksaan kesehatan.
+Bidan fokus pada pemeriksaan kesehatan (menginput dan mengedit pemeriksaan).
 
 **Permissions:**
-- `manage_balita` - Kelola data balita
-- `manage_ibu_hamil` - Kelola data ibu hamil
-- `manage_lansia` - Kelola data lansia
-- `manage_pemeriksaan` - Kelola data pemeriksaan
-- `view_reports` - Lihat laporan
+- `manage_pemeriksaan` - ✅ Menginput data pemeriksaan kesehatan
+- `edit_pemeriksaan` - ✅ Mengedit data pemeriksaan
+- `view_data` - ✅ Melihat data kesehatan
+- `view_reports` - ✅ Melihat laporan posyandu
 
 **Login Credentials:**
 - Email: bidan@posyandu.com
 - Password: password
+
+**Dapat Melakukan:**
+- ✅ Menginput data pemeriksaan kesehatan (Balita, Ibu Hamil, Lansia)
+- ✅ Mengedit data pemeriksaan
+- ✅ Melihat data kesehatan
+- ✅ Melihat laporan posyandu
+- ❌ Menginput data balita, ibu, ibu hamil, lansia
+- ❌ Menghapus data
+
+---
+
+## Tabel Hak Akses (Permissions Matrix)
+
+| Kegiatan / Hak Akses | Admin | Kader | Bidan |
+|---------------------|-------|-------|-------|
+| Mengelola akun pengguna | ✅ | ❌ | ❌ |
+| Menginput data balita | ✅ | ✅ | ❌ |
+| Menginput data ibu | ✅ | ✅ | ❌ |
+| Menginput data ibu hamil | ✅ | ✅ | ❌ |
+| Menginput data lansia | ✅ | ✅ | ❌ |
+| Menginput data pemeriksaan kesehatan | ✅ | ❌ | ✅ |
+| Mengedit data pemeriksaan | ✅ | ❌ | ✅ |
+| Melihat data kesehatan | ✅ | ✅ | ✅ |
+| Melihat laporan posyandu | ✅ | ✅ | ✅ |
+| Menghapus data | ✅ | ❌ | ❌ |
 
 ---
 

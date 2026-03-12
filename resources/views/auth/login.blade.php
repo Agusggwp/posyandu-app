@@ -1,75 +1,176 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — POSYANDU</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-@section('content')
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-        <div class="text-center">
-            <div class="mx-auto h-20 w-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg mb-4">
-                <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
-                </svg>
+    <style>
+        .input-focus {
+            transition: all 0.35s ease;
+        }
+        .input-focus:focus {
+            transform: translateY(-4px);
+            border-color: #000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+        .btn-hover {
+            transition: all 0.4s ease;
+        }
+        .btn-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6">
+
+    <div class="w-full max-w-6xl grid lg:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
+
+        <!-- KIRI: Branding Minimalis Putih -->
+        <div class="hidden lg:flex flex-col justify-between p-16 xl:p-24 bg-white">
+            <div class="text-center">
+                <div class="w-48 h-48 mx-auto mb-12 rounded-3xl shadow-xl border border-gray-100 bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-500 flex items-center justify-center">
+                    <svg class="w-28 h-28 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+
+                <h1 class="text-6xl font-black text-gray-900 tracking-tight">
+                    POSYANDU
+                </h1>
+                <p class="mt-4 text-2xl font-light text-gray-600">
+                    Sistem Informasi Terpadu
+                </p>
+
+                <p class="mt-10 text-lg text-gray-500 max-w-sm mx-auto leading-relaxed">
+                    Sistem kasir modern yang dirancang khusus untuk bisnis Anda berkembang lebih cepat.
+                </p>
             </div>
-            <h2 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Sistem Posyandu
-            </h2>
-            <p class="mt-2 text-gray-600">Silakan login untuk melanjutkan</p>
+
+            <div class="text-center">
+                <p class="text-sm text-gray-400">Dikembangkan oleh</p>
+                <a href="https://artdevata.net" target="_blank" 
+                   class="inline-flex items-center gap-3 mt-2 text-lg font-bold text-gray-800 hover:text-black transition">
+                    <div class="w-9 h-9 rounded-full border border-gray-200 bg-gradient-to-br from-teal-600 to-emerald-600 flex items-center justify-center">
+                        <span class="text-white font-bold text-xs">A</span>
+                    </div>
+                    <span>ARTDEVATA</span>
+                </a>
+            </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                @csrf
-
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address <span class="text-red-500">*</span>
-                    </label>
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all @error('email') border-red-500 @enderror" 
-                           required autocomplete="email" autofocus>
-                    @error('email')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+        <!-- KANAN: Form Login -->
+        <div class="flex flex-col justify-center px-10 py-16 lg:px-20 xl:px-28 bg-white">
+            <div class="flex justify-center mb-12 lg:hidden">
+                <div class="w-28 h-28 rounded-3xl shadow-lg bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-500 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                    </svg>
                 </div>
+            </div>
 
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                        Password <span class="text-red-500">*</span>
-                    </label>
-                    <input id="password" type="password" name="password" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all @error('password') border-red-500 @enderror" 
-                           required autocomplete="current-password">
-                    @error('password')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+            <div class="max-w-md mx-auto w-full">
+                <h2 class="text-4xl font-bold text-gray-900 text-center lg:text-left">
+                    Selamat Datang
+                </h2>
+                <p class="mt-3 text-lg text-gray-600 text-center lg:text-left">
+                    Masukkan akun Anda
+                </p>
 
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input id="remember" name="remember" type="checkbox" 
-                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                               {{ old('remember') ? 'checked' : '' }}>
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">
-                            Ingat Saya
-                        </label>
+                <!-- Error Message -->
+                @if ($errors->any())
+                    <div class="mt-8 p-4 bg-red-50 border-2 border-red-300 rounded-2xl">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                            <div class="text-red-700 font-medium">
+                                {{ $errors->first('email') ?? 'Terjadi kesalahan. Silahkan coba lagi.' }}
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('login') }}" class="mt-12 space-y-8">
+                    @csrf
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Email</label>
+                        <input type="email"
+                               name="email"
+                               value="{{ old('email') }}"
+                               required
+                               autofocus
+                               class="input-focus w-full px-6 py-5 text-lg bg-white border-2 border-gray-200 rounded-2xl outline-none placeholder-gray-400"
+                               placeholder="nama@gmail.com">
                     </div>
 
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
-                            Lupa Password?
-                        </a>
-                    @endif
-                </div>
+                    <!-- Password + Show/Hide -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Password</label>
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               required
+                               class="input-focus w-full px-6 py-5 pr-16 text-lg bg-white border-2 border-gray-200 rounded-2xl outline-none placeholder-gray-400"
+                               placeholder="••••••••••••">
+                        
+                        <!-- Tombol Toggle Password -->
+                        <button type="button"
+                                onclick="togglePassword()"
+                                class="absolute inset-y-0 right-0 flex items-center pr-6 pt-10 text-gray-500 hover:text-gray-800 focus:outline-none">
+                            <!-- Icon Mata Terbuka (Show) -->
+                            <svg id="eye-open" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <!-- Icon Mata Tertutup (Hide) -->
+                            <svg id="eye-closed" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 012.09-2.825m2.813-1.35A9.98 9.98 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.03 10.03 0 01-4.825 5.875" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M3 3l18 18" />
+                            </svg>
+                        </button>
+                    </div>
 
-                <button type="submit" 
-                        class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5">
-                    Login
-                </button>
-            </form>
+                    <!-- Tombol Login -->
+                    <button type="submit"
+                            class="btn-hover w-full py-6 mt-10 bg-black hover:bg-gray-900 text-white font-bold text-lg rounded-2xl shadow-2xl">
+                        Masuk ke Dashboard
+                    </button>
+                </form>
+
+                <p class="mt-16 text-center text-sm text-gray-400">
+                    © 2025 Artdevata — All Rights Reserved
+                </p>
+            </div>
         </div>
-
-        <p class="text-center text-sm text-gray-600">
-            © 2026 Sistem Posyandu. All rights reserved.
-        </p>
     </div>
-</div>
-@endsection
+
+    <!-- Script untuk toggle password -->
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const eyeOpen = document.getElementById('eye-open');
+            const eyeClosed = document.getElementById('eye-closed');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeOpen.classList.remove('hidden');
+                eyeClosed.classList.add('hidden');
+            } else {
+                passwordField.type = 'password';
+                eyeOpen.classList.add('hidden');
+                eyeClosed.classList.remove('hidden');
+            }
+        }
+    </script>
+
+</body>
+</html>

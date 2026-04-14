@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Balita;
 use App\Models\Keluarga;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BalitaController extends Controller
 {
@@ -13,7 +14,7 @@ class BalitaController extends Controller
      */
     public function index()
     {
-        $balitas = Balita::with('keluarga')->paginate(10);
+        $balitas = Balita::with('keluarga')->latest()->paginate(10);
         return view('balita.index', compact('balitas'));
     }
 
@@ -22,7 +23,7 @@ class BalitaController extends Controller
      */
     public function create()
     {
-        $keluargas = Keluarga::all();
+        $keluargas = Keluarga::latest()->get();
         return view('balita.create', compact('keluargas'));
     }
 
@@ -32,16 +33,19 @@ class BalitaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'keluarga_id' => 'required|exists:keluargas,id',
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|unique:balitas,nik|max:16',
+            'kepala_keluarga_id' => 'required|exists:kepala_keluarga,id',
+            'nama_bayi' => 'required|string|max:255',
+            'nik' => 'nullable|string|max:16|unique:balita_identitas,nik',
             'jenis_kelamin' => 'required|in:L,P',
             'tanggal_lahir' => 'required|date',
-            'tempat_lahir' => 'required|string|max:255',
-            'berat_lahir' => 'nullable|numeric',
-            'tinggi_lahir' => 'nullable|numeric',
-            'nama_ayah' => 'required|string|max:255',
-            'nama_ibu' => 'required|string|max:255',
+            'berat_badan_lahir' => 'nullable|numeric|min:0',
+            'panjang_badan_lahir' => 'nullable|numeric|min:0',
+            'nama_ortu' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string',
+            'no_hp' => 'nullable|string|max:20',
+            'dusun' => 'nullable|string|max:100',
+            'desa' => 'nullable|string|max:100',
+            'kecamatan' => 'nullable|string|max:100',
         ]);
 
         Balita::create($validated);
@@ -62,7 +66,7 @@ class BalitaController extends Controller
      */
     public function edit(Balita $balita)
     {
-        $keluargas = Keluarga::all();
+        $keluargas = Keluarga::latest()->get();
         return view('balita.edit', compact('balita', 'keluargas'));
     }
 
@@ -72,16 +76,19 @@ class BalitaController extends Controller
     public function update(Request $request, Balita $balita)
     {
         $validated = $request->validate([
-            'keluarga_id' => 'required|exists:keluargas,id',
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:16|unique:balitas,nik,' . $balita->id,
+            'kepala_keluarga_id' => 'required|exists:kepala_keluarga,id',
+            'nama_bayi' => 'required|string|max:255',
+            'nik' => ['nullable', 'string', 'max:16', Rule::unique('balita_identitas', 'nik')->ignore($balita->id)],
             'jenis_kelamin' => 'required|in:L,P',
             'tanggal_lahir' => 'required|date',
-            'tempat_lahir' => 'required|string|max:255',
-            'berat_lahir' => 'nullable|numeric',
-            'tinggi_lahir' => 'nullable|numeric',
-            'nama_ayah' => 'required|string|max:255',
-            'nama_ibu' => 'required|string|max:255',
+            'berat_badan_lahir' => 'nullable|numeric|min:0',
+            'panjang_badan_lahir' => 'nullable|numeric|min:0',
+            'nama_ortu' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string',
+            'no_hp' => 'nullable|string|max:20',
+            'dusun' => 'nullable|string|max:100',
+            'desa' => 'nullable|string|max:100',
+            'kecamatan' => 'nullable|string|max:100',
         ]);
 
         $balita->update($validated);

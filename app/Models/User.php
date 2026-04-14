@@ -52,6 +52,36 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function getRoleNameAttribute(): ?string
+    {
+        if ($this->relationLoaded('role') && $this->getRelation('role')) {
+            return strtolower((string) $this->getRelation('role')->name);
+        }
+
+        if (!empty($this->role_id)) {
+            $role = $this->role()->select('name')->first();
+            if ($role) {
+                return strtolower((string) $role->name);
+            }
+        }
+
+        $rawRole = $this->attributes['role'] ?? null;
+        return $rawRole ? strtolower((string) $rawRole) : null;
+    }
+
+    protected function resolvedRole(): ?Role
+    {
+        if ($this->relationLoaded('role') && $this->getRelation('role')) {
+            return $this->getRelation('role');
+        }
+
+        if (!empty($this->role_id)) {
+            return $this->role()->first();
+        }
+
+        return null;
+    }
+
     public function pemeriksaanBalitas()
     {
         return $this->hasMany(PemeriksaanBalita::class);
@@ -72,7 +102,7 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
-        return $this->role && $this->role->name === 'admin';
+        return $this->role_name === 'admin';
     }
 
     /**
@@ -80,7 +110,7 @@ class User extends Authenticatable
      */
     public function isKader()
     {
-        return $this->role && $this->role->name === 'kader';
+        return $this->role_name === 'kader';
     }
 
     /**
@@ -88,7 +118,7 @@ class User extends Authenticatable
      */
     public function isBidan()
     {
-        return $this->role && $this->role->name === 'bidan';
+        return $this->role_name === 'bidan';
     }
 
     /**
@@ -96,7 +126,8 @@ class User extends Authenticatable
      */
     public function hasPermission($permission)
     {
-        return $this->role && $this->role->hasPermission($permission);
+        $role = $this->resolvedRole();
+        return $role ? $role->hasPermission($permission) : false;
     }
 
     /**
@@ -104,7 +135,7 @@ class User extends Authenticatable
      */
     public function hasAnyPermission($permissions)
     {
-        if (!$this->role) {
+        if (!$this->resolvedRole()) {
             return false;
         }
 
@@ -122,7 +153,7 @@ class User extends Authenticatable
      */
     public function hasAllPermissions($permissions)
     {
-        if (!$this->role) {
+        if (!$this->resolvedRole()) {
             return false;
         }
 

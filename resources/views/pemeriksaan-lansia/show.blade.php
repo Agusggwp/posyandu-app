@@ -4,82 +4,44 @@
 <div class="max-w-4xl mx-auto">
     <div class="mb-6">
         <h2 class="text-3xl font-bold text-gray-800">Detail Pemeriksaan Lansia</h2>
-        <nav class="text-sm text-gray-600 mt-2">
-            <a href="{{ route('pemeriksaan-lansia.index') }}" class="hover:text-yellow-600">Pemeriksaan Lansia</a>
-            <span class="mx-2">/</span>
-            <span>Detail</span>
-        </nav>
     </div>
 
     <div class="bg-white rounded-lg shadow-lg p-6">
-        <div class="border-b border-gray-200 pb-4 mb-6">
-            <h3 class="text-xl font-semibold text-gray-800">Data Lansia</h3>
-        </div>
+        @php
+            $data = $pemeriksaan->getAttributes();
+            $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
+            $value = function ($key, $raw) {
+                if ($raw === null || $raw === '') {
+                    return '-';
+                }
+
+                if (is_string($raw) && (str_contains($key, 'tanggal') || str_contains($key, 'waktu') || str_ends_with($key, '_at'))) {
+                    try {
+                        return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y H:i');
+                    } catch (\Throwable $e) {
+                        return $raw;
+                    }
+                }
+
+                if ($raw === '1' || $raw === 1) {
+                    return 'Ya';
+                }
+
+                if ($raw === '0' || $raw === 0) {
+                    return 'Tidak';
+                }
+
+                return (string) $raw;
+            };
+        @endphp
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-500 mb-1">Nama Lansia</label>
-                <p class="text-lg text-gray-900 font-semibold">{{ $pemeriksaan->lansia->nama ?? '-' }}</p>
-                <p class="text-sm text-gray-500">{{ $pemeriksaan->lansia->nik ?? '-' }}</p>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-500 mb-1">Tanggal Pemeriksaan</label>
-                <p class="text-lg text-gray-900">{{ $pemeriksaan->tanggal_pemeriksaan->format('d F Y') }}</p>
-            </div>
-        </div>
-
-        <div class="border-b border-gray-200 pb-4 mb-6 mt-8">
-            <h3 class="text-xl font-semibold text-gray-800">Data Pemeriksaan</h3>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="text-center p-4 bg-yellow-50 rounded-lg">
-                <label class="block text-sm font-medium text-gray-500 mb-1">Tekanan Darah</label>
-                <p class="text-3xl text-yellow-600 font-bold">{{ $pemeriksaan->tekanan_darah ?? '-' }}</p>
-                <p class="text-sm text-gray-500">mmHg</p>
-            </div>
-
-            <div class="text-center p-4 bg-orange-50 rounded-lg">
-                <label class="block text-sm font-medium text-gray-500 mb-1">Berat Badan</label>
-                <p class="text-3xl text-orange-600 font-bold">{{ $pemeriksaan->berat_badan ?? '-' }}</p>
-                <p class="text-sm text-gray-500">kg</p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <div class="text-center p-4 bg-amber-50 rounded-lg">
-                <label class="block text-sm font-medium text-gray-500 mb-1">Tinggi Badan</label>
-                <p class="text-3xl text-amber-600 font-bold">{{ $pemeriksaan->tinggi_badan ?? '-' }}</p>
-                <p class="text-sm text-gray-500">cm</p>
-            </div>
-
-            <div class="text-center p-4 bg-red-50 rounded-lg">
-                <label class="block text-sm font-medium text-gray-500 mb-1">Gula Darah</label>
-                <p class="text-3xl text-red-600 font-bold">{{ $pemeriksaan->gula_darah ?? '-' }}</p>
-                <p class="text-sm text-gray-500">mg/dL</p>
-            </div>
-
-            <div class="text-center p-4 bg-rose-50 rounded-lg">
-                <label class="block text-sm font-medium text-gray-500 mb-1">Kolesterol</label>
-                <p class="text-3xl text-rose-600 font-bold">{{ $pemeriksaan->kolesterol ?? '-' }}</p>
-                <p class="text-sm text-gray-500">mg/dL</p>
-            </div>
-        </div>
-
-        <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-500 mb-1">Keluhan</label>
-            <p class="text-lg text-gray-900">{{ $pemeriksaan->keluhan ?? '-' }}</p>
-        </div>
-
-        <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-500 mb-1">Catatan</label>
-            <p class="text-lg text-gray-900">{{ $pemeriksaan->catatan ?? '-' }}</p>
-        </div>
-
-        <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-500 mb-1">Petugas</label>
-            <p class="text-lg text-gray-900">{{ $pemeriksaan->petugas->name ?? '-' }}</p>
+            @foreach($data as $column => $raw)
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">{{ $label($column) }}</label>
+                    <p class="text-lg text-gray-900 break-words">{{ $value($column, $raw) }}</p>
+                </div>
+            @endforeach
         </div>
 
         <div class="flex gap-4 mt-8">

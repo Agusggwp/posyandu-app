@@ -6,9 +6,13 @@ use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\IbuHamilController;
 use App\Http\Controllers\LansiaController;
+use App\Http\Controllers\NifasController;
+use App\Http\Controllers\RemajaController;
 use App\Http\Controllers\PemeriksaanBalitaController;
 use App\Http\Controllers\PemeriksaanIbuHamilController;
 use App\Http\Controllers\PemeriksaanLansiaController;
+use App\Http\Controllers\PemeriksaanNifasController;
+use App\Http\Controllers\PemeriksaanRemajaController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
@@ -40,15 +44,23 @@ Route::middleware(['auth'])->group(function () {
     });
     
     Route::middleware(['permission:manage_balita'])->group(function () {
-        Route::resource('balita', BalitaController::class)->except(['destroy']);
+        Route::resource('balita', BalitaController::class)
+            ->parameters(['balita' => 'balita'])
+            ->except(['destroy']);
     });
     
     Route::middleware(['permission:manage_ibu_hamil'])->group(function () {
         Route::resource('ibu-hamil', IbuHamilController::class)->except(['destroy']);
+        Route::resource('nifas', NifasController::class)
+            ->parameters(['nifas' => 'nifas'])
+            ->except(['destroy']);
     });
     
     Route::middleware(['permission:manage_lansia'])->group(function () {
-        Route::resource('lansia', LansiaController::class)->except(['destroy']);
+        Route::resource('lansia', LansiaController::class)
+            ->parameters(['lansia' => 'lansia'])
+            ->except(['destroy']);
+        Route::resource('remaja', RemajaController::class)->except(['destroy']);
     });
     
     // Delete routes - Hanya Admin
@@ -57,9 +69,13 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('balita/{balita}', [BalitaController::class, 'destroy'])->name('balita.destroy');
         Route::delete('ibu-hamil/{ibu_hamil}', [IbuHamilController::class, 'destroy'])->name('ibu-hamil.destroy');
         Route::delete('lansia/{lansia}', [LansiaController::class, 'destroy'])->name('lansia.destroy');
+        Route::delete('nifas/{nifas}', [NifasController::class, 'destroy'])->name('nifas.destroy');
+        Route::delete('remaja/{remaja}', [RemajaController::class, 'destroy'])->name('remaja.destroy');
         Route::delete('pemeriksaan-balita/{pemeriksaan_balita}', [PemeriksaanBalitaController::class, 'destroy'])->name('pemeriksaan-balita.destroy');
         Route::delete('pemeriksaan-ibu-hamil/{pemeriksaan_ibu_hamil}', [PemeriksaanIbuHamilController::class, 'destroy'])->name('pemeriksaan-ibu-hamil.destroy');
         Route::delete('pemeriksaan-lansia/{pemeriksaan_lansia}', [PemeriksaanLansiaController::class, 'destroy'])->name('pemeriksaan-lansia.destroy');
+        Route::delete('pemeriksaan-nifas/{pemeriksaan_nifas}', [PemeriksaanNifasController::class, 'destroy'])->name('pemeriksaan-nifas.destroy');
+        Route::delete('pemeriksaan-remaja/{pemeriksaan_remaja}', [PemeriksaanRemajaController::class, 'destroy'])->name('pemeriksaan-remaja.destroy');
     });
     
     // Pemeriksaan Routes - Bidan dan Admin dapat menginput
@@ -70,6 +86,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('pemeriksaan-ibu-hamil', [PemeriksaanIbuHamilController::class, 'store'])->name('pemeriksaan-ibu-hamil.store');
         Route::get('pemeriksaan-lansia/create', [PemeriksaanLansiaController::class, 'create'])->name('pemeriksaan-lansia.create');
         Route::post('pemeriksaan-lansia', [PemeriksaanLansiaController::class, 'store'])->name('pemeriksaan-lansia.store');
+        Route::get('pemeriksaan-nifas/create', [PemeriksaanNifasController::class, 'create'])->name('pemeriksaan-nifas.create');
+        Route::post('pemeriksaan-nifas', [PemeriksaanNifasController::class, 'store'])->name('pemeriksaan-nifas.store');
+        Route::get('pemeriksaan-remaja/create', [PemeriksaanRemajaController::class, 'create'])->name('pemeriksaan-remaja.create');
+        Route::post('pemeriksaan-remaja', [PemeriksaanRemajaController::class, 'store'])->name('pemeriksaan-remaja.store');
     });
     
     // Edit Pemeriksaan - Bidan dan Admin
@@ -80,6 +100,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('pemeriksaan-ibu-hamil/{pemeriksaan_ibu_hamil}', [PemeriksaanIbuHamilController::class, 'update'])->name('pemeriksaan-ibu-hamil.update');
         Route::get('pemeriksaan-lansia/{pemeriksaan_lansia}/edit', [PemeriksaanLansiaController::class, 'edit'])->name('pemeriksaan-lansia.edit');
         Route::put('pemeriksaan-lansia/{pemeriksaan_lansia}', [PemeriksaanLansiaController::class, 'update'])->name('pemeriksaan-lansia.update');
+        Route::get('pemeriksaan-nifas/{pemeriksaan_nifas}/edit', [PemeriksaanNifasController::class, 'edit'])->name('pemeriksaan-nifas.edit');
+        Route::put('pemeriksaan-nifas/{pemeriksaan_nifas}', [PemeriksaanNifasController::class, 'update'])->name('pemeriksaan-nifas.update');
+        Route::get('pemeriksaan-remaja/{pemeriksaan_remaja}/edit', [PemeriksaanRemajaController::class, 'edit'])->name('pemeriksaan-remaja.edit');
+        Route::put('pemeriksaan-remaja/{pemeriksaan_remaja}', [PemeriksaanRemajaController::class, 'update'])->name('pemeriksaan-remaja.update');
     });
     
     // View Pemeriksaan - Semua role bisa lihat
@@ -90,6 +114,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('pemeriksaan-ibu-hamil/{pemeriksaan_ibu_hamil}', [PemeriksaanIbuHamilController::class, 'show'])->name('pemeriksaan-ibu-hamil.show');
         Route::get('pemeriksaan-lansia', [PemeriksaanLansiaController::class, 'index'])->name('pemeriksaan-lansia.index');
         Route::get('pemeriksaan-lansia/{pemeriksaan_lansia}', [PemeriksaanLansiaController::class, 'show'])->name('pemeriksaan-lansia.show');
+        Route::get('pemeriksaan-nifas', [PemeriksaanNifasController::class, 'index'])->name('pemeriksaan-nifas.index');
+        Route::get('pemeriksaan-nifas/{pemeriksaan_nifas}', [PemeriksaanNifasController::class, 'show'])->name('pemeriksaan-nifas.show');
+        Route::get('pemeriksaan-remaja', [PemeriksaanRemajaController::class, 'index'])->name('pemeriksaan-remaja.index');
+        Route::get('pemeriksaan-remaja/{pemeriksaan_remaja}', [PemeriksaanRemajaController::class, 'show'])->name('pemeriksaan-remaja.show');
     });
     
     // Laporan Routes - Semua role bisa lihat

@@ -6,30 +6,47 @@ use Illuminate\Database\Eloquent\Model;
 
 class PemeriksaanBalita extends Model
 {
+    protected $table = 'balita_pemeriksaan';
+
     protected $fillable = [
-        'balita_id',
-        'user_id',
-        'tanggal_pemeriksaan',
+        'balita_identitas_id',
+        'umur',
+        'waktu_kunjungan',
         'berat_badan',
-        'tinggi_badan',
+        'naik_tidak_naik',
+        'status_bb_u',
+        'panjang_badan',
+        'status_pb_u',
+        'status_bb_pb',
+        'lingkar_lengan',
+        'status_lila',
         'lingkar_kepala',
+        'batuk',
+        'demam',
+        'bb_turun',
+        'kontak_tbc',
+        'perkembangan',
+        'asi_eksklusif',
+        'mpasi',
         'imunisasi',
-        'vitamin',
-        'status_gizi',
-        'catatan'
+        'vitamin_a',
+        'obat_cacing',
+        'mt_pangan',
+        'edukasi',
+        'catatan_kesehatan',
+        'rujukan',
     ];
 
     protected $casts = [
-        'tanggal_pemeriksaan' => 'date',
+        'waktu_kunjungan' => 'datetime',
+        'batuk' => 'boolean',
+        'demam' => 'boolean',
+        'bb_turun' => 'boolean',
+        'kontak_tbc' => 'boolean',
     ];
 
     public function balita()
     {
-        return $this->belongsTo(Balita::class);
-    }
-
-    public function petugas()
-    {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Balita::class, 'balita_identitas_id');
     }
 }

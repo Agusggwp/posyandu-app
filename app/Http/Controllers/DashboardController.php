@@ -20,10 +20,10 @@ class DashboardController extends Controller
             'total_balita' => Balita::count(),
             'total_ibu_hamil' => IbuHamil::count(),
             'total_lansia' => Lansia::count(),
-            'total_pemeriksaan_balita' => PemeriksaanBalita::whereMonth('tanggal_pemeriksaan', date('m'))->count(),
-            'total_pemeriksaan_ibu_hamil' => PemeriksaanIbuHamil::whereMonth('tanggal_pemeriksaan', date('m'))->count(),
-            'total_pemeriksaan_lansia' => PemeriksaanLansia::whereMonth('tanggal_pemeriksaan', date('m'))->count(),
-            'balita_stunting' => PemeriksaanBalita::where('status_gizi', 'stunting')->distinct('balita_id')->count(),
+            'total_pemeriksaan_balita' => PemeriksaanBalita::whereMonth('created_at', date('m'))->count(),
+            'total_pemeriksaan_ibu_hamil' => PemeriksaanIbuHamil::whereMonth('created_at', date('m'))->count(),
+            'total_pemeriksaan_lansia' => PemeriksaanLansia::whereMonth('created_at', date('m'))->count(),
+            'balita_stunting' => PemeriksaanBalita::whereIn('status_pb_u', ['SP', 'P'])->distinct('balita_identitas_id')->count(),
         ];
         
         return view('dashboard', compact('data'));

@@ -18,12 +18,12 @@
                 <thead class="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tanggal</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Waktu Kunjungan</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama Lansia</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tekanan Darah</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Sistole/Diastole</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Gula Darah</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Kolesterol</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Petugas</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status TD</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Edukasi</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
@@ -31,12 +31,12 @@
                     @forelse($pemeriksaans as $index => $pemeriksaan)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaans->firstItem() + $index }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tanggal_pemeriksaan->format('d/m/Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($pemeriksaan->waktu_kunjungan)->format('d/m/Y H:i') ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $pemeriksaan->lansia->nama ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tekanan_darah ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->sistole && $pemeriksaan->diastole ? $pemeriksaan->sistole . '/' . $pemeriksaan->diastole : '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->gula_darah ? $pemeriksaan->gula_darah . ' mg/dL' : '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->kolesterol ? $pemeriksaan->kolesterol . ' mg/dL' : '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->petugas->name ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tekanan_darah_status ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->edukasi ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
                                 <a href="{{ route('pemeriksaan-lansia.show', $pemeriksaan->id) }}" class="inline-flex items-center px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg text-xs font-semibold transition-all duration-200">

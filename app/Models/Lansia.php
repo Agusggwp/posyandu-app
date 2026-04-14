@@ -6,13 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lansia extends Model
 {
+    protected $table = 'dewasa_identitas';
+
     protected $fillable = [
-        'keluarga_id',
+        'kepala_keluarga_id',
         'nama',
         'nik',
-        'jenis_kelamin',
         'tanggal_lahir',
-        'riwayat_penyakit'
+        'umur',
+        'alamat',
+        'no_hp',
+        'status_perkawinan',
+        'pekerjaan',
+        'dusun',
+        'desa',
+        'kecamatan',
+        'riwayat_keluarga',
+        'riwayat_diri',
+        'merokok',
+        'konsumsi_gula',
+        'konsumsi_garam',
+        'konsumsi_lemak',
     ];
 
     protected $casts = [
@@ -21,11 +35,21 @@ class Lansia extends Model
 
     public function keluarga()
     {
-        return $this->belongsTo(Keluarga::class);
+        return $this->belongsTo(Keluarga::class, 'kepala_keluarga_id');
     }
 
     public function pemeriksaans()
     {
-        return $this->hasMany(PemeriksaanLansia::class);
+        return $this->hasMany(PemeriksaanLansia::class, 'dewasa_identitas_id');
+    }
+
+    public function getKeluargaIdAttribute(): ?int
+    {
+        return $this->kepala_keluarga_id;
+    }
+
+    public function getRiwayatPenyakitAttribute(): ?string
+    {
+        return $this->riwayat_diri;
     }
 }

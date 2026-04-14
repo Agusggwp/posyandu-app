@@ -5,37 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\PemeriksaanIbuHamil;
 use App\Models\IbuHamil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PemeriksaanIbuHamilController extends Controller
 {
     public function index()
     {
-        $pemeriksaans = PemeriksaanIbuHamil::with('ibuHamil', 'petugas')->latest()->paginate(10);
+        $pemeriksaans = PemeriksaanIbuHamil::with('ibuHamil')->orderByDesc('tanggal_kunjungan')->paginate(10);
         return view('pemeriksaan-ibu-hamil.index', compact('pemeriksaans'));
     }
 
     public function create()
     {
-        $ibuHamils = IbuHamil::all();
+        $ibuHamils = IbuHamil::orderBy('nama_ibu')->get();
         return view('pemeriksaan-ibu-hamil.create', compact('ibuHamils'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ibu_hamil_id' => 'required|exists:ibu_hamils,id',
-            'tanggal_pemeriksaan' => 'required|date',
-            'usia_kehamilan' => 'nullable|integer|min:0',
-            'tekanan_darah' => 'nullable|string',
+            'ibu_hamil_identitas_id' => 'required|exists:ibu_hamil_identitas,id',
+            'tinggi_badan' => 'nullable|numeric|min:0',
             'berat_badan' => 'nullable|numeric|min:0',
-            'lingkar_lengan_atas' => 'nullable|string',
-            'tinggi_fundus' => 'nullable|string',
-            'denyut_jantung_janin' => 'nullable|string',
+            'lingkar_lengan' => 'nullable|numeric|min:0',
+            'tekanan_darah' => 'nullable|string|max:255',
+            'denyut_jantung' => 'nullable|string|max:255',
+            'kondisi_ibu' => 'nullable|string|max:255',
+            'keluhan' => 'nullable|string|max:255',
+            'tanggal_kunjungan' => 'required|date',
+            'waktu_ke_posyandu' => 'nullable|date_format:H:i',
+            'petugas' => 'nullable|string|max:255',
             'catatan' => 'nullable|string',
         ]);
-
-        $validated['user_id'] = Auth::id();
         
         PemeriksaanIbuHamil::create($validated);
         return redirect()->route('pemeriksaan-ibu-hamil.index')->with('success', 'Data pemeriksaan berhasil ditambahkan');
@@ -43,27 +43,32 @@ class PemeriksaanIbuHamilController extends Controller
 
     public function show(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
     {
-        $pemeriksaanIbuHamil->load('ibuHamil', 'petugas');
-        return view('pemeriksaan-ibu-hamil.show', compact('pemeriksaanIbuHamil'));
+        $pemeriksaanIbuHamil->load('ibuHamil');
+        $pemeriksaan = $pemeriksaanIbuHamil;
+        return view('pemeriksaan-ibu-hamil.show', compact('pemeriksaan'));
     }
 
     public function edit(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
     {
-        $ibuHamils = IbuHamil::all();
-        return view('pemeriksaan-ibu-hamil.edit', compact('pemeriksaanIbuHamil', 'ibuHamils'));
+        $ibuHamils = IbuHamil::orderBy('nama_ibu')->get();
+        $pemeriksaan = $pemeriksaanIbuHamil;
+        return view('pemeriksaan-ibu-hamil.edit', compact('pemeriksaan', 'ibuHamils'));
     }
 
     public function update(Request $request, PemeriksaanIbuHamil $pemeriksaanIbuHamil)
     {
         $validated = $request->validate([
-            'ibu_hamil_id' => 'required|exists:ibu_hamils,id',
-            'tanggal_pemeriksaan' => 'required|date',
-            'usia_kehamilan' => 'nullable|integer|min:0',
-            'tekanan_darah' => 'nullable|string',
+            'ibu_hamil_identitas_id' => 'required|exists:ibu_hamil_identitas,id',
+            'tinggi_badan' => 'nullable|numeric|min:0',
             'berat_badan' => 'nullable|numeric|min:0',
-            'lingkar_lengan_atas' => 'nullable|string',
-            'tinggi_fundus' => 'nullable|string',
-            'denyut_jantung_janin' => 'nullable|string',
+            'lingkar_lengan' => 'nullable|numeric|min:0',
+            'tekanan_darah' => 'nullable|string|max:255',
+            'denyut_jantung' => 'nullable|string|max:255',
+            'kondisi_ibu' => 'nullable|string|max:255',
+            'keluhan' => 'nullable|string|max:255',
+            'tanggal_kunjungan' => 'required|date',
+            'waktu_ke_posyandu' => 'nullable|date_format:H:i',
+            'petugas' => 'nullable|string|max:255',
             'catatan' => 'nullable|string',
         ]);
 

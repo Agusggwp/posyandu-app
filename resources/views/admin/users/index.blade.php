@@ -90,11 +90,11 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                                @if($user->role->name === 'admin') bg-purple-100 text-purple-800
-                                @elseif($user->role->name === 'kader') bg-blue-100 text-blue-800
+                                @if($user->role_name === 'admin') bg-purple-100 text-purple-800
+                                @elseif($user->role_name === 'kader') bg-blue-100 text-blue-800
                                 @else bg-green-100 text-green-800
                                 @endif">
-                                {{ ucfirst($user->role->name) }}
+                                {{ ucfirst($user->role_name ?? 'n/a') }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

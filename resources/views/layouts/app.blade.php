@@ -52,6 +52,14 @@
                                             <span class="mr-3 text-lg">🤰</span>
                                             <span class="text-sm font-medium">Ibu Hamil</span>
                                         </a>
+                                        <a href="{{ route('nifas.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-150">
+                                            <span class="mr-3 text-lg">🧑‍🍼</span>
+                                            <span class="text-sm font-medium">Nifas</span>
+                                        </a>
+                                        <a href="{{ route('remaja.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 transition-colors duration-150">
+                                            <span class="mr-3 text-lg">🧑</span>
+                                            <span class="text-sm font-medium">Remaja</span>
+                                        </a>
                                         <a href="{{ route('lansia.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors duration-150">
                                             <span class="mr-3 text-lg">👴</span>
                                             <span class="text-sm font-medium">Lansia</span>
@@ -76,6 +84,14 @@
                                         <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-150">
                                             <span class="mr-3 text-lg">💉</span>
                                             <span class="text-sm font-medium">Pemeriksaan Ibu Hamil</span>
+                                        </a>
+                                        <a href="{{ route('pemeriksaan-nifas.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-150">
+                                            <span class="mr-3 text-lg">🧑‍🍼</span>
+                                            <span class="text-sm font-medium">Pemeriksaan Nifas</span>
+                                        </a>
+                                        <a href="{{ route('pemeriksaan-remaja.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 transition-colors duration-150">
+                                            <span class="mr-3 text-lg">🧑</span>
+                                            <span class="text-sm font-medium">Pemeriksaan Remaja</span>
                                         </a>
                                         <a href="{{ route('pemeriksaan-lansia.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors duration-150">
                                             <span class="mr-3 text-lg">📋</span>
@@ -155,7 +171,7 @@
                                     <div class="px-4 py-3 border-b border-slate-200 bg-gradient-to-br from-indigo-50 to-purple-50">
                                         <p class="text-xs text-slate-600 mb-1">Signed in as</p>
                                         <p class="font-semibold text-sm text-slate-800">{{ Auth::user()->email }}</p>
-                                        <p class="text-xs text-indigo-600 mt-1">Role: {{ Auth::user()->role->name ?? 'N/A' }}</p>
+                                        <p class="text-xs text-indigo-600 mt-1">Role: {{ Auth::user()->role_name ?? 'N/A' }}</p>
                                     </div>
                                     <div class="py-2">
                                         <a href="{{ route('logout') }}" 
@@ -203,6 +219,14 @@
                             <span class="mr-2">🤰</span>
                             <span class="text-sm">Ibu Hamil</span>
                         </a>
+                        <a href="{{ route('nifas.index') }}" class="flex items-center px-4 py-2 text-slate-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-150">
+                            <span class="mr-2">🧑‍🍼</span>
+                            <span class="text-sm">Nifas</span>
+                        </a>
+                        <a href="{{ route('remaja.index') }}" class="flex items-center px-4 py-2 text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 transition-colors duration-150">
+                            <span class="mr-2">🧑</span>
+                            <span class="text-sm">Remaja</span>
+                        </a>
                         <a href="{{ route('lansia.index') }}" class="flex items-center px-4 py-2 text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors duration-150">
                             <span class="mr-2">👴</span>
                             <span class="text-sm">Lansia</span>
@@ -217,6 +241,14 @@
                         <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="flex items-center px-4 py-2 text-slate-700 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-150">
                             <span class="mr-2">💉</span>
                             <span class="text-sm">Pemeriksaan Ibu Hamil</span>
+                        </a>
+                        <a href="{{ route('pemeriksaan-nifas.index') }}" class="flex items-center px-4 py-2 text-slate-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-150">
+                            <span class="mr-2">🧑‍🍼</span>
+                            <span class="text-sm">Pemeriksaan Nifas</span>
+                        </a>
+                        <a href="{{ route('pemeriksaan-remaja.index') }}" class="flex items-center px-4 py-2 text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 transition-colors duration-150">
+                            <span class="mr-2">🧑</span>
+                            <span class="text-sm">Pemeriksaan Remaja</span>
                         </a>
                         <a href="{{ route('pemeriksaan-lansia.index') }}" class="flex items-center px-4 py-2 text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors duration-150">
                             <span class="mr-2">📋</span>

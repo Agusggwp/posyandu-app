@@ -178,7 +178,7 @@
         <div class="p-6">
             <div class="mb-4">
                 <p class="text-xl font-semibold text-slate-800 mb-2">Selamat datang, <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{{ Auth::user()->name }}</span>! 👋</p>
-                <p class="text-slate-600">Anda login sebagai: <span class="bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-semibold border border-indigo-200">{{ Auth::user()->role->name ?? 'N/A' }}</span></p>
+                <p class="text-slate-600">Anda login sebagai: <span class="bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-semibold border border-indigo-200">{{ Auth::user()->role_name ?? 'N/A' }}</span></p>
             </div>
             <div class="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent my-6"></div>
             <p class="text-slate-600 leading-relaxed">

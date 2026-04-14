@@ -23,7 +23,7 @@ class CheckRole
 
         // Check if user has any of the required roles
         foreach ($roles as $role) {
-            if ($user->role && $user->role->name === $role) {
+            if ($user->role_name === strtolower($role)) {
                 return $next($request);
             }
         }

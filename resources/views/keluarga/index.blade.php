@@ -4,11 +4,11 @@
 <div class="max-w-7xl mx-auto">
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h2 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Data Keluarga</h2>
-            <p class="text-slate-600 mt-2">Manajemen data keluarga</p>
+            <h2 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Data Kepala Keluarga</h2>
+            <p class="text-slate-600 mt-2">Master data tabel kepala_keluarga</p>
         </div>
         <a href="{{ route('keluarga.create') }}" class="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-            + Tambah Keluarga
+            + Tambah Data
         </a>
     </div>
 
@@ -19,10 +19,10 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No. KK</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Kepala Keluarga</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Alamat</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">RT/RW</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Telepon</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama Lengkap</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NIK</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
@@ -31,10 +31,10 @@
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $keluargas->firstItem() + $index }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $keluarga->no_kk }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $keluarga->nama_kepala_keluarga }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900">{{ $keluarga->alamat }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $keluarga->rt }}/{{ $keluarga->rw }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $keluarga->telepon ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $keluarga->nama_lengkap }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $keluarga->email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $keluarga->no_nik ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($keluarga->status) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
                                 <a href="{{ route('keluarga.show', $keluarga->id) }}" class="inline-flex items-center px-3 py-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-lg text-xs font-semibold transition-all duration-200">
@@ -63,7 +63,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">Tidak ada data keluarga</td>
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">Tidak ada data kepala keluarga</td>
                     </tr>
                     @endforelse
                 </tbody>

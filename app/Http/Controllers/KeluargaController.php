@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Keluarga;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class KeluargaController extends Controller
 {
     public function index()
     {
-        $keluargas = Keluarga::paginate(10);
+        $keluargas = Keluarga::latest()->paginate(10);
         return view('keluarga.index', compact('keluargas'));
     }
 
@@ -21,15 +23,18 @@ class KeluargaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'no_kk' => 'required|string|unique:keluargas,no_kk|max:16',
-            'nama_kepala_keluarga' => 'required|string|max:255',
+            'no_kk' => 'required|string|max:16|unique:kepala_keluarga,no_kk',
+            'nama_lengkap' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:kepala_keluarga,email',
+            'password' => 'required|string|min:8',
+            'no_nik' => 'nullable|string|max:16|unique:kepala_keluarga,no_nik',
             'alamat' => 'required|string',
-            'rt' => 'required|string|max:3',
-            'rw' => 'required|string|max:3',
-            'kelurahan' => 'required|string|max:255',
-            'kecamatan' => 'required|string|max:255',
-            'telepon' => 'nullable|string|max:15',
+            'no_telepon' => 'nullable|string|max:20',
+            'status' => 'required|in:pending,approved,rejected',
         ]);
+
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['email_verified_at'] = null;
 
         Keluarga::create($validated);
         return redirect()->route('keluarga.index')->with('success', 'Data keluarga berhasil ditambahkan');
@@ -49,15 +54,21 @@ class KeluargaController extends Controller
     public function update(Request $request, Keluarga $keluarga)
     {
         $validated = $request->validate([
-            'no_kk' => 'required|string|max:16|unique:keluargas,no_kk,' . $keluarga->id,
-            'nama_kepala_keluarga' => 'required|string|max:255',
+            'no_kk' => ['required', 'string', 'max:16', Rule::unique('kepala_keluarga', 'no_kk')->ignore($keluarga->id)],
+            'nama_lengkap' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', Rule::unique('kepala_keluarga', 'email')->ignore($keluarga->id)],
+            'password' => 'nullable|string|min:8',
+            'no_nik' => ['nullable', 'string', 'max:16', Rule::unique('kepala_keluarga', 'no_nik')->ignore($keluarga->id)],
             'alamat' => 'required|string',
-            'rt' => 'required|string|max:3',
-            'rw' => 'required|string|max:3',
-            'kelurahan' => 'required|string|max:255',
-            'kecamatan' => 'required|string|max:255',
-            'telepon' => 'nullable|string|max:15',
+            'no_telepon' => 'nullable|string|max:20',
+            'status' => 'required|in:pending,approved,rejected',
         ]);
+
+        if (! empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         $keluarga->update($validated);
         return redirect()->route('keluarga.index')->with('success', 'Data keluarga berhasil diperbarui');

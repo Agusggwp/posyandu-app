@@ -5,33 +5,49 @@ namespace App\Http\Controllers;
 use App\Models\IbuHamil;
 use App\Models\Keluarga;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 class IbuHamilController extends Controller
 {
     public function index()
     {
-        $ibuHamils = IbuHamil::with('keluarga')->paginate(10);
+        $ibuHamils = IbuHamil::with('keluarga')->latest()->paginate(10);
         return view('ibu-hamil.index', compact('ibuHamils'));
     }
 
     public function create()
     {
-        $keluargas = Keluarga::all();
+        $keluargas = Keluarga::latest()->get();
         return view('ibu-hamil.create', compact('keluargas'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'keluarga_id' => 'required|exists:keluargas,id',
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|unique:ibu_hamils,nik|max:16',
+            'kepala_keluarga_id' => 'required|exists:kepala_keluarga,id',
+            'nik' => 'nullable|string|max:16|unique:ibu_hamil_identitas,nik',
+            'nama_ibu' => 'required|string|max:255',
             'tanggal_lahir' => 'required|date',
-            'nama_suami' => 'required|string|max:255',
-            'hpht' => 'nullable|date',
-            'hpl' => 'nullable|date',
-            'hamil_ke' => 'required|integer|min:1',
+            'umur' => 'nullable|integer|min:0',
+            'nama_suami' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string',
+            'no_hp' => 'nullable|string|max:20',
+            'l_ibu_hamil' => 'nullable|string|max:50',
+            'kehamilan_ke' => 'nullable|integer|min:1',
+            'hamil_ke' => 'nullable|integer|min:1',
+            'jarak_anak_sebelumnya' => 'nullable|string|max:50',
         ]);
+
+        if (empty($validated['umur']) && ! empty($validated['tanggal_lahir'])) {
+            $validated['umur'] = Carbon::parse($validated['tanggal_lahir'])->age;
+        }
+
+        if (empty($validated['kehamilan_ke']) && ! empty($validated['hamil_ke'])) {
+            $validated['kehamilan_ke'] = $validated['hamil_ke'];
+        }
+
+        unset($validated['hamil_ke']);
 
         IbuHamil::create($validated);
         return redirect()->route('ibu-hamil.index')->with('success', 'Data ibu hamil berhasil ditambahkan');
@@ -45,22 +61,36 @@ class IbuHamilController extends Controller
 
     public function edit(IbuHamil $ibuHamil)
     {
-        $keluargas = Keluarga::all();
+        $keluargas = Keluarga::latest()->get();
         return view('ibu-hamil.edit', compact('ibuHamil', 'keluargas'));
     }
 
     public function update(Request $request, IbuHamil $ibuHamil)
     {
         $validated = $request->validate([
-            'keluarga_id' => 'required|exists:keluargas,id',
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:16|unique:ibu_hamils,nik,' . $ibuHamil->id,
+            'kepala_keluarga_id' => 'required|exists:kepala_keluarga,id',
+            'nik' => ['nullable', 'string', 'max:16', Rule::unique('ibu_hamil_identitas', 'nik')->ignore($ibuHamil->id)],
+            'nama_ibu' => 'required|string|max:255',
             'tanggal_lahir' => 'required|date',
-            'nama_suami' => 'required|string|max:255',
-            'hpht' => 'nullable|date',
-            'hpl' => 'nullable|date',
-            'hamil_ke' => 'required|integer|min:1',
+            'umur' => 'nullable|integer|min:0',
+            'nama_suami' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string',
+            'no_hp' => 'nullable|string|max:20',
+            'l_ibu_hamil' => 'nullable|string|max:50',
+            'kehamilan_ke' => 'nullable|integer|min:1',
+            'hamil_ke' => 'nullable|integer|min:1',
+            'jarak_anak_sebelumnya' => 'nullable|string|max:50',
         ]);
+
+        if (empty($validated['umur']) && ! empty($validated['tanggal_lahir'])) {
+            $validated['umur'] = Carbon::parse($validated['tanggal_lahir'])->age;
+        }
+
+        if (empty($validated['kehamilan_ke']) && ! empty($validated['hamil_ke'])) {
+            $validated['kehamilan_ke'] = $validated['hamil_ke'];
+        }
+
+        unset($validated['hamil_ke']);
 
         $ibuHamil->update($validated);
         return redirect()->route('ibu-hamil.index')->with('success', 'Data ibu hamil berhasil diperbarui');

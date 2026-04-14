@@ -18,11 +18,11 @@
                 <thead class="bg-gradient-to-r from-violet-500 to-purple-600 text-white">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tanggal</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tanggal Kunjungan</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama Ibu Hamil</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Usia Kehamilan</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tekanan Darah</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Berat Badan</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Denyut Jantung</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Petugas</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
                     </tr>
@@ -31,12 +31,12 @@
                     @forelse($pemeriksaans as $index => $pemeriksaan)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaans->firstItem() + $index }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tanggal_pemeriksaan->format('d/m/Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($pemeriksaan->tanggal_kunjungan)->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $pemeriksaan->ibuHamil->nama ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->usia_kehamilan ? $pemeriksaan->usia_kehamilan . ' minggu' : '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tekanan_darah ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->berat_badan ? $pemeriksaan->berat_badan . ' kg' : '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->petugas->name ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->denyut_jantung ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->petugas ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
                                 <a href="{{ route('pemeriksaan-ibu-hamil.show', $pemeriksaan->id) }}" class="inline-flex items-center px-3 py-1.5 bg-violet-100 hover:bg-violet-200 text-violet-700 rounded-lg text-xs font-semibold transition-all duration-200">

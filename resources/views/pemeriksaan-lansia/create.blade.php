@@ -17,27 +17,27 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="lansia_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Lansia <span class="text-red-500">*</span></label>
-                    <select name="lansia_id" id="lansia_id" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('lansia_id') border-red-500 @enderror" required>
+                    <label for="dewasa_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Lansia <span class="text-red-500">*</span></label>
+                    <select name="dewasa_identitas_id" id="dewasa_identitas_id" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('dewasa_identitas_id') border-red-500 @enderror" required>
                         <option value="">-- Pilih Lansia --</option>
                         @foreach($lansias as $lansia)
-                            <option value="{{ $lansia->id }}" {{ old('lansia_id') == $lansia->id ? 'selected' : '' }}>
+                            <option value="{{ $lansia->id }}" {{ old('dewasa_identitas_id') == $lansia->id ? 'selected' : '' }}>
                                 {{ $lansia->nama }} - {{ $lansia->nik }}
                             </option>
                         @endforeach
                     </select>
-                    @error('lansia_id')
+                    @error('dewasa_identitas_id')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label for="tanggal_pemeriksaan" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pemeriksaan <span class="text-red-500">*</span></label>
-                    <input type="date" name="tanggal_pemeriksaan" id="tanggal_pemeriksaan" 
-                           value="{{ old('tanggal_pemeriksaan', date('Y-m-d')) }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('tanggal_pemeriksaan') border-red-500 @enderror" required>
-                    @error('tanggal_pemeriksaan')
+                    <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan <span class="text-red-500">*</span></label>
+                    <input type="datetime-local" name="waktu_kunjungan" id="waktu_kunjungan" 
+                           value="{{ old('waktu_kunjungan', now()->format('Y-m-d\\TH:i')) }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('waktu_kunjungan') border-red-500 @enderror" required>
+                    @error('waktu_kunjungan')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -45,15 +45,27 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
-                    <label for="tekanan_darah" class="block text-sm font-medium text-gray-700 mb-2">Tekanan Darah</label>
-                    <input type="text" name="tekanan_darah" id="tekanan_darah" 
-                           value="{{ old('tekanan_darah') }}" placeholder="120/80"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('tekanan_darah') border-red-500 @enderror">
-                    @error('tekanan_darah')
+                    <label for="sistole" class="block text-sm font-medium text-gray-700 mb-2">Sistole</label>
+                    <input type="number" name="sistole" id="sistole" 
+                           value="{{ old('sistole') }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('sistole') border-red-500 @enderror">
+                    @error('sistole')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
+                <div>
+                    <label for="diastole" class="block text-sm font-medium text-gray-700 mb-2">Diastole</label>
+                    <input type="number" name="diastole" id="diastole" 
+                           value="{{ old('diastole') }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('diastole') border-red-500 @enderror">
+                    @error('diastole')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
                     <label for="berat_badan" class="block text-sm font-medium text-gray-700 mb-2">Berat Badan (kg)</label>
                     <input type="number" step="0.01" name="berat_badan" id="berat_badan" 
@@ -87,32 +99,169 @@
                 </div>
 
                 <div>
-                    <label for="kolesterol" class="block text-sm font-medium text-gray-700 mb-2">Kolesterol (mg/dL)</label>
-                    <input type="number" name="kolesterol" id="kolesterol" 
-                           value="{{ old('kolesterol') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('kolesterol') border-red-500 @enderror">
-                    @error('kolesterol')
+                    <label for="lingkar_perut" class="block text-sm font-medium text-gray-700 mb-2">Lingkar Perut (cm)</label>
+                    <input type="number" step="0.01" name="lingkar_perut" id="lingkar_perut" 
+                           value="{{ old('lingkar_perut') }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('lingkar_perut') border-red-500 @enderror">
+                    @error('lingkar_perut')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
             <div class="mt-6">
-                <label for="keluhan" class="block text-sm font-medium text-gray-700 mb-2">Keluhan</label>
-                <textarea name="keluhan" id="keluhan" rows="2"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('keluhan') border-red-500 @enderror">{{ old('keluhan') }}</textarea>
-                @error('keluhan')
+                <label for="tekanan_darah_status" class="block text-sm font-medium text-gray-700 mb-2">Status Tekanan Darah</label>
+                <input type="text" name="tekanan_darah_status" id="tekanan_darah_status" 
+                       value="{{ old('tekanan_darah_status') }}"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('tekanan_darah_status') border-red-500 @enderror">
+                @error('tekanan_darah_status')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="mt-6">
-                <label for="catatan" class="block text-sm font-medium text-gray-700 mb-2">Catatan</label>
-                <textarea name="catatan" id="catatan" rows="2"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('catatan') border-red-500 @enderror">{{ old('catatan') }}</textarea>
-                @error('catatan')
+                <label for="edukasi" class="block text-sm font-medium text-gray-700 mb-2">Edukasi</label>
+                <textarea name="edukasi" id="edukasi" rows="2"
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('edukasi') border-red-500 @enderror">{{ old('edukasi') }}</textarea>
+                @error('edukasi')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                 @enderror
+            </div>
+
+            <div class="mt-6">
+                <label for="rujukan" class="block text-sm font-medium text-gray-700 mb-2">Rujukan</label>
+                <input type="text" name="rujukan" id="rujukan" 
+                       value="{{ old('rujukan') }}"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('rujukan') border-red-500 @enderror">
+                @error('rujukan')
+                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <div>
+                    <label for="imt" class="block text-sm font-medium text-gray-700 mb-2">IMT</label>
+                    <input type="number" step="0.01" name="imt" id="imt" value="{{ old('imt') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('imt') border-red-500 @enderror">
+                </div>
+                <div>
+                    <label for="mata_kanan" class="block text-sm font-medium text-gray-700 mb-2">Mata Kanan</label>
+                    <input type="text" name="mata_kanan" id="mata_kanan" value="{{ old('mata_kanan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('mata_kanan') border-red-500 @enderror">
+                </div>
+                <div>
+                    <label for="mata_kiri" class="block text-sm font-medium text-gray-700 mb-2">Mata Kiri</label>
+                    <input type="text" name="mata_kiri" id="mata_kiri" value="{{ old('mata_kiri') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('mata_kiri') border-red-500 @enderror">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <div>
+                    <label for="telinga_kanan" class="block text-sm font-medium text-gray-700 mb-2">Telinga Kanan</label>
+                    <input type="text" name="telinga_kanan" id="telinga_kanan" value="{{ old('telinga_kanan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('telinga_kanan') border-red-500 @enderror">
+                </div>
+                <div>
+                    <label for="telinga_kiri" class="block text-sm font-medium text-gray-700 mb-2">Telinga Kiri</label>
+                    <input type="text" name="telinga_kiri" id="telinga_kiri" value="{{ old('telinga_kiri') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('telinga_kiri') border-red-500 @enderror">
+                </div>
+                <div>
+                    <label for="jenis_kelamin" class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+                    <select name="jenis_kelamin" id="jenis_kelamin" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                        <option value="">-- Pilih --</option>
+                        <option value="L" {{ old('jenis_kelamin') === 'L' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="P" {{ old('jenis_kelamin') === 'P' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <div>
+                    <label for="usia_kategori" class="block text-sm font-medium text-gray-700 mb-2">Usia Kategori</label>
+                    <input type="text" name="usia_kategori" id="usia_kategori" value="{{ old('usia_kategori') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('usia_kategori') border-red-500 @enderror">
+                </div>
+                <div>
+                    <label for="skor_merokok" class="block text-sm font-medium text-gray-700 mb-2">Skor Merokok</label>
+                    <input type="number" name="skor_merokok" id="skor_merokok" value="{{ old('skor_merokok') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('skor_merokok') border-red-500 @enderror">
+                </div>
+                <div>
+                    <label for="skor_puma" class="block text-sm font-medium text-gray-700 mb-2">Skor PUMA</label>
+                    <input type="number" name="skor_puma" id="skor_puma" value="{{ old('skor_puma') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('skor_puma') border-red-500 @enderror">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                <div>
+                    <label for="napas_berat" class="block text-sm font-medium text-gray-700 mb-2">Napas Berat</label>
+                    <select name="napas_berat" id="napas_berat" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('napas_berat') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('napas_berat') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="dahak" class="block text-sm font-medium text-gray-700 mb-2">Dahak</label>
+                    <select name="dahak" id="dahak" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('dahak') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('dahak') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="batuk" class="block text-sm font-medium text-gray-700 mb-2">Batuk</label>
+                    <select name="batuk" id="batuk" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('batuk') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('batuk') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="aktivitas_terganggu" class="block text-sm font-medium text-gray-700 mb-2">Aktivitas Terganggu</label>
+                    <select name="aktivitas_terganggu" id="aktivitas_terganggu" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('aktivitas_terganggu') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('aktivitas_terganggu') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div>
+                    <label for="pemeriksaan_sebelumnya" class="block text-sm font-medium text-gray-700 mb-2">Pemeriksaan Sebelumnya</label>
+                    <input type="text" name="pemeriksaan_sebelumnya" id="pemeriksaan_sebelumnya" value="{{ old('pemeriksaan_sebelumnya') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('pemeriksaan_sebelumnya') border-red-500 @enderror">
+                </div>
+                <div>
+                    <label for="batuk_tbc" class="block text-sm font-medium text-gray-700 mb-2">Batuk TBC</label>
+                    <select name="batuk_tbc" id="batuk_tbc" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('batuk_tbc') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('batuk_tbc') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <div>
+                    <label for="demam" class="block text-sm font-medium text-gray-700 mb-2">Demam</label>
+                    <select name="demam" id="demam" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('demam') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('demam') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="bb_turun" class="block text-sm font-medium text-gray-700 mb-2">BB Turun</label>
+                    <select name="bb_turun" id="bb_turun" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('bb_turun') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('bb_turun') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="kontak_tbc" class="block text-sm font-medium text-gray-700 mb-2">Kontak TBC</label>
+                    <select name="kontak_tbc" id="kontak_tbc" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('kontak_tbc') === '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('kontak_tbc') === '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                </div>
             </div>
 
             <div class="flex gap-4 mt-8">

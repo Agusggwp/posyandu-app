@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold">
-                        {{ $user->role->name }}
+                        {{ $user->role_name ?? 'n/a' }}
                     </span>
                 </div>
                 @endforeach

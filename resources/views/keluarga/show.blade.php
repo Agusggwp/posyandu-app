@@ -16,26 +16,42 @@
             <div>
                 <label class="block text-sm font-medium text-gray-500 mb-1">No. KK</label>
                 <p class="text-lg text-gray-900">{{ $keluarga->no_kk }}</p>
+            @php
+                $data = $keluarga->getAttributes();
+                $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
+                $value = function ($key, $raw) {
+                    if ($raw === null || $raw === '') {
+                        return '-';
+                    }
+
+                    if (is_string($raw) && (str_contains($key, 'tanggal') || str_contains($key, 'waktu') || str_ends_with($key, '_at'))) {
+                        try {
+                            return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y H:i');
+                        } catch (\Throwable $e) {
+                            return $raw;
+                        }
+                    }
+
+                    if ($raw === '1' || $raw === 1) {
+                        return 'Ya';
+                    }
+
+                    if ($raw === '0' || $raw === 0) {
+                        return 'Tidak';
+                    }
+
+                    return (string) $raw;
+                };
+            @endphp
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach($data as $column => $raw)
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">{{ $label($column) }}</label>
+                        <p class="text-lg text-gray-900 break-words">{{ $value($column, $raw) }}</p>
+                    </div>
+                @endforeach
             </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-500 mb-1">Nama Kepala Keluarga</label>
-                <p class="text-lg text-gray-900 font-semibold">{{ $keluarga->nama_kepala_keluarga }}</p>
-            </div>
-        </div>
-
-        <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-500 mb-1">Alamat Lengkap</label>
-            <p class="text-lg text-gray-900">{{ $keluarga->alamat }}</p>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-500 mb-1">RT</label>
-                <p class="text-lg text-gray-900">{{ $keluarga->rt }}</p>
-            </div>
-
-            <div>
                 <label class="block text-sm font-medium text-gray-500 mb-1">RW</label>
                 <p class="text-lg text-gray-900">{{ $keluarga->rw }}</p>
             </div>

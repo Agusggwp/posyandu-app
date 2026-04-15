@@ -23,13 +23,7 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->string('jenis_kelamin', 20)->nullable(); // Laki-laki/Perempuan
             $table->string('nama_ortu', 100)->nullable();
-            $table->text('alamat')->nullable();
             $table->string('no_hp', 20)->nullable();
-
-            // LOKASI GEOGRAFIS
-            $table->string('dusun', 100)->nullable();
-            $table->string('desa', 100)->nullable();
-            $table->string('kecamatan', 100)->nullable();
 
             // RIWAYAT
             $table->text('riwayat_keluarga')->nullable();

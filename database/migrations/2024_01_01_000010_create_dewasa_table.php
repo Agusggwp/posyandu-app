@@ -22,15 +22,9 @@ return new class extends Migration
             $table->string('nik', 50)->nullable();
             $table->date('tanggal_lahir');
             $table->string('umur', 50)->nullable();
-            $table->text('alamat')->nullable();
             $table->string('no_hp', 20)->nullable();
             $table->string('status_perkawinan', 50)->nullable(); // Belum Kawin/Kawin/Cerai/Cerai Mati
             $table->string('pekerjaan', 100)->nullable();
-
-            // LOKASI GEOGRAFIS
-            $table->string('dusun', 100)->nullable();
-            $table->string('desa', 100)->nullable();
-            $table->string('kecamatan', 100)->nullable();
 
             // RIWAYAT
             $table->text('riwayat_keluarga')->nullable();

@@ -31,13 +31,15 @@ class IbuHamilController extends Controller
             'tanggal_lahir' => 'required|date',
             'umur' => 'nullable|integer|min:0',
             'nama_suami' => 'nullable|string|max:255',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
             'l_ibu_hamil' => 'nullable|string|max:50',
             'kehamilan_ke' => 'nullable|integer|min:1',
             'hamil_ke' => 'nullable|integer|min:1',
             'jarak_anak_sebelumnya' => 'nullable|string|max:50',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         if (empty($validated['umur']) && ! empty($validated['tanggal_lahir'])) {
             $validated['umur'] = Carbon::parse($validated['tanggal_lahir'])->age;
@@ -74,13 +76,15 @@ class IbuHamilController extends Controller
             'tanggal_lahir' => 'required|date',
             'umur' => 'nullable|integer|min:0',
             'nama_suami' => 'nullable|string|max:255',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
             'l_ibu_hamil' => 'nullable|string|max:50',
             'kehamilan_ke' => 'nullable|integer|min:1',
             'hamil_ke' => 'nullable|integer|min:1',
             'jarak_anak_sebelumnya' => 'nullable|string|max:50',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         if (empty($validated['umur']) && ! empty($validated['tanggal_lahir'])) {
             $validated['umur'] = Carbon::parse($validated['tanggal_lahir'])->age;

@@ -30,13 +30,9 @@ class LansiaController extends Controller
             'nik' => 'nullable|string|max:16|unique:dewasa_identitas,nik',
             'tanggal_lahir' => 'required|date',
             'umur' => 'nullable|integer|min:0',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
             'status_perkawinan' => 'nullable|string|max:50',
             'pekerjaan' => 'nullable|string|max:100',
-            'dusun' => 'nullable|string|max:100',
-            'desa' => 'nullable|string|max:100',
-            'kecamatan' => 'nullable|string|max:100',
             'riwayat_keluarga' => 'nullable|string',
             'riwayat_diri' => 'nullable|string',
             'merokok' => 'nullable|string|max:5',
@@ -44,6 +40,9 @@ class LansiaController extends Controller
             'konsumsi_garam' => 'nullable|string|max:5',
             'konsumsi_lemak' => 'nullable|string|max:5',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         if (empty($validated['umur']) && ! empty($validated['tanggal_lahir'])) {
             $validated['umur'] = Carbon::parse($validated['tanggal_lahir'])->age;
@@ -73,13 +72,9 @@ class LansiaController extends Controller
             'nik' => ['nullable', 'string', 'max:16', Rule::unique('dewasa_identitas', 'nik')->ignore($lansia->id)],
             'tanggal_lahir' => 'required|date',
             'umur' => 'nullable|integer|min:0',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
             'status_perkawinan' => 'nullable|string|max:50',
             'pekerjaan' => 'nullable|string|max:100',
-            'dusun' => 'nullable|string|max:100',
-            'desa' => 'nullable|string|max:100',
-            'kecamatan' => 'nullable|string|max:100',
             'riwayat_keluarga' => 'nullable|string',
             'riwayat_diri' => 'nullable|string',
             'merokok' => 'nullable|string|max:5',
@@ -87,6 +82,9 @@ class LansiaController extends Controller
             'konsumsi_garam' => 'nullable|string|max:5',
             'konsumsi_lemak' => 'nullable|string|max:5',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         if (empty($validated['umur']) && ! empty($validated['tanggal_lahir'])) {
             $validated['umur'] = Carbon::parse($validated['tanggal_lahir'])->age;

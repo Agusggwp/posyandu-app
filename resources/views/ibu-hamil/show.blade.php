@@ -13,7 +13,21 @@
 
     <div class="bg-white rounded-lg shadow-lg p-6">
         @php
-            $data = $ibuHamil->getAttributes();
+            $excludedColumns = [
+                'created_at',
+                'updated_at',
+                'kepala_keluarga_id',
+                'kehamilan_ke',
+                'jarak_anak',
+                'anak_sebelumnya',
+            ];
+
+            $data = collect($ibuHamil->getAttributes())
+                ->except($excludedColumns)
+                ->toArray();
+
+            $data['alamat'] = $ibuHamil->keluarga->alamat ?? ($data['alamat'] ?? '-');
+
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
@@ -26,14 +40,6 @@
                     } catch (\Throwable $e) {
                         return $raw;
                     }
-                }
-
-                if ($raw === '1' || $raw === 1) {
-                    return 'Ya';
-                }
-
-                if ($raw === '0' || $raw === 0) {
-                    return 'Tidak';
                 }
 
                 return (string) $raw;

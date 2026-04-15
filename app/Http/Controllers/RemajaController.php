@@ -30,14 +30,13 @@ class RemajaController extends Controller
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
             'nama_ortu' => 'nullable|string|max:100',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
-            'dusun' => 'nullable|string|max:100',
-            'desa' => 'nullable|string|max:100',
-            'kecamatan' => 'nullable|string|max:100',
             'riwayat_keluarga' => 'nullable|string',
             'riwayat_diri' => 'nullable|string',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         Remaja::create($validated);
 
@@ -65,14 +64,13 @@ class RemajaController extends Controller
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
             'nama_ortu' => 'nullable|string|max:100',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
-            'dusun' => 'nullable|string|max:100',
-            'desa' => 'nullable|string|max:100',
-            'kecamatan' => 'nullable|string|max:100',
             'riwayat_keluarga' => 'nullable|string',
             'riwayat_diri' => 'nullable|string',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         $remaja->update($validated);
 

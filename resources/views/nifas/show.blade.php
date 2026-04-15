@@ -6,7 +6,21 @@
         <h2 class="text-2xl font-bold text-rose-800 mb-6">Detail Nifas</h2>
 
         @php
-            $data = $nifas->getAttributes();
+            $excludedColumns = [
+                'dusun',
+                'desa',
+                'kecamatan',
+                'created_at',
+                'updated_at',
+                'kepala_keluarga_id',
+            ];
+
+            $data = collect($nifas->getAttributes())
+                ->except($excludedColumns)
+                ->toArray();
+
+            $data['alamat'] = $nifas->keluarga->alamat ?? ($data['alamat'] ?? '-');
+
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
@@ -19,14 +33,6 @@
                     } catch (\Throwable $e) {
                         return $raw;
                     }
-                }
-
-                if ($raw === '1' || $raw === 1) {
-                    return 'Ya';
-                }
-
-                if ($raw === '0' || $raw === 0) {
-                    return 'Tidak';
                 }
 
                 return (string) $raw;

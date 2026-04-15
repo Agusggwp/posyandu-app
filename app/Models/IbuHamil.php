@@ -15,7 +15,6 @@ class IbuHamil extends Model
         'tanggal_lahir',
         'umur',
         'nama_suami',
-        'alamat',
         'no_hp',
         'l_ibu_hamil',
         'kehamilan_ke',

@@ -23,13 +23,7 @@ return new class extends Migration
             $table->date('tanggal_lahir')->nullable();
             $table->string('umur', 50)->nullable();
             $table->string('nama_suami', 100)->nullable();
-            $table->text('alamat')->nullable();
             $table->string('no_hp', 20)->nullable();
-
-            // LOKASI GEOGRAFIS
-            $table->string('dusun', 100)->nullable();
-            $table->string('desa', 100)->nullable();
-            $table->string('kecamatan', 100)->nullable();
 
             // DATA NIFAS (POSTPARTUM)
             $table->date('tanggal_bersalin')->nullable();

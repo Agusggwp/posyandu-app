@@ -41,12 +41,11 @@ class BalitaController extends Controller
             'berat_badan_lahir' => 'nullable|numeric|min:0',
             'panjang_badan_lahir' => 'nullable|numeric|min:0',
             'nama_ortu' => 'nullable|string|max:255',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
-            'dusun' => 'nullable|string|max:100',
-            'desa' => 'nullable|string|max:100',
-            'kecamatan' => 'nullable|string|max:100',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         Balita::create($validated);
         return redirect()->route('balita.index')->with('success', 'Data balita berhasil ditambahkan');
@@ -84,12 +83,11 @@ class BalitaController extends Controller
             'berat_badan_lahir' => 'nullable|numeric|min:0',
             'panjang_badan_lahir' => 'nullable|numeric|min:0',
             'nama_ortu' => 'nullable|string|max:255',
-            'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:20',
-            'dusun' => 'nullable|string|max:100',
-            'desa' => 'nullable|string|max:100',
-            'kecamatan' => 'nullable|string|max:100',
         ]);
+
+        $keluarga = Keluarga::find($validated['kepala_keluarga_id']);
+        $validated['alamat'] = $keluarga->alamat ?? null;
 
         $balita->update($validated);
         return redirect()->route('balita.index')->with('success', 'Data balita berhasil diperbarui');

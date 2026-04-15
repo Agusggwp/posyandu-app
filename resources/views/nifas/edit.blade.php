@@ -52,18 +52,6 @@
                     <input type="text" name="no_hp" value="{{ old('no_hp', $nifas->no_hp) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Dusun</label>
-                    <input type="text" name="dusun" value="{{ old('dusun', $nifas->dusun) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Desa</label>
-                    <input type="text" name="desa" value="{{ old('desa', $nifas->desa) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
-                    <input type="text" name="kecamatan" value="{{ old('kecamatan', $nifas->kecamatan) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Bersalin</label>
                     <input type="text" name="tempat_bersalin" value="{{ old('tempat_bersalin', $nifas->tempat_bersalin) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
@@ -75,10 +63,6 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Tinggi Badan Ibu</label>
                     <input type="number" step="0.01" name="tinggi_badan_ibu" value="{{ old('tinggi_badan_ibu', $nifas->tinggi_badan_ibu) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
-            </div>
-            <div class="mt-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
-                <textarea name="alamat" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg">{{ old('alamat', $nifas->alamat) }}</textarea>
             </div>
             <div class="flex gap-4 mt-8">
                 <button type="submit" class="bg-rose-700 hover:bg-rose-800 text-white font-semibold py-2 px-6 rounded-xl">Update</button>

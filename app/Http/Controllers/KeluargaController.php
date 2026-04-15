@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Keluarga;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -53,6 +54,8 @@ class KeluargaController extends Controller
 
     public function update(Request $request, Keluarga $keluarga)
     {
+        $oldStatus = $keluarga->status;
+
         $validated = $request->validate([
             'no_kk' => ['required', 'string', 'max:16', Rule::unique('kepala_keluarga', 'no_kk')->ignore($keluarga->id)],
             'nama_lengkap' => 'required|string|max:255',
@@ -71,6 +74,18 @@ class KeluargaController extends Controller
         }
 
         $keluarga->update($validated);
+
+        if ($oldStatus !== $keluarga->status) {
+            Mail::send('emails.kepala-keluarga-status-updated', [
+                'keluarga' => $keluarga->fresh(),
+                'status' => $keluarga->status,
+                'loginUrl' => route('kepala-keluarga.login'),
+            ], function ($message) use ($keluarga) {
+                $message->to($keluarga->email, $keluarga->nama_lengkap)
+                    ->subject('Status Akun Kepala Keluarga Diperbarui');
+            });
+        }
+
         return redirect()->route('keluarga.index')->with('success', 'Data keluarga berhasil diperbarui');
     }
 

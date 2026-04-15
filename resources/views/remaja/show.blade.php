@@ -6,7 +6,21 @@
         <h2 class="text-2xl font-bold text-cyan-900 mb-6">Detail Remaja</h2>
 
         @php
-            $data = $remaja->getAttributes();
+            $excludedColumns = [
+                'dusun',
+                'desa',
+                'kecamatan',
+                'kepala_keluarga_id',
+                'created_at',
+                'updated_at',
+            ];
+
+            $data = collect($remaja->getAttributes())
+                ->except($excludedColumns)
+                ->toArray();
+
+            $data['alamat'] = $remaja->keluarga->alamat ?? ($data['alamat'] ?? '-');
+
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
@@ -19,14 +33,6 @@
                     } catch (\Throwable $e) {
                         return $raw;
                     }
-                }
-
-                if ($raw === '1' || $raw === 1) {
-                    return 'Ya';
-                }
-
-                if ($raw === '0' || $raw === 0) {
-                    return 'Tidak';
                 }
 
                 return (string) $raw;

@@ -1,0 +1,846 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Kesehatan Keluarga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0ebf8 0%, #f5f7fa 50%, #e8f4f8 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* BUTTON STYLING */
+        .btn-primary {
+            background: linear-gradient(135deg, #4e0383 0%, #6b2ba8 50%, #5a1f8a 100%);
+            box-shadow: 0 4px 15px rgba(78, 3, 131, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3a025c 0%, #5a1f8a 50%, #4a1575 100%);
+            box-shadow: 0 12px 35px rgba(78, 3, 131, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .btn-secondary-color {
+            background: linear-gradient(135deg, #b05800 0%, #d47a2a 50%, #c26a1a 100%);
+            box-shadow: 0 4px 15px rgba(176, 88, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary-color:hover {
+            background: linear-gradient(135deg, #8a4200 0%, #c26a1a 50%, #a85810 100%);
+            box-shadow: 0 12px 35px rgba(176, 88, 0, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .border-primary { border-color: #4e0383; }
+        .text-primary { color: #4e0383; }
+        
+        input, select, textarea {
+            background-color: #f8fafb !important;
+            border: 1.5px solid #e0e5ed !important;
+            transition: all 0.3s ease !important;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none !important;
+            border-color: #4e0383 !important;
+            background-color: #fafbfc !important;
+            box-shadow: 0 0 0 4px rgba(78, 3, 131, 0.08), inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+            transform: translateY(-1px);
+        }
+
+        .page {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fbfd 100%);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(78, 3, 131, 0.05);
+            animation: slideUp 0.5s ease-out;
+            border: 1px solid rgba(78, 3, 131, 0.05);
+        }
+
+        button {
+            font-weight: 500;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            text-transform: none;
+            letter-spacing: 0.3px;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .member-card, .report-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fbfd 100%);
+            border: 1px solid rgba(78, 3, 131, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out backwards;
+        }
+
+        .member-card:nth-child(1), .report-card:nth-child(1) { animation-delay: 0.05s; }
+        .member-card:nth-child(2), .report-card:nth-child(2) { animation-delay: 0.1s; }
+        .member-card:nth-child(3), .report-card:nth-child(3) { animation-delay: 0.15s; }
+        .member-card:nth-child(4), .report-card:nth-child(4) { animation-delay: 0.2s; }
+
+        .member-card::before, .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(78, 3, 131, 0.03) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .member-card:hover, .report-card:hover {
+            box-shadow: 0 16px 40px rgba(78, 3, 131, 0.15);
+            border-color: rgba(78, 3, 131, 0.15);
+            transform: translateY(-8px);
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #4e0383 0%, #6b2ba8 100%);
+            box-shadow: 0 4px 12px rgba(78, 3, 131, 0.15);
+        }
+
+        table thead th {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        table tbody tr:hover {
+            background: linear-gradient(90deg, rgba(78, 3, 131, 0.03), rgba(78, 3, 131, 0.01));
+        }
+
+        .modal {
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .shadow-premium {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(78, 3, 131, 0.1);
+        }
+
+        .bg-gray-500:hover, .bg-red-500:hover {
+            transform: translateY(-2px);
+        }
+
+        /* BADGE STYLING */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            box-shadow: inset 0 1px 2px rgba(21, 87, 36, 0.1);
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+            box-shadow: inset 0 1px 2px rgba(133, 100, 4, 0.1);
+        }
+
+        .badge-info {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            color: #0c5460;
+            box-shadow: inset 0 1px 2px rgba(12, 84, 96, 0.1);
+        }
+
+        /* STAT CARD STYLING */
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fbfd 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(78, 3, 131, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(78, 3, 131, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::after {
+            opacity: 1;
+        }
+
+        /* HEADER STYLING */
+        header {
+            animation: slideInDown 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            opacity: 0.5;
+        }
+
+        header > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* FONT AWESOME ICON STYLING */
+        header i { color: #4e0383; font-size: 48px; }
+        .member-card i, .report-card i { color: #4e0383; font-size: 20px; }
+        
+        /* STAT CARD ICONS - Target by surrounding structure */
+        .stat-card > div:first-child span.text-4xl i {
+            display: inline-block !important;
+            font-size: 40px !important;
+        }
+        
+        /* Purple card - Total Anggota */
+        .stat-card.border-purple-500 > div:first-child span.text-4xl i {
+            color: #7c3aed !important;
+        }
+        
+        /* Orange card - Pemeriksaan Terakhir */
+        .stat-card.border-orange-500 > div:first-child span.text-4xl i {
+            color: #f97316 !important;
+        }
+        
+        /* Green card - Status Kesehatan */
+        .stat-card.border-green-500 > div:first-child span.text-4xl i {
+            color: #10b981 !important;
+        }
+        button i { color: inherit; margin-right: 8px; }
+        .btn-primary i { color: white; }
+        .badge i { margin-right: 4px; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-purple-700 via-purple-600 to-purple-500 text-white p-8 shadow-lg relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-pink-400 to-purple-400 rounded-lg blur opacity-30 animate-pulse"></div>
+                    <span class="relative text-5xl"><i class="fas fa-hospital"></i></span>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-4xl font-bold tracking-tight leading-tight">Sistem Informasi Kesehatan Keluarga</h1>
+                    <p class="text-purple-100 text-base mt-2 font-light">Manajemen kesehatan keluarga yang lebih baik & terpercaya</p>
+                </div>
+            </div>
+            <div class="h-1 w-32 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full mt-4"></div>
+        </div>
+    </header>
+
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- HALAMAN 1: DASHBOARD KELUARGA -->
+        <div id="dashboard" class="page p-8 rounded-2xl shadow-sm">
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">Dashboard Keluarga</h1>
+                <p class="text-gray-600 text-lg font-light">Kelola dan monitor kesehatan keluarga Anda dengan mudah</p>
+                <div class="h-1 w-20 bg-gradient-to-r from-purple-500 to-orange-500 rounded-full mt-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                <button class="btn-primary text-white px-8 py-6 rounded-xl font-semibold flex items-center justify-center gap-3 shadow-md hover:shadow-xl transition-all duration-300" onclick="showPage('familyMembers')">
+                    <span class="text-3xl"><i class="fas fa-people-group"></i></span>
+                    <div class="text-left">
+                        <span class="block text-sm font-light opacity-90">Lihat</span>
+                        <span class="block">Data Anggota</span>
+                    </div>
+                </button>
+                <button class="btn-primary text-white px-8 py-6 rounded-xl font-semibold flex items-center justify-center gap-3 shadow-md hover:shadow-xl transition-all duration-300" onclick="showPage('checkupHistory')">
+                    <span class="text-3xl"><i class="fas fa-list-check"></i></span>
+                    <div class="text-left">
+                        <span class="block text-sm font-light opacity-90">Lihat</span>
+                        <span class="block">Riwayat Cek</span>
+                    </div>
+                </button>
+                <button class="btn-primary text-white px-8 py-6 rounded-xl font-semibold flex items-center justify-center gap-3 shadow-md hover:shadow-xl transition-all duration-300" onclick="showPage('reports')">
+                    <span class="text-3xl"><i class="fas fa-chart-column"></i></span>
+                    <div class="text-left">
+                        <span class="block text-sm font-light opacity-90">Lihat</span>
+                        <span class="block">Laporan</span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-50 via-blue-50 to-orange-50 p-8 rounded-2xl border border-purple-100 shadow-sm">
+                <div class="flex items-center gap-2 mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900"><i class="fas fa-chart-line"></i> Statistik Keluarga</h2>
+                    <span class="text-sm text-gray-600 font-light">Perbarui otomatis</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="stat-card p-8 rounded-2xl border-l-4 border-purple-500 hover:scale-105">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <p class="text-gray-600 text-sm font-semibold uppercase tracking-wider">Total Anggota</p>
+                                <p class="text-5xl font-bold text-purple-600 mt-3">4</p>
+                            </div>
+                            <span class="text-4xl" style="color: #7c3aed;"><i class="fas fa-users"></i></span>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-4">orang keluarga</p>
+                        <div class="h-1 w-12 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full mt-4"></div>
+                    </div>
+                    <div class="stat-card p-8 rounded-2xl border-l-4 border-orange-500 hover:scale-105">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <p class="text-gray-600 text-sm font-semibold uppercase tracking-wider">Pemeriksaan Terakhir</p>
+                                <p class="text-5xl font-bold text-orange-500 mt-3">2</p>
+                            </div>
+                            <span class="text-4xl"><i class="fas fa-calendar-alt"></i></span>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-4">minggu yang lalu</p>
+                        <div class="h-1 w-12 bg-gradient-to-r from-orange-400 to-orange-500 rounded-full mt-4"></div>
+                    </div>
+                    <div class="stat-card p-8 rounded-2xl border-l-4 border-green-500 hover:scale-105">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <p class="text-gray-600 text-sm font-semibold uppercase tracking-wider">Status Kesehatan</p>
+                                <p class="text-5xl font-bold text-green-600 mt-3"><i class="fas fa-check"></i></p>
+                            </div>
+                            <span class="text-4xl"><i class="fas fa-hospital"></i></span>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-4">Semua normal</p>
+                        <div class="h-1 w-12 bg-gradient-to-r from-green-400 to-green-500 rounded-full mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 2: DATA ANGGOTA KELUARGA -->
+        <div id="familyMembers" class="page hidden p-8 rounded-2xl shadow-sm">
+            <div class="text-sm text-gray-600 mb-8 flex items-center gap-2">
+                <a class="text-purple-600 font-semibold cursor-pointer hover:text-purple-800 transition-colors" onclick="showPage('dashboard')">Dashboard</a>
+                <span class="text-gray-400">/</span>
+                <span class="text-gray-700">Data Anggota Keluarga</span>
+            </div>
+            
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">Data Anggota Keluarga</h1>
+                <p class="text-gray-600 text-lg font-light">Kelola informasi kesehatan setiap anggota keluarga</p>
+                <div class="h-1 w-20 bg-gradient-to-r from-purple-500 to-orange-500 rounded-full mt-4"></div>
+            </div>
+
+            <div class="flex gap-3 mb-10">
+                <button class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all duration-300 flex items-center gap-2" onclick="showPage('dashboard')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            </div>
+
+            <!-- DAFTAR ANGGOTA KELUARGA -->
+            <div id="membersList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="member-card p-8 rounded-2xl border-l-4 border-purple-500 shadow-md">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-3xl"><i class="fas fa-user"></i></span>
+                                <h3 class="text-2xl font-bold text-gray-900">Budi Santoso</h3>
+                            </div>
+                            <p class="text-sm text-purple-600 font-semibold bg-purple-50 px-3 py-1 rounded-full inline-block">Ayah Keluarga</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm mb-8 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Umur</span><span class="font-semibold text-gray-900 bg-purple-50 px-3 py-1 rounded-lg">45 tahun</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Darah</span><span class="font-semibold text-gray-900 bg-purple-50 px-3 py-1 rounded-lg">O+</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Berat</span><span class="font-semibold text-gray-900 bg-purple-50 px-3 py-1 rounded-lg">75 kg</span></div>
+                        <div class="flex justify-between items-center text-xs"><span class="text-gray-600 font-medium">Email</span><span class="text-gray-700">budi@email.com</span></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1" onclick="showPage('memberDetail')"><i class="fas fa-eye"></i> Detail</button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md transition-all duration-300"><i class="fas fa-trash"></i> Hapus</button>
+                    </div>
+                </div>
+
+                <div class="member-card p-8 rounded-2xl border-l-4 border-pink-500 shadow-md">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-3xl"><i class="fas fa-user"></i></span>
+                                <h3 class="text-2xl font-bold text-gray-900">Siti Nur Azizah</h3>
+                            </div>
+                            <p class="text-sm text-pink-600 font-semibold bg-pink-50 px-3 py-1 rounded-full inline-block">Ibu Keluarga</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm mb-8 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Umur</span><span class="font-semibold text-gray-900 bg-pink-50 px-3 py-1 rounded-lg">42 tahun</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Darah</span><span class="font-semibold text-gray-900 bg-pink-50 px-3 py-1 rounded-lg">A+</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Berat</span><span class="font-semibold text-gray-900 bg-pink-50 px-3 py-1 rounded-lg">62 kg</span></div>
+                        <div class="flex justify-between items-center text-xs"><span class="text-gray-600 font-medium">Email</span><span class="text-gray-700">siti@email.com</span></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1" onclick="showPage('memberDetail')"><i class="fas fa-eye"></i> Detail</button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md transition-all duration-300"><i class="fas fa-trash"></i> Hapus</button>
+                    </div>
+                </div>
+
+                <div class="member-card p-8 rounded-2xl border-l-4 border-blue-500 shadow-md">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-3xl"><i class="fas fa-user"></i></span>
+                                <h3 class="text-2xl font-bold text-gray-900">Ahmad Budi</h3>
+                            </div>
+                            <p class="text-sm text-blue-600 font-semibold bg-blue-50 px-3 py-1 rounded-full inline-block">Anak Laki-laki</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm mb-8 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Umur</span><span class="font-semibold text-gray-900 bg-blue-50 px-3 py-1 rounded-lg">18 tahun</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Darah</span><span class="font-semibold text-gray-900 bg-blue-50 px-3 py-1 rounded-lg">B+</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Berat</span><span class="font-semibold text-gray-900 bg-blue-50 px-3 py-1 rounded-lg">68 kg</span></div>
+                        <div class="flex justify-between items-center text-xs"><span class="text-gray-600 font-medium">Email</span><span class="text-gray-700">ahmad@email.com</span></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1" onclick="showPage('memberDetail')"><i class="fas fa-eye"></i> Detail</button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md transition-all duration-300"><i class="fas fa-trash"></i> Hapus</button>
+                    </div>
+                </div>
+
+                <div class="member-card p-8 rounded-2xl border-l-4 border-green-500 shadow-md">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-3xl"><i class="fas fa-user"></i></span>
+                                <h3 class="text-2xl font-bold text-gray-900">Ria Budi Santoso</h3>
+                            </div>
+                            <p class="text-sm text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-full inline-block">Anak Perempuan</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm mb-8 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Umur</span><span class="font-semibold text-gray-900 bg-green-50 px-3 py-1 rounded-lg">15 tahun</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Darah</span><span class="font-semibold text-gray-900 bg-green-50 px-3 py-1 rounded-lg">O+</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Berat</span><span class="font-semibold text-gray-900 bg-green-50 px-3 py-1 rounded-lg">55 kg</span></div>
+                        <div class="flex justify-between items-center text-xs"><span class="text-gray-600 font-medium">Email</span><span class="text-gray-700">ria@email.com</span></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1" onclick="showPage('memberDetail')"><i class="fas fa-eye"></i> Detail</button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md transition-all duration-300"><i class="fas fa-trash"></i> Hapus</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 3: DETAIL ANGGOTA KELUARGA -->
+        <div id="memberDetail" class="page hidden p-8 rounded-2xl shadow-sm">
+            <div class="text-sm text-gray-600 mb-8 flex items-center gap-2">
+                <a class="text-purple-600 font-semibold cursor-pointer hover:text-purple-800 transition-colors" onclick="showPage('dashboard')">Dashboard</a>
+                <span class="text-gray-400">/</span>
+                <a class="text-purple-600 font-semibold cursor-pointer hover:text-purple-800 transition-colors" onclick="showPage('familyMembers')">Data Anggota</a> 
+                <span class="text-gray-400">/</span>
+                <span class="text-gray-700">Detail</span>
+            </div>
+            
+            <div class="mb-10">
+                <h2 class="text-4xl font-bold text-gray-900 mb-3">Detail Data Kesehatan</h2>
+                <p class="text-gray-600 text-lg font-light">Informasi lengkap kesehatan anggota keluarga</p>
+                <div class="h-1 w-20 bg-gradient-to-r from-purple-500 to-orange-500 rounded-full mt-4"></div>
+            </div>
+
+            <div class="flex gap-3 mb-10">
+                <button class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all duration-300 flex items-center gap-2" onclick="showPage('familyMembers')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            </div>
+
+            <div class="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl border border-purple-100 shadow-md mb-10">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"><i class="fas fa-user"></i> <span>Budi Santoso</span></h3>
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Hubungan:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">Ayah</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Tanggal Lahir:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">15 Januari 1979</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Umur:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">45 tahun</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Jenis Kelamin:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">Laki-laki</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Golongan Darah:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">O+</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Berat Badan:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">75 kg</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Tinggi Badan:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">172 cm</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Alergi:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">Tidak ada</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Riwayat Penyakit:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">Tekanan Darah Tinggi</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Email:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline break-all">budi@email.com</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-white rounded-lg hover:bg-purple-50 transition-colors border-l-4 border-purple-500">
+                        <span class="font-semibold text-gray-900 mb-2 sm:mb-0">Nomor Telepon:</span>
+                        <span class="text-gray-700 bg-purple-50 px-3 py-1 rounded-lg inline-block sm:inline">081234567890</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"><i class="fas fa-list-check"></i> <span>Riwayat Pemeriksaan Kesehatan</span></h3>
+            <div class="overflow-x-auto rounded-xl shadow-md">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="text-white font-bold text-base">
+                            <th class="px-6 py-4 text-left">Tanggal</th>
+                            <th class="px-6 py-4 text-left">Jenis Pemeriksaan</th>
+                            <th class="px-6 py-4 text-left">Hasil</th>
+                            <th class="px-6 py-4 text-left">Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        <tr class="border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">10 April 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Cek Tekanan Darah</td>
+                            <td class="px-6 py-4"><span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Tinggi</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">150/95 mmHg</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">15 Maret 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Tes Darah</td>
+                            <td class="px-6 py-4"><span class="badge badge-success"><i class="fas fa-check"></i> Normal</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">Hasil pemeriksaan normal</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">20 Februari 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Pemeriksaan Umum</td>
+                            <td class="px-6 py-4"><span class="badge badge-success"><i class="fas fa-check"></i> Normal</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">Kesehatan baik-baik saja</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- HALAMAN 4: RIWAYAT PEMERIKSAAN -->
+        <div id="checkupHistory" class="page hidden p-8 rounded-2xl shadow-sm">
+            <div class="text-sm text-gray-600 mb-8 flex items-center gap-2">
+                <a class="text-purple-600 font-semibold cursor-pointer hover:text-purple-800 transition-colors" onclick="showPage('dashboard')">Dashboard</a>
+                <span class="text-gray-400">/</span>
+                <span class="text-gray-700">Riwayat Pemeriksaan</span>
+            </div>
+            
+            <div class="mb-10">
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">Riwayat Pemeriksaan Kesehatan</h1>
+                <p class="text-gray-600 text-lg font-light">Catatan lengkap pemeriksaan kesehatan seluruh keluarga</p>
+                <div class="h-1 w-20 bg-gradient-to-r from-purple-500 to-orange-500 rounded-full mt-4"></div>
+            </div>
+
+            <div class="flex gap-3 mb-10">
+                <button class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all duration-300 flex items-center gap-2" onclick="showPage('dashboard')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl shadow-md">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="text-white font-semibold">
+                            <th class="px-6 py-4 text-left font-bold text-base">Anggota Keluarga</th>
+                            <th class="px-6 py-4 text-left font-bold text-base">Tanggal</th>
+                            <th class="px-6 py-4 text-left font-bold text-base">Jenis Pemeriksaan</th>
+                            <th class="px-6 py-4 text-left font-bold text-base">Hasil</th>
+                            <th class="px-6 py-4 text-left font-bold text-base">Catatan</th>
+                            <th class="px-6 py-4 text-left font-bold text-base">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        <tr class="border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Budi Santoso</td>
+                            <td class="px-6 py-4 text-gray-700">10 April 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Cek Tekanan Darah</td>
+                            <td class="px-6 py-4"><span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Tinggi</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">150/95 mmHg</td>
+                            <td class="px-6 py-4"><button class="btn-primary text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300"><i class="fas fa-arrow-right"></i></button></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Siti Nur Azizah</td>
+                            <td class="px-6 py-4 text-gray-700">05 April 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Tes Darah</td>
+                            <td class="px-6 py-4"><span class="badge badge-success"><i class="fas fa-check"></i> Normal</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">Hasil normal</td>
+                            <td class="px-6 py-4"><button class="btn-primary text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300"><i class="fas fa-arrow-right"></i></button></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Ahmad Budi</td>
+                            <td class="px-6 py-4 text-gray-700">01 April 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Pemeriksaan Umum</td>
+                            <td class="px-6 py-4"><span class="badge badge-success"><i class="fas fa-check"></i> Normal</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">Kesehatan baik</td>
+                            <td class="px-6 py-4"><button class="btn-primary text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300"><i class="fas fa-arrow-right"></i></button></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Ria Budi Santoso</td>
+                            <td class="px-6 py-4 text-gray-700">28 Maret 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Cek Gigi</td>
+                            <td class="px-6 py-4"><span class="badge badge-success"><i class="fas fa-check"></i> Normal</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">Gigi sehat</td>
+                            <td class="px-6 py-4"><button class="btn-primary text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300"><i class="fas fa-arrow-right"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-purple-50 transition-colors duration-200">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Budi Santoso</td>
+                            <td class="px-6 py-4 text-gray-700">15 Maret 2024</td>
+                            <td class="px-6 py-4 text-gray-700">Tes Darah</td>
+                            <td class="px-6 py-4"><span class="badge badge-success"><i class="fas fa-check"></i> Normal</span></td>
+                            <td class="px-6 py-4 text-gray-700 text-sm">Hasil normal</td>
+                            <td class="px-6 py-4"><button class="btn-primary text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300"><i class="fas fa-arrow-right"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- HALAMAN 5: LAPORAN KESEHATAN -->
+        <div id="reports" class="page hidden p-8 rounded-2xl shadow-sm">
+            <div class="text-sm text-gray-600 mb-8 flex items-center gap-2">
+                <a class="text-purple-600 font-semibold cursor-pointer hover:text-purple-800 transition-colors" onclick="showPage('dashboard')">Dashboard</a>
+                <span class="text-gray-400">/</span>
+                <span class="text-gray-700">Laporan Kesehatan</span>
+            </div>
+            
+            <div class="mb-10">
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">Laporan Kesehatan Keluarga</h1>
+                <p class="text-gray-600 text-lg font-light">Ringkasan kesehatan keluarga dari periode pemeriksaan</p>
+                <div class="h-1 w-20 bg-gradient-to-r from-purple-500 to-orange-500 rounded-full mt-4"></div>
+            </div>
+
+            <div class="flex gap-3 mb-10">
+                <button class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all duration-300 flex items-center gap-2" onclick="showPage('dashboard')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            </div>
+
+            <div id="reportsList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="report-card p-8 rounded-2xl border-l-4 border-purple-500 shadow-md">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900"><i class="fas fa-calendar-alt"></i> April 2024</h3>
+                            <p class="text-sm text-gray-600 mt-2 font-light">01 - 30 April 2024</p>
+                        </div>
+                        <span class="badge badge-warning">Dalam Review</span>
+                    </div>
+                    <div class="space-y-3 text-sm mb-8 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Total Pemeriksaan</span><span class="font-bold text-gray-900 bg-purple-50 px-3 py-1 rounded-lg">5 pemeriksaan</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Dibuat Pada</span><span class="text-gray-900">10 April 2024</span></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1 transition-all duration-300" onclick="showModal('downloadReportModal')"><i class="fas fa-download"></i> Unduh</button>
+                        <button class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1 transition-all duration-300"><i class="fas fa-eye"></i> Lihat</button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md transition-all duration-300"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <div class="report-card p-8 rounded-2xl border-l-4 border-green-500 shadow-md">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900"><i class="fas fa-calendar-alt"></i> Maret 2024</h3>
+                            <p class="text-sm text-gray-600 mt-2 font-light">01 - 31 Maret 2024</p>
+                        </div>
+                        <span class="badge badge-success">Selesai</span>
+                    </div>
+                    <div class="space-y-3 text-sm mb-8 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Total Pemeriksaan</span><span class="font-bold text-gray-900 bg-green-50 px-3 py-1 rounded-lg">8 pemeriksaan</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Dibuat Pada</span><span class="text-gray-900">31 Maret 2024</span></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1 transition-all duration-300" onclick="showModal('downloadReportModal')"><i class="fas fa-download"></i> Unduh</button>
+                        <button class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1 transition-all duration-300"><i class="fas fa-eye"></i> Lihat</button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md transition-all duration-300"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <div class="report-card p-8 rounded-2xl border-l-4 border-blue-500 shadow-md">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900"><i class="fas fa-calendar-alt"></i> Februari 2024</h3>
+                            <p class="text-sm text-gray-600 mt-2 font-light">01 - 29 Februari 2024</p>
+                        </div>
+                        <span class="badge badge-info">Selesai</span>
+                    </div>
+                    <div class="space-y-3 text-sm mb-8 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Total Pemeriksaan</span><span class="font-bold text-gray-900 bg-blue-50 px-3 py-1 rounded-lg">6 pemeriksaan</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600 font-medium">Dibuat Pada</span><span class="text-gray-900">29 Februari 2024</span></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1 transition-all duration-300" onclick="showModal('downloadReportModal')"><i class="fas fa-download"></i> Unduh</button>
+                        <button class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md flex-1 transition-all duration-300"><i class="fas fa-eye"></i> Lihat</button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold shadow-md transition-all duration-300"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: UNDUH LAPORAN -->
+    <div id="downloadReportModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-lg animate-fadeIn">
+        <div class="bg-white rounded-3xl p-10 w-full max-w-md shadow-2xl border border-purple-100 transform transition-all duration-300 scale-95 hover:scale-100">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-900"><i class="fas fa-download"></i> Unduh Laporan</h2>
+                <button onclick="closeModal('downloadReportModal')" class="text-gray-400 hover:text-gray-600 text-4xl leading-none h-10 w-10 flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors"><i class="fas fa-times"></i></button>
+            </div>
+            <p class="text-gray-600 mb-8 text-base font-light">Pilih format file untuk mengunduh laporan kesehatan keluarga Anda</p>
+            <div class="space-y-3">
+                <button type="button" class="btn-primary text-white px-4 py-3 rounded-lg font-semibold shadow-md w-full flex items-center justify-center gap-3 text-base uppercase tracking-wider transition-all duration-300" onclick="closeModal('downloadReportModal')"><i class="fas fa-file-pdf"></i> <span>Download PDF</span></button>
+                <button type="button" class="btn-primary text-white px-4 py-3 rounded-lg font-semibold shadow-md w-full flex items-center justify-center gap-3 text-base uppercase tracking-wider transition-all duration-300" onclick="closeModal('downloadReportModal')"><i class="fas fa-file-excel"></i> <span>Download Excel</span></button>
+                <button type="button" class="btn-primary text-white px-4 py-3 rounded-lg font-semibold shadow-md w-full flex items-center justify-center gap-3 text-base uppercase tracking-wider transition-all duration-300" onclick="closeModal('downloadReportModal')"><i class="fas fa-file-word"></i> <span>Download Word</span></button>
+                <button type="button" class="bg-gradient-to-r from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 text-white px-4 py-3 rounded-lg font-semibold shadow-md w-full uppercase tracking-wider transition-all duration-300 mt-4" onclick="closeModal('downloadReportModal')"><i class="fas fa-times"></i> Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // FUNGSI UNTUK MENAMPILKAN HALAMAN
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // FUNGSI UNTUK MENAMPILKAN MODAL
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        // FUNGSI UNTUK MENUTUP MODAL
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // TUTUP MODAL JIKA KLIK LUAR
+        window.onclick = function(event) {
+            if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
+                event.target.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

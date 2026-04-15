@@ -17,11 +17,7 @@ class Balita extends Model
         'berat_badan_lahir',
         'panjang_badan_lahir',
         'nama_ortu',
-        'alamat',
         'no_hp',
-        'dusun',
-        'desa',
-        'kecamatan',
     ];
 
     protected $casts = [

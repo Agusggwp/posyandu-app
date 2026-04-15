@@ -48,22 +48,6 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">No HP</label>
                     <input type="text" name="no_hp" value="{{ old('no_hp', $remaja->no_hp) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Dusun</label>
-                    <input type="text" name="dusun" value="{{ old('dusun', $remaja->dusun) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Desa</label>
-                    <input type="text" name="desa" value="{{ old('desa', $remaja->desa) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
-                    <input type="text" name="kecamatan" value="{{ old('kecamatan', $remaja->kecamatan) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                </div>
-            </div>
-            <div class="mt-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
-                <textarea name="alamat" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg">{{ old('alamat', $remaja->alamat) }}</textarea>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>

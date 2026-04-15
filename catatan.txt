@@ -1,0 +1,50 @@
+Testing Posyandu
+SARAN DAN MASUKKAN
+1. Di halaman login masih keterangan "Sistem kasir modern yang dirancang khusus untuk bisnis Anda berkembang lebih cepat".
+2. Untuk logo home dihapus dan ditempatkan button hamburger jika mengakses menggunakan hp
+3. Untuk di form input isikan keterangannya di dalam dan Batasan karakter
+4. Untuk di form pemeriksaan gunakanlah 1 form Waktu kunjungan (isi tanggal, bulan dan tahun}
+5. Untuk di pilih keluarga, balita, ibu hamil, ibu nifas, remaja dan lansia bisa di search
+Tampilan di aksi data ibu nifas, data remaja berbeda
+
+
+Master Data
+1. Data Keluarga
+2. Data balita 
+   - Di form ditulis nama bayi
+3. Data Ibu hamil
+   - Keterangan di form nama belum lengkap (Nama Ibu Hamil)
+   - Belum isi Tinggi Badan
+4. Data Ibu Nifas/Menyusui
+   - Keterangan di form nama belum lengkap (Nama Ibu Nifas/Menyusui)
+   - Belum isi alamat
+   - Belum isi II. Ibu Nifas/Menyusui
+5. Data Pra Sekolah/Remaja
+   - Untuk di Riwayat Keluarga dan Riwayat diri sebaiknya menggunakan dropdown menu/select
+     option yang bisa di pilih lebih dari 1 (Hipertensi/DM/Storke/Jantung/Asma/Kanker/Kolesterol Tinggi
+6. Data Lansia
+   - Tidak berisi umur
+   - Untuk di Riwayat Keluarga dan Riwayat diri sebaiknya menggunakan dropdown menu/select
+     option yang bisa di pilih lebih dari 1 (Hipertensi/DM/Storke/Jantung/Asma/Kanker/Kolesterol Tinggi
+   - Untuk di form Konsumsi Gula, Konsumsi garam dan Konsumsi Lemak samakan dengan form Merokok (select option)
+
+
+PEMERIKSAAN
+1. Pemeriksaan Balita
+   - Untuk Umur tempatnya di atas form Waktu kunjungan
+   - Untuk di Perkembangan, Asi Eklusif, MP-ASI, Vitamin A, Obat Cacing, MT Pangan Lokal buatkan dropdown menu/select option (Ya/Tidak)
+   - Untuk di form pemeriksaan (data balita belum beraturan langkah"nya) 
+   - Untuk di BB/U, PB/U, TB-PB/U buatkan hasil keterangan dari itu
+2. Pemeriksaan Ibu Hamil
+   - Form belum lengkap
+3. Pemeriksaan Ibu Nifas/Menyusui
+   - Setelah form LILA belum berisi keterangan (Hijau/Kuning/Merah)
+   - Untuk keterangan BB Turun diganti menjadi BB tidak naik/turun dalam 2 bulan berturut-turut
+   - Untuk form Pemberian Vitamin A, Menyusui, Mengikuti KB Pasca Persalinan (Pil/Kondom/Lainnya) menggunakn dropdown menu/select option (Ya/Tidak)
+4. Pemeriksaan Pra Sekolah/Remaja
+   - Untuk keterangan BB Turun diganti menjadi BB tidak naik/turun dalam 2 bulan berturut-turut
+   - From Edukasi berada di atas form rujukan
+   - Untuk Form Skrining Masalah (Home, Education/Employment, Aktivities, Drugs, Sexuality, Self Image, dan Safety) menggunakn dropdown menu/select option (Ya/Tidak)
+   - Form sudah lengkap
+5. Pemeriksaan Lansia
+   - Form belum beraturan

@@ -72,24 +72,11 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
                     <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-2">No HP</label>
                     <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp', $balita->no_hp) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('no_hp') border-red-500 @enderror">
                 </div>
-                <div>
-                    <label for="dusun" class="block text-sm font-medium text-gray-700 mb-2">Dusun</label>
-                    <input type="text" name="dusun" id="dusun" value="{{ old('dusun', $balita->dusun) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('dusun') border-red-500 @enderror">
-                </div>
-                <div>
-                    <label for="desa" class="block text-sm font-medium text-gray-700 mb-2">Desa</label>
-                    <input type="text" name="desa" id="desa" value="{{ old('desa', $balita->desa) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('desa') border-red-500 @enderror">
-                </div>
-            </div>
-
-            <div class="mt-6">
-                <label for="kecamatan" class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
-                <input type="text" name="kecamatan" id="kecamatan" value="{{ old('kecamatan', $balita->kecamatan) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('kecamatan') border-red-500 @enderror">
             </div>
 
             <div class="flex gap-4 mt-8">

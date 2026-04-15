@@ -17,9 +17,30 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\KepalaKeluargaAuthController;
 
 Route::get('/', function () {
     return redirect()->route('login');
+});
+
+Route::prefix('kepala-keluarga')->name('kepala-keluarga.')->group(function () {
+    Route::middleware('guest:kepala_keluarga')->group(function () {
+        Route::get('login', [KepalaKeluargaAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('login', [KepalaKeluargaAuthController::class, 'login'])->name('login.post');
+        Route::get('register', [KepalaKeluargaAuthController::class, 'showRegisterForm'])->name('register');
+        Route::post('register', [KepalaKeluargaAuthController::class, 'register'])->name('register.post');
+        Route::get('activate/{id}/{hash}', [KepalaKeluargaAuthController::class, 'activate'])
+            ->middleware('signed')
+            ->name('activate');
+    });
+
+    Route::middleware('auth:kepala_keluarga')->group(function () {
+        Route::get('dashboard', [KepalaKeluargaAuthController::class, 'dashboard'])->name('dashboard');
+        Route::get('anggota/{tipe}/{id}', [KepalaKeluargaAuthController::class, 'showMemberDetail'])->name('anggota.show');
+        Route::get('anggota/{tipe}/{id}/pemeriksaan', [KepalaKeluargaAuthController::class, 'showMemberPemeriksaanStats'])->name('anggota.pemeriksaan');
+        Route::get('anggota/{tipe}/{id}/pemeriksaan/export/{format}', [KepalaKeluargaAuthController::class, 'exportMemberPemeriksaan'])->name('anggota.pemeriksaan.export');
+        Route::post('logout', [KepalaKeluargaAuthController::class, 'logout'])->name('logout');
+    });
 });
 
 // Authentication Routes (without register)

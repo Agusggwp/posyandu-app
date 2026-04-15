@@ -15,11 +15,7 @@ class Remaja extends Model
         'tanggal_lahir',
         'jenis_kelamin',
         'nama_ortu',
-        'alamat',
         'no_hp',
-        'dusun',
-        'desa',
-        'kecamatan',
         'riwayat_keluarga',
         'riwayat_diri',
     ];

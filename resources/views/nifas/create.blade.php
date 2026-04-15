@@ -45,18 +45,6 @@
                     <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent @error('no_hp') border-red-500 @enderror">
                 </div>
                 <div>
-                    <label for="dusun" class="block text-sm font-medium text-gray-700 mb-2">Dusun</label>
-                    <input type="text" name="dusun" id="dusun" value="{{ old('dusun') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent @error('dusun') border-red-500 @enderror">
-                </div>
-                <div>
-                    <label for="desa" class="block text-sm font-medium text-gray-700 mb-2">Desa</label>
-                    <input type="text" name="desa" id="desa" value="{{ old('desa') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent @error('desa') border-red-500 @enderror">
-                </div>
-                <div>
-                    <label for="kecamatan" class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
-                    <input type="text" name="kecamatan" id="kecamatan" value="{{ old('kecamatan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent @error('kecamatan') border-red-500 @enderror">
-                </div>
-                <div>
                     <label for="tanggal_bersalin" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Bersalin</label>
                     <input type="date" name="tanggal_bersalin" id="tanggal_bersalin" value="{{ old('tanggal_bersalin') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent @error('tanggal_bersalin') border-red-500 @enderror">
                 </div>

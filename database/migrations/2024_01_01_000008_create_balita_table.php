@@ -27,13 +27,7 @@ return new class extends Migration
 
             // DATA ORANG TUA
             $table->string('nama_ortu', 100)->nullable();
-            $table->text('alamat')->nullable();
             $table->string('no_hp', 20)->nullable();
-
-            // LOKASI GEOGRAFIS
-            $table->string('dusun', 100)->nullable();
-            $table->string('desa', 100)->nullable();
-            $table->string('kecamatan', 100)->nullable();
 
             $table->timestamps();
 

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->string('umur', 50)->nullable();
             $table->string('nama_suami', 100)->nullable();
-            $table->text('alamat')->nullable();
             $table->string('no_hp', 20)->nullable();
 
             // Data Kehamilan

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Keluarga extends Model
+class Keluarga extends Authenticatable
 {
     protected $table = 'kepala_keluarga';
 
@@ -22,6 +22,7 @@ class Keluarga extends Model
 
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     protected $casts = [

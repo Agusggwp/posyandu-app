@@ -8,7 +8,21 @@
 
     <div class="bg-white rounded-lg shadow-lg p-6">
         @php
-            $data = $lansia->getAttributes();
+            $excludedColumns = [
+                'dusun',
+                'desa',
+                'kecamatan',
+                'kepala_keluarga_id',
+                'created_at',
+                'updated_at',
+            ];
+
+            $data = collect($lansia->getAttributes())
+                ->except($excludedColumns)
+                ->toArray();
+
+            $data['alamat'] = $lansia->keluarga->alamat ?? ($data['alamat'] ?? '-');
+
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
@@ -21,14 +35,6 @@
                     } catch (\Throwable $e) {
                         return $raw;
                     }
-                }
-
-                if ($raw === '1' || $raw === 1) {
-                    return 'Ya';
-                }
-
-                if ($raw === '0' || $raw === 0) {
-                    return 'Tidak';
                 }
 
                 return (string) $raw;

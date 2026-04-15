@@ -8,7 +8,21 @@
 
     <div class="bg-white rounded-lg shadow-lg p-6">
         @php
-            $data = $balita->getAttributes();
+            $excludedColumns = [
+                'no_telp',
+                'dusun',
+                'desa',
+                'kecamatan',
+                'created_at',
+                'updated_at',
+            ];
+
+            $data = collect($balita->getAttributes())
+                ->except($excludedColumns)
+                ->toArray();
+
+            $data['alamat'] = $balita->keluarga->alamat ?? ($data['alamat'] ?? '-');
+
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
@@ -21,14 +35,6 @@
                     } catch (\Throwable $e) {
                         return $raw;
                     }
-                }
-
-                if ($raw === '1' || $raw === 1) {
-                    return 'Ya';
-                }
-
-                if ($raw === '0' || $raw === 0) {
-                    return 'Tidak';
                 }
 
                 return (string) $raw;

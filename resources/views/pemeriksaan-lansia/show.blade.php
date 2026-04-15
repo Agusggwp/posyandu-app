@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Detail Pemeriksaan Lansia</h2>
+<div class="max-w-4xl mx-auto px-3 sm:px-4">
+    <div class="mb-4 sm:mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Detail Pemeriksaan Lansia</h2>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         @php
             $data = $pemeriksaan->getAttributes();
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
@@ -15,7 +15,15 @@
                     return '-';
                 }
 
-                if (is_string($raw) && (str_contains($key, 'tanggal') || str_contains($key, 'waktu') || str_ends_with($key, '_at'))) {
+                if (is_string($raw) && $key === 'waktu_kunjungan') {
+                    try {
+                        return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y');
+                    } catch (\Throwable $e) {
+                        return $raw;
+                    }
+                }
+
+                if (is_string($raw) && (str_contains($key, 'tanggal') || str_ends_with($key, '_at'))) {
                     try {
                         return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y H:i');
                     } catch (\Throwable $e) {
@@ -44,11 +52,11 @@
             @endforeach
         </div>
 
-        <div class="flex gap-4 mt-8">
-            <a href="{{ route('pemeriksaan-lansia.edit', $pemeriksaan->id) }}" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
+            <a href="{{ route('pemeriksaan-lansia.edit', $pemeriksaan->id) }}" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                 Edit
             </a>
-            <a href="{{ route('pemeriksaan-lansia.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <a href="{{ route('pemeriksaan-lansia.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                 Kembali
             </a>
         </div>

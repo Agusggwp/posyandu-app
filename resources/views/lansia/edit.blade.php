@@ -1,19 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto px-1 sm:px-0">
     <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Edit Data Lansia</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Edit Data Lansia</h2>
         <p class="text-sm text-gray-600 mt-2">Perbarui data pada tabel dewasa_identitas.</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         <form action="{{ route('lansia.update', $lansia->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="kepala_keluarga_id" class="block text-sm font-medium text-gray-700 mb-2">Keluarga <span class="text-red-500">*</span></label>
+                    <input type="text" class="js-keluarga-search w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent" data-target="#kepala_keluarga_id" placeholder="Cari no KK / nama kepala keluarga...">
                     <select name="kepala_keluarga_id" id="kepala_keluarga_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('kepala_keluarga_id') border-red-500 @enderror" required>
                         <option value="">-- Pilih Keluarga --</option>
                         @foreach($keluargas as $keluarga)
@@ -60,11 +61,29 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
                     <label for="riwayat_keluarga" class="block text-sm font-medium text-gray-700 mb-2">Riwayat Keluarga</label>
-                    <textarea name="riwayat_keluarga" id="riwayat_keluarga" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('riwayat_keluarga') border-red-500 @enderror">{{ old('riwayat_keluarga', $lansia->riwayat_keluarga) }}</textarea>
+                    <select name="riwayat_keluarga" id="riwayat_keluarga" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('riwayat_keluarga') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="Hipertensi" {{ old('riwayat_keluarga', $lansia->riwayat_keluarga) == 'Hipertensi' ? 'selected' : '' }}>Hipertensi</option>
+                        <option value="DM" {{ old('riwayat_keluarga', $lansia->riwayat_keluarga) == 'DM' ? 'selected' : '' }}>DM (Diabetes Melitus)</option>
+                        <option value="Stroke" {{ old('riwayat_keluarga', $lansia->riwayat_keluarga) == 'Stroke' ? 'selected' : '' }}>Stroke</option>
+                        <option value="Jantung" {{ old('riwayat_keluarga', $lansia->riwayat_keluarga) == 'Jantung' ? 'selected' : '' }}>Jantung</option>
+                        <option value="Asma" {{ old('riwayat_keluarga', $lansia->riwayat_keluarga) == 'Asma' ? 'selected' : '' }}>Asma</option>
+                        <option value="Kanker" {{ old('riwayat_keluarga', $lansia->riwayat_keluarga) == 'Kanker' ? 'selected' : '' }}>Kanker</option>
+                        <option value="Kolesterol Tinggi" {{ old('riwayat_keluarga', $lansia->riwayat_keluarga) == 'Kolesterol Tinggi' ? 'selected' : '' }}>Kolesterol Tinggi</option>
+                    </select>
                 </div>
                 <div>
                     <label for="riwayat_diri" class="block text-sm font-medium text-gray-700 mb-2">Riwayat Diri</label>
-                    <textarea name="riwayat_diri" id="riwayat_diri" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('riwayat_diri') border-red-500 @enderror">{{ old('riwayat_diri', $lansia->riwayat_diri) }}</textarea>
+                    <select name="riwayat_diri" id="riwayat_diri" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('riwayat_diri') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="Hipertensi" {{ old('riwayat_diri', $lansia->riwayat_diri) == 'Hipertensi' ? 'selected' : '' }}>Hipertensi</option>
+                        <option value="DM" {{ old('riwayat_diri', $lansia->riwayat_diri) == 'DM' ? 'selected' : '' }}>DM (Diabetes Melitus)</option>
+                        <option value="Stroke" {{ old('riwayat_diri', $lansia->riwayat_diri) == 'Stroke' ? 'selected' : '' }}>Stroke</option>
+                        <option value="Jantung" {{ old('riwayat_diri', $lansia->riwayat_diri) == 'Jantung' ? 'selected' : '' }}>Jantung</option>
+                        <option value="Asma" {{ old('riwayat_diri', $lansia->riwayat_diri) == 'Asma' ? 'selected' : '' }}>Asma</option>
+                        <option value="Kanker" {{ old('riwayat_diri', $lansia->riwayat_diri) == 'Kanker' ? 'selected' : '' }}>Kanker</option>
+                        <option value="Kolesterol Tinggi" {{ old('riwayat_diri', $lansia->riwayat_diri) == 'Kolesterol Tinggi' ? 'selected' : '' }}>Kolesterol Tinggi</option>
+                    </select>
                 </div>
             </div>
 
@@ -79,23 +98,35 @@
                 </div>
                 <div>
                     <label for="konsumsi_gula" class="block text-sm font-medium text-gray-700 mb-2">Konsumsi Gula</label>
-                    <input type="text" name="konsumsi_gula" id="konsumsi_gula" value="{{ old('konsumsi_gula', $lansia->konsumsi_gula) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('konsumsi_gula') border-red-500 @enderror">
+                    <select name="konsumsi_gula" id="konsumsi_gula" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('konsumsi_gula') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('konsumsi_gula', $lansia->konsumsi_gula) === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('konsumsi_gula', $lansia->konsumsi_gula) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label for="konsumsi_garam" class="block text-sm font-medium text-gray-700 mb-2">Konsumsi Garam</label>
-                    <input type="text" name="konsumsi_garam" id="konsumsi_garam" value="{{ old('konsumsi_garam', $lansia->konsumsi_garam) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('konsumsi_garam') border-red-500 @enderror">
+                    <select name="konsumsi_garam" id="konsumsi_garam" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('konsumsi_garam') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('konsumsi_garam', $lansia->konsumsi_garam) === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('konsumsi_garam', $lansia->konsumsi_garam) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label for="konsumsi_lemak" class="block text-sm font-medium text-gray-700 mb-2">Konsumsi Lemak</label>
-                    <input type="text" name="konsumsi_lemak" id="konsumsi_lemak" value="{{ old('konsumsi_lemak', $lansia->konsumsi_lemak) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('konsumsi_lemak') border-red-500 @enderror">
+                    <select name="konsumsi_lemak" id="konsumsi_lemak" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('konsumsi_lemak') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('konsumsi_lemak', $lansia->konsumsi_lemak) === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('konsumsi_lemak', $lansia->konsumsi_lemak) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+                <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                     Update
                 </button>
-                <a href="{{ route('lansia.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                <a href="{{ route('lansia.index') }}" class="w-full sm:w-auto text-center bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                     Batal
                 </a>
             </div>

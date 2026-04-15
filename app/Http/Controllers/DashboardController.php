@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Balita;
 use App\Models\IbuHamil;
 use App\Models\Lansia;
+use App\Models\Nifas;
+use App\Models\Remaja;
 use App\Models\Keluarga;
 use App\Models\PemeriksaanBalita;
 use App\Models\PemeriksaanIbuHamil;
@@ -19,6 +21,8 @@ class DashboardController extends Controller
             'total_keluarga' => Keluarga::count(),
             'total_balita' => Balita::count(),
             'total_ibu_hamil' => IbuHamil::count(),
+            'total_nifas' => Nifas::count(),
+            'total_remaja' => Remaja::count(),
             'total_lansia' => Lansia::count(),
             'total_pemeriksaan_balita' => PemeriksaanBalita::whereMonth('created_at', date('m'))->count(),
             'total_pemeriksaan_ibu_hamil' => PemeriksaanIbuHamil::whereMonth('created_at', date('m'))->count(),

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Edit Pemeriksaan Balita</h2>
+<div class="max-w-4xl mx-auto px-3 sm:px-4">
+    <div class="mb-4 sm:mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Edit Pemeriksaan Balita</h2>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-balita.index') }}" class="hover:text-green-600">Pemeriksaan Balita</a>
             <span class="mx-2">/</span>
@@ -11,7 +11,7 @@
         </nav>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         <form action="{{ route('pemeriksaan-balita.update', $pemeriksaan->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -34,9 +34,17 @@
                 </div>
 
                 <div>
+                    <label for="umur" class="block text-sm font-medium text-gray-700 mb-2">Umur</label>
+                    <input type="number" name="umur" id="umur" value="{{ old('umur', $pemeriksaan->umur) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('umur') border-red-500 @enderror">
+                    @error('umur')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
                     <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan <span class="text-red-500">*</span></label>
-                    <input type="datetime-local" name="waktu_kunjungan" id="waktu_kunjungan" 
-                           value="{{ old('waktu_kunjungan', optional($pemeriksaan->waktu_kunjungan)->format('Y-m-d\\TH:i')) }}"
+                          <input type="date" name="waktu_kunjungan" id="waktu_kunjungan" 
+                              value="{{ old('waktu_kunjungan', optional($pemeriksaan->waktu_kunjungan)->format('Y-m-d')) }}"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('waktu_kunjungan') border-red-500 @enderror" required>
                     @error('waktu_kunjungan')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -89,9 +97,11 @@
 
                 <div>
                     <label for="vitamin_a" class="block text-sm font-medium text-gray-700 mb-2">Vitamin A</label>
-                    <input type="text" name="vitamin_a" id="vitamin_a" 
-                           value="{{ old('vitamin_a', $pemeriksaan->vitamin_a) }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('vitamin_a') border-red-500 @enderror">
+                    <select name="vitamin_a" id="vitamin_a" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('vitamin_a') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('vitamin_a', $pemeriksaan->vitamin_a) == '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('vitamin_a', $pemeriksaan->vitamin_a) == '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                     @error('vitamin_a')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -129,10 +139,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="umur" class="block text-sm font-medium text-gray-700 mb-2">Umur</label>
-                    <input type="number" name="umur" id="umur" value="{{ old('umur', $pemeriksaan->umur) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('umur') border-red-500 @enderror">
-                </div>
                 <div>
                     <label for="naik_tidak_naik" class="block text-sm font-medium text-gray-700 mb-2">Naik/Tidak Naik</label>
                     <input type="text" name="naik_tidak_naik" id="naik_tidak_naik" value="{{ old('naik_tidak_naik', $pemeriksaan->naik_tidak_naik) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('naik_tidak_naik') border-red-500 @enderror">
@@ -185,29 +191,52 @@
                 </div>
                 <div>
                     <label for="perkembangan" class="block text-sm font-medium text-gray-700 mb-2">Perkembangan</label>
-                    <input type="text" name="perkembangan" id="perkembangan" value="{{ old('perkembangan', $pemeriksaan->perkembangan) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('perkembangan') border-red-500 @enderror">
+                    <select name="perkembangan" id="perkembangan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('perkembangan') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('perkembangan', $pemeriksaan->perkembangan) == '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('perkembangan', $pemeriksaan->perkembangan) == '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
+                    @error('perkembangan')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 <div>
                     <label for="asi_eksklusif" class="block text-sm font-medium text-gray-700 mb-2">ASI Eksklusif</label>
-                    <input type="text" name="asi_eksklusif" id="asi_eksklusif" value="{{ old('asi_eksklusif', $pemeriksaan->asi_eksklusif) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('asi_eksklusif') border-red-500 @enderror">
+                    <select name="asi_eksklusif" id="asi_eksklusif" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('asi_eksklusif') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('asi_eksklusif', $pemeriksaan->asi_eksklusif) == '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('asi_eksklusif', $pemeriksaan->asi_eksklusif) == '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
-                    <label for="mpasi" class="block text-sm font-medium text-gray-700 mb-2">MPASI</label>
-                    <input type="text" name="mpasi" id="mpasi" value="{{ old('mpasi', $pemeriksaan->mpasi) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('mpasi') border-red-500 @enderror">
+                    <label for="mpasi" class="block text-sm font-medium text-gray-700 mb-2">MP-ASI</label>
+                    <select name="mpasi" id="mpasi" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('mpasi') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('mpasi', $pemeriksaan->mpasi) == '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('mpasi', $pemeriksaan->mpasi) == '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label for="obat_cacing" class="block text-sm font-medium text-gray-700 mb-2">Obat Cacing</label>
-                    <input type="text" name="obat_cacing" id="obat_cacing" value="{{ old('obat_cacing', $pemeriksaan->obat_cacing) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('obat_cacing') border-red-500 @enderror">
+                    <select name="obat_cacing" id="obat_cacing" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('obat_cacing') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('obat_cacing', $pemeriksaan->obat_cacing) == '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('obat_cacing', $pemeriksaan->obat_cacing) == '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 <div>
-                    <label for="mt_pangan" class="block text-sm font-medium text-gray-700 mb-2">MT Pangan</label>
-                    <input type="text" name="mt_pangan" id="mt_pangan" value="{{ old('mt_pangan', $pemeriksaan->mt_pangan) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('mt_pangan') border-red-500 @enderror">
+                    <label for="mt_pangan" class="block text-sm font-medium text-gray-700 mb-2">MT Pangan Lokal</label>
+                    <select name="mt_pangan" id="mt_pangan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('mt_pangan') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="1" {{ old('mt_pangan', $pemeriksaan->mt_pangan) == '1' ? 'selected' : '' }}>Ya</option>
+                        <option value="0" {{ old('mt_pangan', $pemeriksaan->mt_pangan) == '0' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label for="rujukan" class="block text-sm font-medium text-gray-700 mb-2">Rujukan</label>
@@ -215,11 +244,11 @@
                 </div>
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
+                <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                     Update
                 </button>
-                <a href="{{ route('pemeriksaan-balita.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                <a href="{{ route('pemeriksaan-balita.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                     Batal
                 </a>
             </div>

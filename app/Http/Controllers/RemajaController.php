@@ -82,4 +82,31 @@ class RemajaController extends Controller
         $remaja->delete();
         return redirect()->route('remaja.index')->with('success', 'Data remaja berhasil dihapus');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $remajas = Remaja::with('keluarga')
+            ->where(function ($q) use ($query) {
+                $q->where('nama_anak', 'like', "%{$query}%")
+                    ->orWhere('nik', 'like', "%{$query}%")
+                    ->orWhereHas('keluarga', function ($kq) use ($query) {
+                        $kq->where('nama_lengkap', 'like', "%{$query}%")
+                            ->orWhere('no_kk', 'like', "%{$query}%");
+                    });
+            })
+            ->take(10)
+            ->get();
+
+        return response()->json($remajas->map(function ($remaja) {
+            return [
+                'id' => $remaja->id,
+                'nik' => $remaja->nik,
+                'nama' => $remaja->nama_anak,
+                'jenis_kelamin' => $remaja->jenis_kelamin,
+                'keluarga' => $remaja->keluarga->nama_kepala_keluarga ?? '-',
+            ];
+        }));
+    }
 }

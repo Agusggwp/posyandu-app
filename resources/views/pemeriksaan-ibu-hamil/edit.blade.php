@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Edit Pemeriksaan Ibu Hamil</h2>
+<div class="max-w-4xl mx-auto px-3 sm:px-4">
+    <div class="mb-4 sm:mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Edit Pemeriksaan Ibu Hamil</h2>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="hover:text-purple-600">Pemeriksaan Ibu Hamil</a>
             <span class="mx-2">/</span>
@@ -11,7 +11,7 @@
         </nav>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         <form action="{{ route('pemeriksaan-ibu-hamil.update', $pemeriksaan->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -148,11 +148,11 @@
                 @enderror
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
+                <button type="submit" class="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                     Update
                 </button>
-                <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                     Batal
                 </a>
             </div>

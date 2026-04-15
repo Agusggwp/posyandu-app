@@ -99,4 +99,32 @@ class LansiaController extends Controller
         $lansia->delete();
         return redirect()->route('lansia.index')->with('success', 'Data lansia berhasil dihapus');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $lansias = Lansia::with('keluarga')
+            ->where(function ($q) use ($query) {
+                $q->where('nama', 'like', "%{$query}%")
+                    ->orWhere('nik', 'like', "%{$query}%")
+                    ->orWhereHas('keluarga', function ($kq) use ($query) {
+                        $kq->where('nama_lengkap', 'like', "%{$query}%")
+                            ->orWhere('no_kk', 'like', "%{$query}%");
+                    });
+            })
+            ->take(10)
+            ->get();
+
+        return response()->json($lansias->map(function ($lansia) {
+            return [
+                'id' => $lansia->id,
+                'nik' => $lansia->nik,
+                'nama' => $lansia->nama,
+                'jenis_kelamin' => $lansia->jenis_kelamin,
+                'umur' => \Carbon\Carbon::parse($lansia->tanggal_lahir)->age,
+                'keluarga' => $lansia->keluarga->nama_kepala_keluarga ?? '-',
+            ];
+        }));
+    }
 }

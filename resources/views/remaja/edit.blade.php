@@ -1,20 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto px-1 sm:px-0">
     <div class="mb-6">
-        <h2 class="text-3xl font-bold text-cyan-900">Edit Data Remaja</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-cyan-900">Edit Data Remaja</h2>
         <p class="text-sm text-gray-600 mt-2">Perbarui data pada tabel remaja_identitas.</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg border border-cyan-200 p-6">
+    <div class="bg-white rounded-lg shadow-lg border border-cyan-200 p-4 sm:p-6">
         <form action="{{ route('remaja.update', $remaja->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Keluarga <span class="text-red-500">*</span></label>
-                    <select name="kepala_keluarga_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    <input type="text" class="js-keluarga-search w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" data-target="#kepala_keluarga_id" placeholder="Cari no KK / nama kepala keluarga...">
+                    <select name="kepala_keluarga_id" id="kepala_keluarga_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                         <option value="">-- Pilih Keluarga --</option>
                         @foreach($keluargas as $keluarga)
                         <option value="{{ $keluarga->id }}" {{ old('kepala_keluarga_id', $remaja->kepala_keluarga_id) == $keluarga->id ? 'selected' : '' }}>{{ $keluarga->no_kk }} - {{ $keluarga->nama_kepala_keluarga }}</option>
@@ -51,17 +52,35 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Riwayat Keluarga</label>
-                    <textarea name="riwayat_keluarga" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg">{{ old('riwayat_keluarga', $remaja->riwayat_keluarga) }}</textarea>
+                    <label for="riwayat_keluarga" class="block text-sm font-medium text-gray-700 mb-2">Riwayat Keluarga</label>
+                    <select name="riwayat_keluarga" id="riwayat_keluarga" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('riwayat_keluarga') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="Hipertensi" {{ old('riwayat_keluarga', $remaja->riwayat_keluarga) == 'Hipertensi' ? 'selected' : '' }}>Hipertensi</option>
+                        <option value="DM" {{ old('riwayat_keluarga', $remaja->riwayat_keluarga) == 'DM' ? 'selected' : '' }}>DM (Diabetes Melitus)</option>
+                        <option value="Stroke" {{ old('riwayat_keluarga', $remaja->riwayat_keluarga) == 'Stroke' ? 'selected' : '' }}>Stroke</option>
+                        <option value="Jantung" {{ old('riwayat_keluarga', $remaja->riwayat_keluarga) == 'Jantung' ? 'selected' : '' }}>Jantung</option>
+                        <option value="Asma" {{ old('riwayat_keluarga', $remaja->riwayat_keluarga) == 'Asma' ? 'selected' : '' }}>Asma</option>
+                        <option value="Kanker" {{ old('riwayat_keluarga', $remaja->riwayat_keluarga) == 'Kanker' ? 'selected' : '' }}>Kanker</option>
+                        <option value="Kolesterol Tinggi" {{ old('riwayat_keluarga', $remaja->riwayat_keluarga) == 'Kolesterol Tinggi' ? 'selected' : '' }}>Kolesterol Tinggi</option>
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Riwayat Diri</label>
-                    <textarea name="riwayat_diri" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg">{{ old('riwayat_diri', $remaja->riwayat_diri) }}</textarea>
+                    <label for="riwayat_diri" class="block text-sm font-medium text-gray-700 mb-2">Riwayat Diri</label>
+                    <select name="riwayat_diri" id="riwayat_diri" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('riwayat_diri') border-red-500 @enderror">
+                        <option value="">-- Pilih --</option>
+                        <option value="Hipertensi" {{ old('riwayat_diri', $remaja->riwayat_diri) == 'Hipertensi' ? 'selected' : '' }}>Hipertensi</option>
+                        <option value="DM" {{ old('riwayat_diri', $remaja->riwayat_diri) == 'DM' ? 'selected' : '' }}>DM (Diabetes Melitus)</option>
+                        <option value="Stroke" {{ old('riwayat_diri', $remaja->riwayat_diri) == 'Stroke' ? 'selected' : '' }}>Stroke</option>
+                        <option value="Jantung" {{ old('riwayat_diri', $remaja->riwayat_diri) == 'Jantung' ? 'selected' : '' }}>Jantung</option>
+                        <option value="Asma" {{ old('riwayat_diri', $remaja->riwayat_diri) == 'Asma' ? 'selected' : '' }}>Asma</option>
+                        <option value="Kanker" {{ old('riwayat_diri', $remaja->riwayat_diri) == 'Kanker' ? 'selected' : '' }}>Kanker</option>
+                        <option value="Kolesterol Tinggi" {{ old('riwayat_diri', $remaja->riwayat_diri) == 'Kolesterol Tinggi' ? 'selected' : '' }}>Kolesterol Tinggi</option>
+                    </select>
                 </div>
             </div>
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-2 px-6 rounded-xl">Update</button>
-                <a href="{{ route('remaja.index') }}" class="bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-2 px-6 rounded-xl">Batal</a>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+                <button type="submit" class="w-full sm:w-auto bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-2 px-6 rounded-xl">Update</button>
+                <a href="{{ route('remaja.index') }}" class="w-full sm:w-auto text-center bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-2 px-6 rounded-xl">Batal</a>
             </div>
         </form>
     </div>

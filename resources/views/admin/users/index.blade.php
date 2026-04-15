@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto">
-    <div class="mb-6 flex justify-between items-center">
+<div class="max-w-7xl mx-auto px-3 sm:px-4">
+    <div class="mb-4 sm:mb-6 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
         <div>
-            <h2 class="text-3xl font-bold text-gray-800">Kelola User</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Kelola User</h2>
             <p class="text-gray-600 mt-1">Manajemen akun pengguna sistem</p>
         </div>
-        <a href="{{ route('users.create') }}" class="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <a href="{{ route('users.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
             + Tambah User
         </a>
     </div>
@@ -25,7 +25,7 @@
     @endif
 
     <!-- Search & Filter -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 mb-6">
         <form method="GET" action="{{ route('users.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="md:col-span-2">
                 <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search</label>
@@ -58,7 +58,7 @@
         </form>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hidden md:block">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gradient-to-r from-indigo-50 to-purple-50">
@@ -126,6 +126,52 @@
 
         @if($users->hasPages())
         <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+            {{ $users->links() }}
+        </div>
+        @endif
+    </div>
+
+    <div class="md:hidden space-y-3">
+        @forelse($users as $user)
+        <div class="bg-white rounded-xl shadow border border-gray-100 p-4">
+            <div class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-900">{{ $user->name }}</p>
+                    <p class="text-sm text-gray-500 break-all">{{ $user->email }}</p>
+                </div>
+            </div>
+
+            <div class="mt-3 flex items-center justify-between text-sm">
+                <span class="px-2.5 py-1 inline-flex font-semibold rounded-full
+                    @if($user->role_name === 'admin') bg-purple-100 text-purple-800
+                    @elseif($user->role_name === 'kader') bg-blue-100 text-blue-800
+                    @else bg-green-100 text-green-800
+                    @endif">
+                    {{ ucfirst($user->role_name ?? 'n/a') }}
+                </span>
+                <span class="text-gray-500">{{ $user->created_at->format('d M Y') }}</span>
+            </div>
+
+            <div class="mt-4 flex flex-col gap-2">
+                <a href="{{ route('users.edit', $user) }}" class="w-full text-center py-2 rounded-lg bg-indigo-100 text-indigo-700 font-semibold">Edit</a>
+                @if($user->id !== auth()->id())
+                <form action="{{ route('users.destroy', $user) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="w-full py-2 rounded-lg bg-rose-100 text-rose-700 font-semibold">Hapus</button>
+                </form>
+                @endif
+            </div>
+        </div>
+        @empty
+        <div class="bg-white rounded-xl shadow border border-gray-100 p-6 text-center text-gray-500">Tidak ada data user</div>
+        @endforelse
+
+        @if($users->hasPages())
+        <div class="bg-white rounded-xl shadow border border-gray-100 px-4 py-3">
             {{ $users->links() }}
         </div>
         @endif

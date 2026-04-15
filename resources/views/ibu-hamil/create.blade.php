@@ -1,19 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto px-1 sm:px-0">
     <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Tambah Data Ibu Hamil</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Tambah Data Ibu Hamil</h2>
         <p class="text-sm text-gray-600 mt-2">Sesuai struktur tabel ibu_hamil_identitas.</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         <form action="{{ route('ibu-hamil.store') }}" method="POST">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="kepala_keluarga_id" class="block text-sm font-medium text-gray-700 mb-2">Keluarga <span class="text-red-500">*</span></label>
+                    <input type="text" class="js-keluarga-search w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" data-target="#kepala_keluarga_id" placeholder="Cari no KK / nama kepala keluarga...">
                     <select name="kepala_keluarga_id" id="kepala_keluarga_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('kepala_keluarga_id') border-red-500 @enderror" required>
                         <option value="">-- Pilih Keluarga --</option>
                         @foreach($keluargas as $keluarga)
@@ -26,7 +27,7 @@
                 </div>
 
                 <div>
-                    <label for="nama_ibu" class="block text-sm font-medium text-gray-700 mb-2">Nama Ibu <span class="text-red-500">*</span></label>
+                    <label for="nama_ibu" class="block text-sm font-medium text-gray-700 mb-2">Nama Ibu Hamil <span class="text-red-500">*</span></label>
                     <input type="text" name="nama_ibu" id="nama_ibu" value="{{ old('nama_ibu') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('nama_ibu') border-red-500 @enderror" required>
                     @error('nama_ibu')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
                 </div>
@@ -80,9 +81,9 @@
                 </div>
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">Simpan</button>
-                <a href="{{ route('ibu-hamil.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">Batal</a>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+                <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">Simpan</button>
+                <a href="{{ route('ibu-hamil.index') }}" class="w-full sm:w-auto text-center bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">Batal</a>
             </div>
         </form>
     </div>

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="bg-white rounded-lg shadow-lg border border-rose-200 p-6">
-        <h2 class="text-2xl font-bold text-rose-800 mb-6">Detail Nifas</h2>
+<div class="max-w-4xl mx-auto px-1 sm:px-0">
+    <div class="bg-white rounded-lg shadow-lg border border-rose-200 p-4 sm:p-6">
+        <h2 class="text-xl sm:text-2xl font-bold text-rose-800 mb-6">Detail Nifas</h2>
 
         @php
             $excludedColumns = [
@@ -48,9 +48,9 @@
             @endforeach
         </div>
 
-        <div class="mt-6">
-            <a href="{{ route('nifas.edit', ['nifas' => $nifas]) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-xl">Edit</a>
-            <a href="{{ route('nifas.index') }}" class="ml-2 bg-rose-700 hover:bg-rose-800 text-white font-semibold py-2 px-6 rounded-xl">Kembali</a>
+        <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <a href="{{ route('nifas.edit', ['nifas' => $nifas]) }}" class="w-full sm:w-auto text-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-xl">Edit</a>
+            <a href="{{ route('nifas.index') }}" class="w-full sm:w-auto text-center bg-rose-700 hover:bg-rose-800 text-white font-semibold py-2 px-6 rounded-xl sm:ml-0">Kembali</a>
         </div>
     </div>
 </div>

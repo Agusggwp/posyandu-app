@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto px-1 sm:px-0">
     <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Edit Data Kepala Keluarga</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Edit Data Kepala Keluarga</h2>
         <p class="text-sm text-gray-600 mt-2">Perbarui data pada tabel kepala_keluarga.</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         <form action="{{ route('keluarga.update', $keluarga->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -61,11 +61,11 @@
                 @error('no_telepon')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+                <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                     Update
                 </button>
-                <a href="{{ route('keluarga.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                <a href="{{ route('keluarga.index') }}" class="w-full sm:w-auto text-center bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                     Batal
                 </a>
             </div>

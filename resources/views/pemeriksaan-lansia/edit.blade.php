@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Edit Pemeriksaan Lansia</h2>
+<div class="max-w-4xl mx-auto px-3 sm:px-4">
+    <div class="mb-4 sm:mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Edit Pemeriksaan Lansia</h2>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-lansia.index') }}" class="hover:text-yellow-600">Pemeriksaan Lansia</a>
             <span class="mx-2">/</span>
@@ -11,7 +11,7 @@
         </nav>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         <form action="{{ route('pemeriksaan-lansia.update', $pemeriksaan->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -35,8 +35,8 @@
 
                 <div>
                     <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan <span class="text-red-500">*</span></label>
-                    <input type="datetime-local" name="waktu_kunjungan" id="waktu_kunjungan" 
-                           value="{{ old('waktu_kunjungan', optional($pemeriksaan->waktu_kunjungan)->format('Y-m-d\\TH:i')) }}"
+                          <input type="date" name="waktu_kunjungan" id="waktu_kunjungan" 
+                              value="{{ old('waktu_kunjungan', optional($pemeriksaan->waktu_kunjungan)->format('Y-m-d')) }}"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('waktu_kunjungan') border-red-500 @enderror" required>
                     @error('waktu_kunjungan')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -265,11 +265,11 @@
                 </div>
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
+                <button type="submit" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                     Update
                 </button>
-                <a href="{{ route('pemeriksaan-lansia.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                <a href="{{ route('pemeriksaan-lansia.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                     Batal
                 </a>
             </div>

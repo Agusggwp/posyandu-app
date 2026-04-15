@@ -94,4 +94,28 @@ class KeluargaController extends Controller
         $keluarga->delete();
         return redirect()->route('keluarga.index')->with('success', 'Data keluarga berhasil dihapus');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $keluargas = Keluarga::where(function ($q) use ($query) {
+            $q->where('nama_lengkap', 'like', "%{$query}%")
+                ->orWhere('no_kk', 'like', "%{$query}%")
+                ->orWhere('no_nik', 'like', "%{$query}%")
+                ->orWhere('email', 'like', "%{$query}%");
+        })
+        ->take(10)
+        ->get();
+
+        return response()->json($keluargas->map(function ($keluarga) {
+            return [
+                'id' => $keluarga->id,
+                'no_kk' => $keluarga->no_kk,
+                'nama' => $keluarga->nama_lengkap,
+                'email' => $keluarga->email,
+                'status' => $keluarga->status,
+            ];
+        }));
+    }
 }

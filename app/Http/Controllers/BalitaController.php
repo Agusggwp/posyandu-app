@@ -101,4 +101,32 @@ class BalitaController extends Controller
         $balita->delete();
         return redirect()->route('balita.index')->with('success', 'Data balita berhasil dihapus');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $balitas = Balita::with('keluarga')
+            ->where(function ($q) use ($query) {
+                $q->where('nama_bayi', 'like', "%{$query}%")
+                    ->orWhere('nik', 'like', "%{$query}%")
+                    ->orWhereHas('keluarga', function ($kq) use ($query) {
+                        $kq->where('nama_lengkap', 'like', "%{$query}%")
+                            ->orWhere('no_kk', 'like', "%{$query}%");
+                    });
+            })
+            ->take(10)
+            ->get();
+
+        return response()->json($balitas->map(function ($balita) {
+            return [
+                'id' => $balita->id,
+                'nik' => $balita->nik,
+                'nama' => $balita->nama_bayi,
+                'jenis_kelamin' => $balita->jenis_kelamin,
+                'umur' => \Carbon\Carbon::parse($balita->tanggal_lahir)->age,
+                'keluarga' => $balita->keluarga->nama_kepala_keluarga ?? '-',
+            ];
+        }));
+    }
 }

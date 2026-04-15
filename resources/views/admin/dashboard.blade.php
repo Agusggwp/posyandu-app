@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto">
-    <div class="mb-8">
-        <h2 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Admin Dashboard</h2>
+<div class="max-w-7xl mx-auto px-3 sm:px-4">
+    <div class="mb-6 sm:mb-8">
+        <h2 class="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Admin Dashboard</h2>
         <p class="text-slate-600 mt-2">Panel Kontrol Administrasi Sistem</p>
     </div>
 
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-2xl shadow-lg border border-indigo-100 p-6 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-2xl shadow-lg border border-indigo-100 p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Total Users</p>
-                    <h3 class="text-4xl font-bold text-indigo-600">{{ $stats['total_users'] }}</h3>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-indigo-600">{{ $stats['total_users'] }}</h3>
                 </div>
                 <div class="w-12 h-12 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -23,11 +23,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-lg border border-emerald-100 p-6 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-2xl shadow-lg border border-emerald-100 p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Total Keluarga</p>
-                    <h3 class="text-4xl font-bold text-emerald-600">{{ $stats['total_keluarga'] }}</h3>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-emerald-600">{{ $stats['total_keluarga'] }}</h3>
                 </div>
                 <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -37,11 +37,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-lg border border-violet-100 p-6 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-2xl shadow-lg border border-violet-100 p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Total Balita</p>
-                    <h3 class="text-4xl font-bold text-violet-600">{{ $stats['total_balita'] }}</h3>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-violet-600">{{ $stats['total_balita'] }}</h3>
                 </div>
                 <div class="w-12 h-12 bg-gradient-to-br from-violet-400 to-purple-500 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -51,11 +51,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-lg border border-rose-100 p-6 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-2xl shadow-lg border border-rose-100 p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Total Pemeriksaan</p>
-                    <h3 class="text-4xl font-bold text-rose-600">{{ $stats['total_pemeriksaan_balita'] + $stats['total_pemeriksaan_ibu_hamil'] + $stats['total_pemeriksaan_lansia'] }}</h3>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-rose-600">{{ $stats['total_pemeriksaan_balita'] + $stats['total_pemeriksaan_ibu_hamil'] + $stats['total_pemeriksaan_lansia'] }}</h3>
                 </div>
                 <div class="w-12 h-12 bg-gradient-to-br from-rose-400 to-pink-500 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -69,22 +69,22 @@
     <!-- Recent Users & Activities -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Recent Users -->
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-            <div class="flex justify-between items-center mb-6">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
                 <h3 class="text-xl font-bold text-gray-800">User Terbaru</h3>
                 <a href="{{ route('users.index') }}" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">Lihat Semua →</a>
             </div>
             
             <div class="space-y-4">
                 @foreach($recentUsers as $user)
-                <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                    <div class="flex items-center space-x-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                    <div class="flex items-center space-x-3 min-w-0">
                         <div class="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
                             {{ strtoupper(substr($user->name, 0, 1)) }}
                         </div>
-                        <div>
+                        <div class="min-w-0">
                             <p class="font-semibold text-gray-800">{{ $user->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $user->email }}</p>
+                            <p class="text-sm text-gray-500 truncate">{{ $user->email }}</p>
                         </div>
                     </div>
                     <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold">
@@ -96,8 +96,8 @@
         </div>
 
         <!-- Recent Activities -->
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-            <div class="flex justify-between items-center mb-6">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
                 <h3 class="text-xl font-bold text-gray-800">Recent Activities</h3>
                 <a href="{{ route('admin.activity-logs') }}" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">View all →</a>
             </div>
@@ -143,7 +143,7 @@
     <!-- Activity Chart & Role Distribution -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Activity Chart (Last 7 Days) -->
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-6">Activity Trend (Last 7 Days)</h3>
             
             <div class="space-y-3">
@@ -165,6 +165,8 @@
                 @endforeach
             </div>
         </div>
+
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-6">Distribusi Role</h3>
             
             <div class="space-y-4">
@@ -185,10 +187,10 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
         <h3 class="text-xl font-bold text-gray-800 mb-6">Quick Actions</h3>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <a href="{{ route('users.create') }}" class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl hover:shadow-md transition-all duration-200 border border-indigo-100">
                 <svg class="w-8 h-8 text-indigo-600 mb-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/>

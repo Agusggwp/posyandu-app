@@ -3,174 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — POSYANDU</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <title>Login - Sistem Informasi Kesehatan Keluarga</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        .input-focus {
-            transition: all 0.35s ease;
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .input-focus:focus {
-            transform: translateY(-4px);
-            border-color: #000;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
-        .btn-hover {
-            transition: all 0.4s ease;
+
+        .login-left {
+            animation: slideInLeft 0.8s ease-out;
+            background: #ffffff;
         }
-        .btn-hover:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+
+        .btn-login {
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .btn-login:hover {
+            box-shadow: 0 16px 40px rgba(124, 58, 237, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .btn-login:active {
+            transform: scale(0.95) translateY(-1px);
+        }
+
+        input,
+        input:-webkit-autofill {
+            background-color: #f8fafb !important;
+            border: 1.5px solid #e5e7eb !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        input::placeholder {
+            color: #9ca3af;
+        }
+
+        input:focus,
+        input:focus-visible {
+            outline: none !important;
+            border-color: #7c3aed !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        input:-webkit-autofill {
+            -webkit-text-fill-color: #1f2937 !important;
+        }
+
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 0 0 1000px #ffffff inset !important;
+            -webkit-text-fill-color: #1f2937 !important;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #f8fafb;
+        }
+
+        .forgot-link,
+        .sign-up-link {
+            color: #7c3aed;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover,
+        .sign-up-link:hover {
+            color: #2563eb;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6">
-
-    <div class="w-full max-w-6xl grid lg:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
-
-        <!-- KIRI: Branding Minimalis Putih -->
-        <div class="hidden lg:flex flex-col justify-between p-16 xl:p-24 bg-white">
-            <div class="text-center">
-                <div class="w-48 h-48 mx-auto mb-12 rounded-3xl shadow-xl border border-gray-100 bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-500 flex items-center justify-center">
-                    <svg class="w-28 h-28 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-
-                <h1 class="text-6xl font-black text-gray-900 tracking-tight">
-                    POSYANDU
-                </h1>
-                <p class="mt-4 text-2xl font-light text-gray-600">
-                    Sistem Informasi Terpadu
-                </p>
-
-                <p class="mt-10 text-lg text-gray-500 max-w-sm mx-auto leading-relaxed">
-                    Sistem kasir modern yang dirancang khusus untuk bisnis Anda berkembang lebih cepat.
-                </p>
+<body>
+    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+        <div class="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden flex">
+            <div class="hidden md:flex w-1/2 relative items-center justify-center overflow-hidden bg-gradient-to-br from-purple-400 via-purple-500 to-blue-600">
+                <img src="{{ asset('auth/login.webp') }}" alt="Welcome" class="w-full h-full object-cover">
             </div>
 
-            <div class="text-center">
-                <p class="text-sm text-gray-400">Dikembangkan oleh</p>
-                <a href="https://artdevata.net" target="_blank" 
-                   class="inline-flex items-center gap-3 mt-2 text-lg font-bold text-gray-800 hover:text-black transition">
-                    <div class="w-9 h-9 rounded-full border border-gray-200 bg-gradient-to-br from-teal-600 to-emerald-600 flex items-center justify-center">
-                        <span class="text-white font-bold text-xs">A</span>
+            <div class="login-left w-full md:w-1/2 flex items-center justify-center px-6 md:px-12 py-12 bg-white">
+                <div class="w-full max-w-md">
+                    <div class="mb-12">
+                        <h1 class="text-5xl font-bold text-gray-900 mb-2 leading-tight">Holla,<br>Welcome Back</h1>
+                        <p class="text-gray-600 text-base mt-4 leading-relaxed">Silakan masuk ke akun Anda untuk melanjutkan pengelolaan kesehatan keluarga</p>
                     </div>
-                    <span>ARTDEVATA</span>
-                </a>
-            </div>
-        </div>
 
-        <!-- KANAN: Form Login -->
-        <div class="flex flex-col justify-center px-10 py-16 lg:px-20 xl:px-28 bg-white">
-            <div class="flex justify-center mb-12 lg:hidden">
-                <div class="w-28 h-28 rounded-3xl shadow-lg bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-500 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-            </div>
+                    @if ($errors->any())
+                        <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                            {{ $errors->first('email') ?? $errors->first('password') ?? 'Login gagal. Periksa kembali data Anda.' }}
+                        </div>
+                    @endif
 
-            <div class="max-w-md mx-auto w-full">
-                <h2 class="text-4xl font-bold text-gray-900 text-center lg:text-left">
-                    Selamat Datang
-                </h2>
-                <p class="mt-3 text-lg text-gray-600 text-center lg:text-left">
-                    Masukkan akun Anda
-                </p>
+                    <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                        @csrf
 
-                <!-- Error Message -->
-                @if ($errors->any())
-                    <div class="mt-8 p-4 bg-red-50 border-2 border-red-300 rounded-2xl">
-                        <div class="flex items-start gap-3">
-                            <svg class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                            </svg>
-                            <div class="text-red-700 font-medium">
-                                {{ $errors->first('email') ?? 'Terjadi kesalahan. Silahkan coba lagi.' }}
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address</label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                value="{{ old('email') }}"
+                                placeholder="stanley@gmail.com"
+                                class="form-input"
+                                required
+                                autofocus
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="form-label m-0" for="password-input">Password</label>
+                                @if (Route::has('password.request'))
+                                    <a href="{{ route('password.request') }}" class="forgot-link text-sm">Lupa Password?</a>
+                                @endif
+                            </div>
+                            <div class="relative">
+                                <input
+                                    id="password-input"
+                                    name="password"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    class="form-input pr-12"
+                                    required
+                                >
+                                <button type="button" class="absolute right-4 top-3 text-gray-500 hover:text-gray-700 text-xl" id="toggle-password" aria-label="Toggle password visibility">
+                                    👁️
+                                </button>
                             </div>
                         </div>
-                    </div>
-                @endif
 
-                <form method="POST" action="{{ route('login') }}" class="mt-12 space-y-8">
-                    @csrf
+                        <div class="checkbox-wrapper pt-2">
+                            <input type="checkbox" id="remember-me" name="remember" class="w-5 h-5 cursor-pointer accent-purple-600" {{ old('remember') ? 'checked' : '' }}>
+                            <label for="remember-me" class="text-gray-700 font-medium text-sm cursor-pointer">Ingatkan saya</label>
+                        </div>
 
-                    <!-- Email -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-3">Email</label>
-                        <input type="email"
-                               name="email"
-                               value="{{ old('email') }}"
-                               required
-                               autofocus
-                               class="input-focus w-full px-6 py-5 text-lg bg-white border-2 border-gray-200 rounded-2xl outline-none placeholder-gray-400"
-                               placeholder="nama@gmail.com">
-                    </div>
-
-                    <!-- Password + Show/Hide -->
-                    <div class="relative">
-                        <label class="block text-sm font-medium text-gray-700 mb-3">Password</label>
-                        <input type="password"
-                               id="password"
-                               name="password"
-                               required
-                               class="input-focus w-full px-6 py-5 pr-16 text-lg bg-white border-2 border-gray-200 rounded-2xl outline-none placeholder-gray-400"
-                               placeholder="••••••••••••">
-                        
-                        <!-- Tombol Toggle Password -->
-                        <button type="button"
-                                onclick="togglePassword()"
-                                class="absolute inset-y-0 right-0 flex items-center pr-6 pt-10 text-gray-500 hover:text-gray-800 focus:outline-none">
-                            <!-- Icon Mata Terbuka (Show) -->
-                            <svg id="eye-open" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                            <!-- Icon Mata Tertutup (Hide) -->
-                            <svg id="eye-closed" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 012.09-2.825m2.813-1.35A9.98 9.98 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.03 10.03 0 01-4.825 5.875" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M3 3l18 18" />
-                            </svg>
+                        <button
+                            type="submit"
+                            class="btn-login w-full text-white font-bold py-3.5 px-6 rounded-xl mt-8 text-base uppercase tracking-wide shadow-lg hover:shadow-2xl"
+                        >
+                            Sign In
                         </button>
-                    </div>
+                    </form>
 
-                    <!-- Tombol Login -->
-                    <button type="submit"
-                            class="btn-hover w-full py-6 mt-10 bg-black hover:bg-gray-900 text-white font-bold text-lg rounded-2xl shadow-2xl">
-                        Masuk ke Dashboard
-                    </button>
-                </form>
-
-                <p class="mt-16 text-center text-sm text-gray-400">
-                    © 2025 Artdevata — All Rights Reserved
-                </p>
+                    @if (Route::has('register'))
+                        <p class="text-center text-gray-700 text-sm mt-8 font-medium">
+                            Belum punya akun?
+                            <a href="{{ route('register') }}" class="sign-up-link">Daftar Sekarang -></a>
+                        </p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Script untuk toggle password -->
     <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const eyeOpen = document.getElementById('eye-open');
-            const eyeClosed = document.getElementById('eye-closed');
+        const passwordInput = document.getElementById('password-input');
+        const toggleBtn = document.getElementById('toggle-password');
 
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeOpen.classList.remove('hidden');
-                eyeClosed.classList.add('hidden');
-            } else {
-                passwordField.type = 'password';
-                eyeOpen.classList.add('hidden');
-                eyeClosed.classList.remove('hidden');
-            }
+        if (passwordInput && toggleBtn) {
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleBtn.innerHTML = '🙈';
+                } else {
+                    passwordInput.type = 'password';
+                    toggleBtn.innerHTML = '👁️';
+                }
+            });
         }
     </script>
-
 </body>
 </html>

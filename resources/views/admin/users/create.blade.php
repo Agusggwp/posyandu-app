@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Tambah User Baru</h2>
+<div class="max-w-4xl mx-auto px-3 sm:px-4">
+    <div class="mb-4 sm:mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Tambah User Baru</h2>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('users.index') }}" class="hover:text-indigo-600 transition-colors">Kelola User</a>
             <span class="mx-2">/</span>
@@ -11,7 +11,7 @@
         </nav>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
+    <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-8 border border-indigo-100">
         <form action="{{ route('users.store') }}" method="POST">
             @csrf
             
@@ -66,11 +66,11 @@
                 </div>
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
+                <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                     Simpan
                 </button>
-                <a href="{{ route('users.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                <a href="{{ route('users.index') }}" class="w-full sm:w-auto text-center bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                     Batal
                 </a>
             </div>

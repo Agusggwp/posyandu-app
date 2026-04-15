@@ -4,19 +4,19 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="mb-8">
+        <div class="mb-6 sm:mb-8">
             <a href="{{ route('roles.index') }}" class="text-indigo-600 hover:text-indigo-700 mb-4 inline-flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Back to Roles
             </a>
-            <h1 class="text-3xl font-bold text-gray-900 mt-2">Create New Role</h1>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">Create New Role</h1>
             <p class="mt-2 text-sm text-gray-600">Add a new user role with specific permissions</p>
         </div>
 
         <!-- Form -->
-        <div class="bg-white rounded-xl shadow-sm p-8">
+        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-8">
             <form action="{{ route('roles.store') }}" method="POST">
                 @csrf
 
@@ -65,11 +65,11 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="flex gap-4">
-                    <button type="submit" class="flex-1 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <button type="submit" class="w-full sm:flex-1 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm">
                         Create Role
                     </button>
-                    <a href="{{ route('roles.index') }}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                    <a href="{{ route('roles.index') }}" class="w-full sm:w-auto text-center px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
                         Cancel
                     </a>
                 </div>

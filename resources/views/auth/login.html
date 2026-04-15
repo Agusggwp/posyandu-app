@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistem Informasi Kesehatan Keluarga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
+        @keyframes floatDelay {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-25px);
+            }
+        }
+
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-left {
+            animation: slideInLeft 0.8s ease-out;
+            background: #ffffff;
+            min-height: 600px;
+        }
+
+        .login-right {
+            animation: slideInRight 0.8s ease-out;
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 50%, #1e40af 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .btn-login:hover {
+            box-shadow: 0 16px 40px rgba(124, 58, 237, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .btn-login:active {
+            transform: scale(0.95) translateY(-1px);
+        }
+
+        input, input:-webkit-autofill {
+            background-color: #f8fafb !important;
+            border: 1.5px solid #e5e7eb !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        input::placeholder {
+            color: #9ca3af;
+        }
+
+        input:focus, input:focus-visible {
+            outline: none !important;
+            border-color: #7c3aed !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        input:-webkit-autofill {
+            -webkit-text-fill-color: #1f2937 !important;
+        }
+
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 0 0 1000px #ffffff inset !important;
+            -webkit-text-fill-color: #1f2937 !important;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            opacity: 0.3;
+        }
+
+        .cloud-1 {
+            width: 120px;
+            height: 50px;
+            top: 10%;
+            left: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .cloud-2 {
+            width: 150px;
+            height: 60px;
+            top: 50%;
+            right: 5%;
+            animation: float 8s ease-in-out infinite 1s;
+        }
+
+        .cloud-3 {
+            width: 100px;
+            height: 45px;
+            bottom: 20%;
+            left: 20%;
+            animation: float 7s ease-in-out infinite 2s;
+        }
+
+        .feature-icon {
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .phone-icon {
+            width: 80px;
+            height: 160px;
+            top: 15%;
+            right: 15%;
+            background: white;
+            border-radius: 24px;
+            padding: 8px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .checkmark-icon {
+            width: 100px;
+            height: 100px;
+            bottom: 25%;
+            left: 10%;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            animation: float 3.5s ease-in-out infinite 0.5s;
+        }
+
+        .lock-icon {
+            width: 90px;
+            height: 90px;
+            top: 55%;
+            right: 8%;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            animation: float 4s ease-in-out infinite 1s;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #f8fafb;
+        }
+
+        .forgot-link {
+            color: #7c3aed;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            color: #2563eb;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .sign-up-link {
+            color: #7c3aed;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .sign-up-link:hover {
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+        <!-- CONTAINER -->
+        <div class="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden flex">
+            <!-- LEFT SECTION: ILLUSTRATION IMAGE -->
+            <div class="hidden md:flex w-1/2 relative items-center justify-center overflow-hidden bg-gradient-to-br from-purple-400 via-purple-500 to-blue-600">
+                <img src="login.webp" alt="Welcome" class="w-full h-full object-cover">
+            </div>
+
+            <!-- RIGHT SECTION: LOGIN FORM -->
+            <div class="login-left w-full md:w-1/2 flex items-center justify-center px-6 md:px-12 py-12 bg-white">
+            <div class="w-full max-w-md">
+                <!-- HEADER -->
+                <div class="mb-12">
+                    <h1 class="text-5xl font-bold text-gray-900 mb-2 leading-tight">Holla,<br>Welcome Back</h1>
+                    <p class="text-gray-600 text-base mt-4 leading-relaxed">Silakan masuk ke akun Anda untuk melanjutkan pengelolaan kesehatan keluarga</p>
+                </div>
+
+                <!-- LOGIN FORM -->
+                <form class="space-y-6">
+                    <!-- EMAIL -->
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input 
+                            type="email"
+                            placeholder="stanley@gmail.com"
+                            class="form-input"
+                            required
+                        >
+                    </div>
+
+                    <!-- PASSWORD -->
+                    <div class="form-group">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="form-label m-0">Password</label>
+                            <a href="#" class="forgot-link">Lupa Password?</a>
+                        </div>
+                        <div class="relative">
+                            <input 
+                                type="password"
+                                placeholder="••••••••"
+                                class="form-input pr-12"
+                                required
+                                id="password-input"
+                            >
+                            <button type="button" class="absolute right-4 top-3 text-gray-500 hover:text-gray-700 text-xl" id="toggle-password">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- REMEMBER ME -->
+                    <div class="checkbox-wrapper pt-2">
+                        <input type="checkbox" id="remember-me" class="w-5 h-5 cursor-pointer accent-purple-600">
+                        <label for="remember-me" class="text-gray-700 font-medium text-sm cursor-pointer">Ingatkan saya</label>
+                    </div>
+
+                    <!-- SIGN IN BUTTON -->
+                    <button 
+                        type="submit"
+                        class="btn-login w-full text-white font-bold py-3.5 px-6 rounded-xl mt-8 text-base uppercase tracking-wide shadow-lg hover:shadow-2xl"
+                    >
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- SIGN UP -->
+                <p class="text-center text-gray-700 text-sm mt-8 font-medium">
+                    Belum punya akun? 
+                    <a href="#" class="sign-up-link">Daftar Sekarang →</a>
+                </p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        // Password toggle functionality
+        const passwordInput = document.getElementById('password-input');
+        const toggleBtn = document.getElementById('toggle-password');
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.innerHTML = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.innerHTML = '👁️';
+            }
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.textContent;
+            
+            button.disabled = true;
+            button.textContent = '⏳ Memproses...';
+            
+            setTimeout(() => {
+                button.textContent = '✓ Berhasil!';
+                button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 800);
+            }, 1200);
+        });
+
+        // Remember me functionality
+        const rememberCheckbox = document.getElementById('remember-me');
+        const emailInput = document.querySelector('input[type="email"]');
+
+        // Load remembered email
+        const remembered = localStorage.getItem('remembered_email');
+        if (remembered) {
+            emailInput.value = remembered;
+            rememberCheckbox.checked = true;
+        }
+
+        rememberCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                localStorage.setItem('remembered_email', emailInput.value);
+            } else {
+                localStorage.removeItem('remembered_email');
+            }
+        });
+
+        emailInput.addEventListener('change', function() {
+            if (rememberCheckbox.checked) {
+                localStorage.setItem('remembered_email', this.value);
+            }
+        });
+    </script>
+</body>
+</html>

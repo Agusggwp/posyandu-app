@@ -154,6 +154,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/laporan/export-excel/{type}', [LaporanController::class, 'exportExcel'])->name('laporan.export-excel');
         Route::get('/laporan/export-pdf/{type}', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
     });
+
+    // Search API Routes - Real-time search (semua role yang login)
+    Route::get('/api/search/balita', [BalitaController::class, 'search'])->name('api.search.balita');
+    Route::get('/api/search/ibu-hamil', [IbuHamilController::class, 'search'])->name('api.search.ibu-hamil');
+    Route::get('/api/search/lansia', [LansiaController::class, 'search'])->name('api.search.lansia');
+    Route::get('/api/search/nifas', [NifasController::class, 'search'])->name('api.search.nifas');
+    Route::get('/api/search/remaja', [RemajaController::class, 'search'])->name('api.search.remaja');
+    Route::get('/api/search/keluarga', [KeluargaController::class, 'search'])->name('api.search.keluarga');
 });
 
 // Admin Only Routes (Full Power)

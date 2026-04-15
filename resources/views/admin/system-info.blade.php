@@ -4,15 +4,15 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">System Information</h1>
+        <div class="mb-6 sm:mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">System Information</h1>
             <p class="mt-2 text-sm text-gray-600">View system configuration and technical details</p>
         </div>
 
         <!-- System Info Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- PHP Information -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
                 <div class="flex items-center mb-4">
                     <div class="p-3 bg-purple-100 rounded-lg">
                         <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,23 +22,23 @@
                     <h2 class="ml-3 text-xl font-bold text-gray-900">PHP Information</h2>
                 </div>
                 <div class="space-y-3">
-                    <div class="flex justify-between py-2 border-b border-gray-100">
+                    <div class="flex items-start justify-between gap-3 py-2 border-b border-gray-100">
                         <span class="text-gray-600">PHP Version</span>
-                        <span class="font-semibold text-gray-900">{{ $info['php_version'] }}</span>
+                        <span class="font-semibold text-gray-900 text-right break-all">{{ $info['php_version'] }}</span>
                     </div>
-                    <div class="flex justify-between py-2 border-b border-gray-100">
+                    <div class="flex items-start justify-between gap-3 py-2 border-b border-gray-100">
                         <span class="text-gray-600">Memory Limit</span>
-                        <span class="font-semibold text-gray-900">{{ ini_get('memory_limit') }}</span>
+                        <span class="font-semibold text-gray-900 text-right break-all">{{ ini_get('memory_limit') }}</span>
                     </div>
-                    <div class="flex justify-between py-2">
+                    <div class="flex items-start justify-between gap-3 py-2">
                         <span class="text-gray-600">Max Upload Size</span>
-                        <span class="font-semibold text-gray-900">{{ ini_get('upload_max_filesize') }}</span>
+                        <span class="font-semibold text-gray-900 text-right break-all">{{ ini_get('upload_max_filesize') }}</span>
                     </div>
                 </div>
             </div>
 
             <!-- Laravel Information -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
                 <div class="flex items-center mb-4">
                     <div class="p-3 bg-red-100 rounded-lg">
                         <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@
             </div>
 
             <!-- Database Information -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
                 <div class="flex items-center mb-4">
                     <div class="p-3 bg-blue-100 rounded-lg">
                         <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,13 +80,13 @@
                     <h2 class="ml-3 text-xl font-bold text-gray-900">Database Information</h2>
                 </div>
                 <div class="space-y-3">
-                    <div class="flex justify-between py-2 border-b border-gray-100">
+                    <div class="flex items-start justify-between gap-3 py-2 border-b border-gray-100">
                         <span class="text-gray-600">Database Type</span>
-                        <span class="font-semibold text-gray-900">{{ ucfirst($info['database']) }}</span>
+                        <span class="font-semibold text-gray-900 text-right break-all">{{ ucfirst($info['database']) }}</span>
                     </div>
-                    <div class="flex justify-between py-2 border-b border-gray-100">
+                    <div class="flex items-start justify-between gap-3 py-2 border-b border-gray-100">
                         <span class="text-gray-600">Database Name</span>
-                        <span class="font-semibold text-gray-900">{{ config('database.connections.mysql.database') }}</span>
+                        <span class="font-semibold text-gray-900 text-right break-all">{{ config('database.connections.mysql.database') }}</span>
                     </div>
                     <div class="flex justify-between py-2">
                         <span class="text-gray-600">Connection</span>
@@ -98,7 +98,7 @@
             </div>
 
             <!-- Application Information -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
                 <div class="flex items-center mb-4">
                     <div class="p-3 bg-green-100 rounded-lg">
                         <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,15 +108,15 @@
                     <h2 class="ml-3 text-xl font-bold text-gray-900">Application Settings</h2>
                 </div>
                 <div class="space-y-3">
-                    <div class="flex justify-between py-2 border-b border-gray-100">
+                    <div class="flex items-start justify-between gap-3 py-2 border-b border-gray-100">
                         <span class="text-gray-600">Timezone</span>
-                        <span class="font-semibold text-gray-900">{{ $info['timezone'] }}</span>
+                        <span class="font-semibold text-gray-900 text-right break-all">{{ $info['timezone'] }}</span>
                     </div>
-                    <div class="flex justify-between py-2 border-b border-gray-100">
+                    <div class="flex items-start justify-between gap-3 py-2 border-b border-gray-100">
                         <span class="text-gray-600">Locale</span>
-                        <span class="font-semibold text-gray-900">{{ $info['locale'] }}</span>
+                        <span class="font-semibold text-gray-900 text-right break-all">{{ $info['locale'] }}</span>
                     </div>
-                    <div class="flex justify-between py-2">
+                    <div class="flex items-start justify-between gap-3 py-2">
                         <span class="text-gray-600">App URL</span>
                         <span class="font-semibold text-gray-900 truncate ml-2">{{ config('app.url') }}</span>
                     </div>
@@ -125,7 +125,7 @@
         </div>
 
         <!-- Server Information -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 mt-6">
             <div class="flex items-center mb-4">
                 <div class="p-3 bg-indigo-100 rounded-lg">
                     <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

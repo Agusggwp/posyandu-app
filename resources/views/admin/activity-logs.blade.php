@@ -4,14 +4,14 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Activity Logs</h1>
+        <div class="mb-6 sm:mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Activity Logs</h1>
             <p class="mt-2 text-sm text-gray-600">Track all user activities in the system</p>
         </div>
 
         <!-- Filter Form -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-            <form method="GET" action="{{ route('admin.activity-logs') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6">
+            <form method="GET" action="{{ route('admin.activity-logs') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- User Filter -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">User</label>
@@ -40,10 +40,10 @@
 
                 <!-- Buttons -->
                 <div class="flex items-end gap-2">
-                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                    <button type="submit" class="flex-1 md:flex-none px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                         Filter
                     </button>
-                    <a href="{{ route('admin.activity-logs') }}" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                    <a href="{{ route('admin.activity-logs') }}" class="flex-1 md:flex-none text-center px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
                         Reset
                     </a>
                 </div>
@@ -51,7 +51,7 @@
         </div>
 
         <!-- Activity Logs Table -->
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="hidden md:block bg-white rounded-xl shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
@@ -126,6 +126,42 @@
                 <div class="bg-gray-50 px-4 py-3 border-t border-gray-200">
                     {{ $logs->links() }}
                 </div>
+            @endif
+        </div>
+
+        <div class="md:hidden mt-4 space-y-3">
+            @forelse($logs as $log)
+                @php
+                    $colors = [
+                        'created' => 'bg-green-100 text-green-800',
+                        'updated' => 'bg-blue-100 text-blue-800',
+                        'deleted' => 'bg-red-100 text-red-800',
+                        'login' => 'bg-purple-100 text-purple-800',
+                        'logout' => 'bg-gray-100 text-gray-800',
+                    ];
+                    $color = $colors[$log->action] ?? 'bg-gray-100 text-gray-800';
+                @endphp
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <p class="font-semibold text-gray-900">{{ $log->user->name ?? 'System' }}</p>
+                            <p class="text-xs text-gray-500">{{ $log->user->email ?? '-' }}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $color }}">{{ ucfirst($log->action) }}</span>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-700">{{ $log->description }}</p>
+                    <div class="mt-3 text-xs text-gray-500 space-y-1">
+                        <p>Model: {{ $log->model ?? '-' }}</p>
+                        <p>IP: {{ $log->ip_address ?? '-' }}</p>
+                        <p>{{ $log->created_at->format('M d, Y H:i:s') }}</p>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center text-gray-500">No activity logs found</div>
+            @endforelse
+
+            @if($logs->hasPages())
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-4 py-3">{{ $logs->links() }}</div>
             @endif
         </div>
     </div>

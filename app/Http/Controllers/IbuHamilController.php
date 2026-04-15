@@ -105,4 +105,30 @@ class IbuHamilController extends Controller
         $ibuHamil->delete();
         return redirect()->route('ibu-hamil.index')->with('success', 'Data ibu hamil berhasil dihapus');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $ibuHamils = IbuHamil::with('keluarga')
+            ->where(function ($q) use ($query) {
+                $q->where('nama_ibu', 'like', "%{$query}%")
+                    ->orWhere('nik', 'like', "%{$query}%")
+                    ->orWhereHas('keluarga', function ($kq) use ($query) {
+                        $kq->where('nama_lengkap', 'like', "%{$query}%")
+                            ->orWhere('no_kk', 'like', "%{$query}%");
+                    });
+            })
+            ->take(10)
+            ->get();
+
+        return response()->json($ibuHamils->map(function ($ibuHamil) {
+            return [
+                'id' => $ibuHamil->id,
+                'nik' => $ibuHamil->nik,
+                'nama' => $ibuHamil->nama_ibu,
+                'keluarga' => $ibuHamil->keluarga->nama_kepala_keluarga ?? '-',
+            ];
+        }));
+    }
 }

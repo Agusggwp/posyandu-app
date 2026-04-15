@@ -97,4 +97,30 @@ class NifasController extends Controller
         $nifas->delete();
         return redirect()->route('nifas.index')->with('success', 'Data nifas berhasil dihapus');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $nifases = Nifas::with('keluarga')
+            ->where(function ($q) use ($query) {
+                $q->where('nama_ibu', 'like', "%{$query}%")
+                    ->orWhere('nik', 'like', "%{$query}%")
+                    ->orWhereHas('keluarga', function ($kq) use ($query) {
+                        $kq->where('nama_lengkap', 'like', "%{$query}%")
+                            ->orWhere('no_kk', 'like', "%{$query}%");
+                    });
+            })
+            ->take(10)
+            ->get();
+
+        return response()->json($nifases->map(function ($nifas) {
+            return [
+                'id' => $nifas->id,
+                'nik' => $nifas->nik,
+                'nama' => $nifas->nama_ibu,
+                'keluarga' => $nifas->keluarga->nama_kepala_keluarga ?? '-',
+            ];
+        }));
+    }
 }

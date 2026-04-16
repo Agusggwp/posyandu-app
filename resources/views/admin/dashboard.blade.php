@@ -185,8 +185,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Quick Actions -->
+  <!-- Quick Actions -->
     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
         <h3 class="text-xl font-bold text-gray-800 mb-6">Quick Actions</h3>
         

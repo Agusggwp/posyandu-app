@@ -8,6 +8,7 @@ use App\Models\IbuHamil;
 use App\Models\Lansia;
 use App\Models\Nifas;
 use App\Models\Remaja;
+use App\Models\Setting;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Http\Request;
@@ -24,7 +25,20 @@ class KepalaKeluargaAuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('panel_kepalakeluarga.auth.login');
+        $loginSettings = [
+            'badge' => Setting::getSetting('kk_login_badge', 'Portal Keluarga Posyandu'),
+            'hero_title' => Setting::getSetting('kk_login_hero_title', 'Pantau kesehatan keluarga lebih mudah.'),
+            'hero_subtitle' => Setting::getSetting('kk_login_hero_subtitle', 'Satu tempat untuk akses data kunjungan, informasi layanan, dan catatan penting kesehatan keluarga Anda.'),
+            'feature_1_title' => Setting::getSetting('kk_login_feature_1_title', 'Akses cepat data keluarga'),
+            'feature_1_desc' => Setting::getSetting('kk_login_feature_1_desc', 'Lihat riwayat pemeriksaan dan status layanan secara real-time.'),
+            'feature_2_title' => Setting::getSetting('kk_login_feature_2_title', 'Data aman dan privat'),
+            'feature_2_desc' => Setting::getSetting('kk_login_feature_2_desc', 'Informasi hanya bisa diakses melalui akun terverifikasi.'),
+            'footer_text' => Setting::getSetting('kk_login_footer_text', 'Posyandu Digital • Layanan Kesehatan Keluarga'),
+            'form_title' => Setting::getSetting('kk_login_form_title', 'Login Kepala Keluarga'),
+            'form_subtitle' => Setting::getSetting('kk_login_form_subtitle', 'Masuk untuk melanjutkan ke panel keluarga.'),
+        ];
+
+        return view('panel_kepalakeluarga.auth.login', compact('loginSettings'));
     }
 
     public function login(Request $request)
@@ -138,6 +152,23 @@ class KepalaKeluargaAuthController extends Controller
         $kepalaKeluarga = Auth::guard('kepala_keluarga')->user();
         $kepalaKeluarga?->load(['balitas', 'ibuHamils', 'lansias', 'nifases', 'remajas']);
 
+        $centerInfo = [
+            'email' => Setting::getSetting('center_email', '-'),
+            'address' => Setting::getSetting('center_address', '-'),
+            'hours_open' => Setting::getSetting('center_hours_open', '08:00'),
+            'hours_close' => Setting::getSetting('center_hours_close', '16:00'),
+        ];
+
+        $news = [
+            'status' => Setting::getSetting('kk_news_status', 'active'),
+            'title' => Setting::getSetting('kk_news_title', 'Jadwal layanan Posyandu bulan ini'),
+            'summary' => Setting::getSetting('kk_news_summary', 'Layanan pemeriksaan rutin tersedia sesuai jadwal. Silakan cek detail lengkap pada halaman berita.'),
+            'content' => Setting::getSetting('kk_news_content', 'Posyandu membuka layanan pemeriksaan keluarga secara berkala. Pastikan data anggota keluarga sudah lengkap agar proses layanan lebih cepat.'),
+            'link_url' => Setting::getSetting('kk_news_link_url', ''),
+            'link_label' => Setting::getSetting('kk_news_link_label', 'Baca informasi lengkap'),
+            'published_at' => Setting::getSetting('kk_news_published_at', now()->format('Y-m-d')),
+        ];
+
         $anggota = collect();
 
         if ($kepalaKeluarga) {
@@ -177,7 +208,7 @@ class KepalaKeluargaAuthController extends Controller
                 ->values();
         }
 
-        return view('panel_kepalakeluarga.dashboard', compact('kepalaKeluarga', 'anggota'));
+        return view('panel_kepalakeluarga.dashboard', compact('kepalaKeluarga', 'anggota', 'centerInfo', 'news'));
     }
 
     public function showMemberDetail(string $tipe, int $id)

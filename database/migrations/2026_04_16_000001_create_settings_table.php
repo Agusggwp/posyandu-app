@@ -24,6 +24,7 @@ return new class extends Migration
         });
 
         DB::table('settings')->insert([
+            // Center Info
             [
                 'key' => 'center_address',
                 'value' => '',

@@ -71,6 +71,38 @@
 
     <div class="mx-auto max-w-6xl p-6">
         <section class="panel-shell rounded-2xl p-6 md:p-8">
+            <div class="grid gap-4 lg:grid-cols-2">
+                <div class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-6">
+                    <h2 class="text-lg font-bold text-emerald-900">Informasi Pusat Kesehatan</h2>
+                    <div class="mt-4 space-y-2 text-sm text-emerald-900">
+                        <p><span class="font-semibold">Email:</span> {{ $centerInfo['email'] ?: '-' }}</p>
+                        <p><span class="font-semibold">Jam Operasional:</span> {{ $centerInfo['hours_open'] ?: '-' }} - {{ $centerInfo['hours_close'] ?: '-' }}</p>
+                        <p><span class="font-semibold">Alamat:</span> {{ $centerInfo['address'] ?: '-' }}</p>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-blue-100 bg-blue-50/60 p-6">
+                    <div class="flex items-center justify-between gap-4">
+                        <h2 class="text-lg font-bold text-blue-900">Berita Terbaru</h2>
+                        <span class="rounded-full px-3 py-1 text-xs font-semibold {{ ($news['status'] ?? 'inactive') === 'active' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600' }}">
+                            {{ ($news['status'] ?? 'inactive') === 'active' ? 'Aktif' : 'Nonaktif' }}
+                        </span>
+                    </div>
+                    <p class="mt-3 text-base font-semibold text-gray-900">{{ $news['title'] ?? '-' }}</p>
+                    <p class="mt-2 text-sm text-gray-700">{{ $news['summary'] ?? '-' }}</p>
+                    <div class="mt-4 rounded-xl border border-blue-100 bg-white p-4">
+                        <p class="text-sm leading-7 text-gray-700 whitespace-pre-line">{{ $news['content'] ?? '-' }}</p>
+                        @if (!empty($news['link_url']))
+                            <div class="mt-4">
+                                <a href="{{ $news['link_url'] }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700">
+                                    <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>{{ $news['link_label'] ?? 'Baca informasi lengkap' }}
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <div class="grid gap-4 md:grid-cols-3">
                 <div class="stat-card rounded-2xl border-l-4 border-violet-500 p-5">
                     <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Nama Kepala Keluarga</p>
@@ -113,6 +145,7 @@
                     <div class="md:col-span-2"><span class="font-semibold text-gray-500">Alamat:</span> {{ $kepalaKeluarga->alamat }}</div>
                 </div>
             </div>
+
         </section>
 
         <section class="panel-shell mt-6 rounded-2xl p-6 md:p-8">

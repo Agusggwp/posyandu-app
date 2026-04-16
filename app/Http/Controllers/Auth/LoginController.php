@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -36,5 +37,19 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    /**
+     * Show the login form with customizable admin settings
+     */
+    public function showLoginForm()
+    {
+        $loginSettings = [
+            'title' => Setting::getSetting('admin_login_title', 'Admin Dashboard'),
+            'subtitle' => Setting::getSetting('admin_login_subtitle', 'Kelola sistem informasi kesehatan keluarga'),
+            'description' => Setting::getSetting('admin_login_description', 'Silakan masuk ke akun admin Anda untuk mengelola sistem Posyandu'),
+        ];
+
+        return view('auth.login', compact('loginSettings'));
     }
 }

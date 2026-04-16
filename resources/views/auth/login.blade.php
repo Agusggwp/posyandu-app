@@ -130,8 +130,8 @@
             <div class="login-left w-full md:w-1/2 flex items-center justify-center px-6 md:px-12 py-12 bg-white">
                 <div class="w-full max-w-md">
                     <div class="mb-12">
-                        <h1 class="text-5xl font-bold text-gray-900 mb-2 leading-tight">Holla,<br>Welcome Back</h1>
-                        <p class="text-gray-600 text-base mt-4 leading-relaxed">Silakan masuk ke akun Anda untuk melanjutkan pengelolaan kesehatan keluarga</p>
+                        <h1 class="text-5xl font-bold text-gray-900 mb-2 leading-tight">{{ isset($loginSettings) ? $loginSettings['title'] : 'Holla, Welcome Back' }}</h1>
+                        <p class="text-gray-600 text-base mt-4 leading-relaxed">{{ isset($loginSettings) ? $loginSettings['description'] : 'Silakan masuk ke akun Anda untuk melanjutkan pengelolaan kesehatan keluarga' }}</p>
                     </div>
 
                     @if ($errors->any())

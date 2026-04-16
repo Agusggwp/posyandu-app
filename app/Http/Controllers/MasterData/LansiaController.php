@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Lansia;
 use App\Models\Keluarga;
@@ -13,13 +15,13 @@ class LansiaController extends Controller
     public function index()
     {
         $lansias = Lansia::with('keluarga')->latest()->paginate(10);
-        return view('lansia.index', compact('lansias'));
+        return view('master-data.lansia.index', compact('lansias'));
     }
 
     public function create()
     {
         $keluargas = Keluarga::latest()->get();
-        return view('lansia.create', compact('keluargas'));
+        return view('master-data.lansia.create', compact('keluargas'));
     }
 
     public function store(Request $request)
@@ -55,13 +57,13 @@ class LansiaController extends Controller
     public function show(Lansia $lansia)
     {
         $lansia->load('keluarga', 'pemeriksaans');
-        return view('lansia.show', compact('lansia'));
+        return view('master-data.lansia.show', compact('lansia'));
     }
 
     public function edit(Lansia $lansia)
     {
         $keluargas = Keluarga::latest()->get();
-        return view('lansia.edit', compact('lansia', 'keluargas'));
+        return view('master-data.lansia.edit', compact('lansia', 'keluargas'));
     }
 
     public function update(Request $request, Lansia $lansia)

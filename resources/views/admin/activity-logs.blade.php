@@ -84,6 +84,7 @@
                                             'created' => 'bg-green-100 text-green-800',
                                             'updated' => 'bg-blue-100 text-blue-800',
                                             'deleted' => 'bg-red-100 text-red-800',
+                                            'viewed' => 'bg-cyan-100 text-cyan-800',
                                             'login' => 'bg-purple-100 text-purple-800',
                                             'logout' => 'bg-gray-100 text-gray-800',
                                         ];
@@ -136,6 +137,7 @@
                         'created' => 'bg-green-100 text-green-800',
                         'updated' => 'bg-blue-100 text-blue-800',
                         'deleted' => 'bg-red-100 text-red-800',
+                        'viewed' => 'bg-cyan-100 text-cyan-800',
                         'login' => 'bg-purple-100 text-purple-800',
                         'logout' => 'bg-gray-100 text-gray-800',
                     ];

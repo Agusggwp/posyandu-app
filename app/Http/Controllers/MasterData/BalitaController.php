@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Balita;
 use App\Models\Keluarga;
@@ -15,7 +17,7 @@ class BalitaController extends Controller
     public function index()
     {
         $balitas = Balita::with('keluarga')->latest()->paginate(10);
-        return view('balita.index', compact('balitas'));
+        return view('master-data.balita.index', compact('balitas'));
     }
 
     /**
@@ -24,7 +26,7 @@ class BalitaController extends Controller
     public function create()
     {
         $keluargas = Keluarga::latest()->get();
-        return view('balita.create', compact('keluargas'));
+        return view('master-data.balita.create', compact('keluargas'));
     }
 
     /**
@@ -57,7 +59,7 @@ class BalitaController extends Controller
     public function show(Balita $balita)
     {
         $balita->load('keluarga', 'pemeriksaans');
-        return view('balita.show', compact('balita'));
+        return view('master-data.balita.show', compact('balita'));
     }
 
     /**
@@ -66,7 +68,7 @@ class BalitaController extends Controller
     public function edit(Balita $balita)
     {
         $keluargas = Keluarga::latest()->get();
-        return view('balita.edit', compact('balita', 'keluargas'));
+        return view('master-data.balita.edit', compact('balita', 'keluargas'));
     }
 
     /**

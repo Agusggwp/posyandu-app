@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\ActivityLog;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +23,34 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Event::listen(Login::class, function (Login $event): void {
+            ActivityLog::create([
+                'user_id' => $event->user->id,
+                'action' => 'login',
+                'model' => 'User',
+                'model_id' => $event->user->id,
+                'description' => 'User login: ' . $event->user->name,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        });
+
+        Event::listen(Logout::class, function (Logout $event): void {
+            if (! $event->user) {
+                return;
+            }
+
+            ActivityLog::create([
+                'user_id' => $event->user->id,
+                'action' => 'logout',
+                'model' => 'User',
+                'model_id' => $event->user->id,
+                'description' => 'User logout: ' . $event->user->name,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        });
+
         // Register Gates for Permissions
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
             // Admin has all permissions

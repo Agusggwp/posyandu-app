@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Keluarga;
 use App\Models\Nifas;
@@ -13,13 +15,13 @@ class NifasController extends Controller
     public function index()
     {
         $nifases = Nifas::with('keluarga')->latest()->paginate(10);
-        return view('nifas.index', compact('nifases'));
+        return view('master-data.nifas.index', compact('nifases'));
     }
 
     public function create()
     {
         $keluargas = Keluarga::latest()->get();
-        return view('nifas.create', compact('keluargas'));
+        return view('master-data.nifas.create', compact('keluargas'));
     }
 
     public function store(Request $request)
@@ -54,13 +56,13 @@ class NifasController extends Controller
     public function show(Nifas $nifas)
     {
         $nifas->load('keluarga');
-        return view('nifas.show', compact('nifas'));
+        return view('master-data.nifas.show', compact('nifas'));
     }
 
     public function edit(Nifas $nifas)
     {
         $keluargas = Keluarga::latest()->get();
-        return view('nifas.edit', compact('nifas', 'keluargas'));
+        return view('master-data.nifas.edit', compact('nifas', 'keluargas'));
     }
 
     public function update(Request $request, Nifas $nifas)

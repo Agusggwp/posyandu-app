@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pemeriksaan;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Nifas;
 use App\Models\PemeriksaanNifas;
@@ -11,13 +13,13 @@ class PemeriksaanNifasController extends Controller
     public function index()
     {
         $pemeriksaans = PemeriksaanNifas::with('nifas')->latest()->paginate(10);
-        return view('pemeriksaan-nifas.index', compact('pemeriksaans'));
+        return view('pemeriksaan.nifas.index', compact('pemeriksaans'));
     }
 
     public function create()
     {
         $nifases = Nifas::latest()->get();
-        return view('pemeriksaan-nifas.create', compact('nifases'));
+        return view('pemeriksaan.nifas.create', compact('nifases'));
     }
 
     public function store(Request $request)
@@ -52,13 +54,13 @@ class PemeriksaanNifasController extends Controller
     public function show(PemeriksaanNifas $pemeriksaan_nifas)
     {
         $pemeriksaan_nifas->load('nifas');
-        return view('pemeriksaan-nifas.show', ['pemeriksaanNifas' => $pemeriksaan_nifas]);
+        return view('pemeriksaan.nifas.show', ['pemeriksaanNifas' => $pemeriksaan_nifas]);
     }
 
     public function edit(PemeriksaanNifas $pemeriksaan_nifas)
     {
         $nifases = Nifas::latest()->get();
-        return view('pemeriksaan-nifas.edit', ['pemeriksaanNifas' => $pemeriksaan_nifas, 'nifases' => $nifases]);
+        return view('pemeriksaan.nifas.edit', ['pemeriksaanNifas' => $pemeriksaan_nifas, 'nifases' => $nifases]);
     }
 
     public function update(Request $request, PemeriksaanNifas $pemeriksaan_nifas)

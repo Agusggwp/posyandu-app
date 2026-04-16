@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Reports;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Balita;
 use App\Models\IbuHamil;
@@ -14,7 +16,7 @@ class LaporanController extends Controller
 {
     public function index()
     {
-        return view('laporan.index');
+        return view('reports.laporan.index');
     }
 
     public function balita(Request $request)
@@ -35,7 +37,7 @@ class LaporanController extends Controller
             'stunting' => $pemeriksaans->where('status_gizi', 'stunting')->count(),
         ];
         
-        return view('laporan.balita', compact('pemeriksaans', 'statistik', 'bulan', 'tahun'));
+        return view('reports.laporan.balita', compact('pemeriksaans', 'statistik', 'bulan', 'tahun'));
     }
 
     public function ibuHamil(Request $request)
@@ -49,7 +51,7 @@ class LaporanController extends Controller
             ->orderBy('tanggal_pemeriksaan', 'desc')
             ->get();
         
-        return view('laporan.ibu-hamil', compact('pemeriksaans', 'bulan', 'tahun'));
+        return view('reports.laporan.ibu-hamil', compact('pemeriksaans', 'bulan', 'tahun'));
     }
 
     public function lansia(Request $request)
@@ -63,7 +65,7 @@ class LaporanController extends Controller
             ->orderBy('tanggal_pemeriksaan', 'desc')
             ->get();
         
-        return view('laporan.lansia', compact('pemeriksaans', 'bulan', 'tahun'));
+        return view('reports.laporan.lansia', compact('pemeriksaans', 'bulan', 'tahun'));
     }
 
     public function exportExcel($type)

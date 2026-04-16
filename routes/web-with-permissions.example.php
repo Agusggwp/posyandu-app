@@ -7,15 +7,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KeluargaController;
-use App\Http\Controllers\BalitaController;
-use App\Http\Controllers\IbuHamilController;
-use App\Http\Controllers\LansiaController;
-use App\Http\Controllers\PemeriksaanBalitaController;
-use App\Http\Controllers\PemeriksaanIbuHamilController;
-use App\Http\Controllers\PemeriksaanLansiaController;
-use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\MasterData\KeluargaController;
+use App\Http\Controllers\MasterData\BalitaController;
+use App\Http\Controllers\MasterData\IbuHamilController;
+use App\Http\Controllers\MasterData\LansiaController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanBalitaController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanIbuHamilController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanLansiaController;
+use App\Http\Controllers\Reports\LaporanController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return redirect()->route('login');

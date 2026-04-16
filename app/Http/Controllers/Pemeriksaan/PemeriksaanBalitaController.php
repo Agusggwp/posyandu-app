@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pemeriksaan;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\PemeriksaanBalita;
 use App\Models\Balita;
@@ -11,13 +13,13 @@ class PemeriksaanBalitaController extends Controller
     public function index()
     {
         $pemeriksaans = PemeriksaanBalita::with('balita')->orderByDesc('waktu_kunjungan')->paginate(10);
-        return view('pemeriksaan-balita.index', compact('pemeriksaans'));
+        return view('pemeriksaan.balita.index', compact('pemeriksaans'));
     }
 
     public function create()
     {
         $balitas = Balita::orderBy('nama_bayi')->get();
-        return view('pemeriksaan-balita.create', compact('balitas'));
+        return view('pemeriksaan.balita.create', compact('balitas'));
     }
 
     public function store(Request $request)
@@ -59,14 +61,14 @@ class PemeriksaanBalitaController extends Controller
     {
         $pemeriksaanBalita->load('balita');
         $pemeriksaan = $pemeriksaanBalita;
-        return view('pemeriksaan-balita.show', compact('pemeriksaan'));
+        return view('pemeriksaan.balita.show', compact('pemeriksaan'));
     }
 
     public function edit(PemeriksaanBalita $pemeriksaanBalita)
     {
         $balitas = Balita::orderBy('nama_bayi')->get();
         $pemeriksaan = $pemeriksaanBalita;
-        return view('pemeriksaan-balita.edit', compact('pemeriksaan', 'balitas'));
+        return view('pemeriksaan.balita.edit', compact('pemeriksaan', 'balitas'));
     }
 
     public function update(Request $request, PemeriksaanBalita $pemeriksaanBalita)

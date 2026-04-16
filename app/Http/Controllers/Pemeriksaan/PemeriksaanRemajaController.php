@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pemeriksaan;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\PemeriksaanRemaja;
 use App\Models\Remaja;
@@ -11,13 +13,13 @@ class PemeriksaanRemajaController extends Controller
     public function index()
     {
         $pemeriksaans = PemeriksaanRemaja::with('remaja')->latest()->paginate(10);
-        return view('pemeriksaan-remaja.index', compact('pemeriksaans'));
+        return view('pemeriksaan.remaja.index', compact('pemeriksaans'));
     }
 
     public function create()
     {
         $remajas = Remaja::latest()->get();
-        return view('pemeriksaan-remaja.create', compact('remajas'));
+        return view('pemeriksaan.remaja.create', compact('remajas'));
     }
 
     public function store(Request $request)
@@ -59,13 +61,13 @@ class PemeriksaanRemajaController extends Controller
     public function show(PemeriksaanRemaja $pemeriksaan_remaja)
     {
         $pemeriksaan_remaja->load('remaja');
-        return view('pemeriksaan-remaja.show', ['pemeriksaanRemaja' => $pemeriksaan_remaja]);
+        return view('pemeriksaan.remaja.show', ['pemeriksaanRemaja' => $pemeriksaan_remaja]);
     }
 
     public function edit(PemeriksaanRemaja $pemeriksaan_remaja)
     {
         $remajas = Remaja::latest()->get();
-        return view('pemeriksaan-remaja.edit', ['pemeriksaanRemaja' => $pemeriksaan_remaja, 'remajas' => $remajas]);
+        return view('pemeriksaan.remaja.edit', ['pemeriksaanRemaja' => $pemeriksaan_remaja, 'remajas' => $remajas]);
     }
 
     public function update(Request $request, PemeriksaanRemaja $pemeriksaan_remaja)

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Keluarga;
 use App\Models\Remaja;
@@ -12,13 +14,13 @@ class RemajaController extends Controller
     public function index()
     {
         $remajas = Remaja::with('keluarga')->latest()->paginate(10);
-        return view('remaja.index', compact('remajas'));
+        return view('master-data.remaja.index', compact('remajas'));
     }
 
     public function create()
     {
         $keluargas = Keluarga::latest()->get();
-        return view('remaja.create', compact('keluargas'));
+        return view('master-data.remaja.create', compact('keluargas'));
     }
 
     public function store(Request $request)
@@ -46,13 +48,13 @@ class RemajaController extends Controller
     public function show(Remaja $remaja)
     {
         $remaja->load('keluarga');
-        return view('remaja.show', compact('remaja'));
+        return view('master-data.remaja.show', compact('remaja'));
     }
 
     public function edit(Remaja $remaja)
     {
         $keluargas = Keluarga::latest()->get();
-        return view('remaja.edit', compact('remaja', 'keluargas'));
+        return view('master-data.remaja.edit', compact('remaja', 'keluargas'));
     }
 
     public function update(Request $request, Remaja $remaja)

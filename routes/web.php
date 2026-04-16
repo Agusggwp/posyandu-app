@@ -2,21 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KeluargaController;
-use App\Http\Controllers\BalitaController;
-use App\Http\Controllers\IbuHamilController;
-use App\Http\Controllers\LansiaController;
-use App\Http\Controllers\NifasController;
-use App\Http\Controllers\RemajaController;
-use App\Http\Controllers\PemeriksaanBalitaController;
-use App\Http\Controllers\PemeriksaanIbuHamilController;
-use App\Http\Controllers\PemeriksaanLansiaController;
-use App\Http\Controllers\PemeriksaanNifasController;
-use App\Http\Controllers\PemeriksaanRemajaController;
-use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\MasterData\KeluargaController;
+use App\Http\Controllers\MasterData\BalitaController;
+use App\Http\Controllers\MasterData\IbuHamilController;
+use App\Http\Controllers\MasterData\LansiaController;
+use App\Http\Controllers\MasterData\NifasController;
+use App\Http\Controllers\MasterData\RemajaController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanBalitaController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanIbuHamilController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanLansiaController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanNifasController;
+use App\Http\Controllers\Pemeriksaan\PemeriksaanRemajaController;
+use App\Http\Controllers\Reports\LaporanController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\KepalaKeluargaAuthController;
 
 Route::get('/', function () {
@@ -168,7 +168,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
-    Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
+    Route::put('/settings', [AdminController::class, 'updateSettings'])->name('updateSettings');
     
     // Activity Logs
     Route::get('/activity-logs', [AdminController::class, 'activityLogs'])->name('activity-logs');

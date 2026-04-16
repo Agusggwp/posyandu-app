@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use App\Models\Role;
@@ -12,6 +14,7 @@ use App\Models\PemeriksaanBalita;
 use App\Models\PemeriksaanIbuHamil;
 use App\Models\PemeriksaanLansia;
 use App\Models\ActivityLog;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -82,9 +85,14 @@ class AdminController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        $logs = $query->paginate(20);
-        $users = User::all();
-        $actions = ActivityLog::distinct()->pluck('action');
+        $logs = $query->paginate(20)->withQueryString();
+        $users = User::query()->select('id', 'name', 'email')->orderBy('name')->get();
+        $actions = ActivityLog::query()
+            ->select('action')
+            ->whereNotNull('action')
+            ->distinct()
+            ->orderBy('action')
+            ->pluck('action');
 
         return view('admin.activity-logs', compact('logs', 'users', 'actions'));
     }
@@ -112,7 +120,14 @@ class AdminController extends Controller
      */
     public function settings()
     {
-        return view('admin.settings');
+        $settings = [
+            'center_address' => Setting::getSetting('center_address', ''),
+            'center_email' => Setting::getSetting('center_email', ''),
+            'center_hours_open' => Setting::getSetting('center_hours_open', '08:00'),
+            'center_hours_close' => Setting::getSetting('center_hours_close', '16:00'),
+        ];
+
+        return view('admin.settings', compact('settings'));
     }
 
     /**
@@ -120,8 +135,18 @@ class AdminController extends Controller
      */
     public function updateSettings(Request $request)
     {
-        // Implement settings update logic here
+        $validated = $request->validate([
+            'center_address' => 'nullable|string|max:500',
+            'center_email' => 'nullable|email|max:255',
+            'center_hours_open' => 'nullable|date_format:H:i',
+            'center_hours_close' => 'nullable|date_format:H:i',
+        ]);
+
+        foreach ($validated as $key => $value) {
+            Setting::setSetting($key, $value);
+        }
+
         return redirect()->route('admin.settings')
-            ->with('success', 'Pengaturan berhasil diupdate.');
+            ->with('success', 'Pengaturan berhasil diperbarui.');
     }
 }

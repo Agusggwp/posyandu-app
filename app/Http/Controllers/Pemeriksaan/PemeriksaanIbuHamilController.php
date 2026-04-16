@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pemeriksaan;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\PemeriksaanIbuHamil;
 use App\Models\IbuHamil;
@@ -11,13 +13,13 @@ class PemeriksaanIbuHamilController extends Controller
     public function index()
     {
         $pemeriksaans = PemeriksaanIbuHamil::with('ibuHamil')->orderByDesc('tanggal_kunjungan')->paginate(10);
-        return view('pemeriksaan-ibu-hamil.index', compact('pemeriksaans'));
+        return view('pemeriksaan.ibu-hamil.index', compact('pemeriksaans'));
     }
 
     public function create()
     {
         $ibuHamils = IbuHamil::orderBy('nama_ibu')->get();
-        return view('pemeriksaan-ibu-hamil.create', compact('ibuHamils'));
+        return view('pemeriksaan.ibu-hamil.create', compact('ibuHamils'));
     }
 
     public function store(Request $request)
@@ -45,14 +47,14 @@ class PemeriksaanIbuHamilController extends Controller
     {
         $pemeriksaanIbuHamil->load('ibuHamil');
         $pemeriksaan = $pemeriksaanIbuHamil;
-        return view('pemeriksaan-ibu-hamil.show', compact('pemeriksaan'));
+        return view('pemeriksaan.ibu-hamil.show', compact('pemeriksaan'));
     }
 
     public function edit(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
     {
         $ibuHamils = IbuHamil::orderBy('nama_ibu')->get();
         $pemeriksaan = $pemeriksaanIbuHamil;
-        return view('pemeriksaan-ibu-hamil.edit', compact('pemeriksaan', 'ibuHamils'));
+        return view('pemeriksaan.ibu-hamil.edit', compact('pemeriksaan', 'ibuHamils'));
     }
 
     public function update(Request $request, PemeriksaanIbuHamil $pemeriksaanIbuHamil)

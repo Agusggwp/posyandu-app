@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Keluarga;
 use Illuminate\Http\Request;
@@ -13,12 +15,12 @@ class KeluargaController extends Controller
     public function index()
     {
         $keluargas = Keluarga::latest()->paginate(10);
-        return view('keluarga.index', compact('keluargas'));
+        return view('master-data.keluarga.index', compact('keluargas'));
     }
 
     public function create()
     {
-        return view('keluarga.create');
+        return view('master-data.keluarga.create');
     }
 
     public function store(Request $request)
@@ -44,12 +46,12 @@ class KeluargaController extends Controller
     public function show(Keluarga $keluarga)
     {
         $keluarga->load('balitas', 'ibuHamils', 'lansias');
-        return view('keluarga.show', compact('keluarga'));
+        return view('master-data.keluarga.show', compact('keluarga'));
     }
 
     public function edit(Keluarga $keluarga)
     {
-        return view('keluarga.edit', compact('keluarga'));
+        return view('master-data.keluarga.edit', compact('keluarga'));
     }
 
     public function update(Request $request, Keluarga $keluarga)

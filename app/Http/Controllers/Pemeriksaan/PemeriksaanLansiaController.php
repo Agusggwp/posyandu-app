@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pemeriksaan;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\PemeriksaanLansia;
 use App\Models\Lansia;
@@ -11,13 +13,13 @@ class PemeriksaanLansiaController extends Controller
     public function index()
     {
         $pemeriksaans = PemeriksaanLansia::with('lansia')->orderByDesc('waktu_kunjungan')->paginate(10);
-        return view('pemeriksaan-lansia.index', compact('pemeriksaans'));
+        return view('pemeriksaan.lansia.index', compact('pemeriksaans'));
     }
 
     public function create()
     {
         $lansias = Lansia::orderBy('nama')->get();
-        return view('pemeriksaan-lansia.create', compact('lansias'));
+        return view('pemeriksaan.lansia.create', compact('lansias'));
     }
 
     public function store(Request $request)
@@ -58,14 +60,14 @@ class PemeriksaanLansiaController extends Controller
     {
         $pemeriksaanLansia->load('lansia');
         $pemeriksaan = $pemeriksaanLansia;
-        return view('pemeriksaan-lansia.show', compact('pemeriksaan'));
+        return view('pemeriksaan.lansia.show', compact('pemeriksaan'));
     }
 
     public function edit(PemeriksaanLansia $pemeriksaanLansia)
     {
         $lansias = Lansia::orderBy('nama')->get();
         $pemeriksaan = $pemeriksaanLansia;
-        return view('pemeriksaan-lansia.edit', compact('pemeriksaan', 'lansias'));
+        return view('pemeriksaan.lansia.edit', compact('pemeriksaan', 'lansias'));
     }
 
     public function update(Request $request, PemeriksaanLansia $pemeriksaanLansia)

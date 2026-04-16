@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\IbuHamil;
 use App\Models\Keluarga;
@@ -13,13 +15,13 @@ class IbuHamilController extends Controller
     public function index()
     {
         $ibuHamils = IbuHamil::with('keluarga')->latest()->paginate(10);
-        return view('ibu-hamil.index', compact('ibuHamils'));
+        return view('master-data.ibu-hamil.index', compact('ibuHamils'));
     }
 
     public function create()
     {
         $keluargas = Keluarga::latest()->get();
-        return view('ibu-hamil.create', compact('keluargas'));
+        return view('master-data.ibu-hamil.create', compact('keluargas'));
     }
 
     public function store(Request $request)
@@ -58,13 +60,13 @@ class IbuHamilController extends Controller
     public function show(IbuHamil $ibuHamil)
     {
         $ibuHamil->load('keluarga', 'pemeriksaans');
-        return view('ibu-hamil.show', compact('ibuHamil'));
+        return view('master-data.ibu-hamil.show', compact('ibuHamil'));
     }
 
     public function edit(IbuHamil $ibuHamil)
     {
         $keluargas = Keluarga::latest()->get();
-        return view('ibu-hamil.edit', compact('ibuHamil', 'keluargas'));
+        return view('master-data.ibu-hamil.edit', compact('ibuHamil', 'keluargas'));
     }
 
     public function update(Request $request, IbuHamil $ibuHamil)

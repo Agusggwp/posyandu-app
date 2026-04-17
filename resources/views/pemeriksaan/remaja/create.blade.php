@@ -107,35 +107,67 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Rumah</label>
-                    <input type="text" name="masalah_rumah" value="{{ old('masalah_rumah') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_rumah" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_rumah') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_rumah') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Pendidikan</label>
-                    <input type="text" name="masalah_pendidikan" value="{{ old('masalah_pendidikan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_pendidikan" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_pendidikan') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_pendidikan') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Makan</label>
-                    <input type="text" name="masalah_makan" value="{{ old('masalah_makan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_makan" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_makan') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_makan') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Aktivitas</label>
-                    <input type="text" name="masalah_aktivitas" value="{{ old('masalah_aktivitas') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_aktivitas" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_aktivitas') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_aktivitas') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Obat</label>
-                    <input type="text" name="masalah_obat" value="{{ old('masalah_obat') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_obat" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_obat') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_obat') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Seksual</label>
-                    <input type="text" name="masalah_seksual" value="{{ old('masalah_seksual') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_seksual" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_seksual') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_seksual') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Emosi</label>
-                    <input type="text" name="masalah_emosi" value="{{ old('masalah_emosi') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_emosi" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_emosi') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_emosi') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Masalah Keamanan</label>
-                    <input type="text" name="masalah_keamanan" value="{{ old('masalah_keamanan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <select name="masalah_keamanan" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">-- Pilih --</option>
+                        <option value="Ya" {{ old('masalah_keamanan') === 'Ya' ? 'selected' : '' }}>Ya</option>
+                        <option value="Tidak" {{ old('masalah_keamanan') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                    </select>
                 </div>
             </div>
             <div class="mt-6">

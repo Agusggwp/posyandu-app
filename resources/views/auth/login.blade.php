@@ -179,11 +179,6 @@
                             </div>
                         </div>
 
-                        <div class="checkbox-wrapper pt-2">
-                            <input type="checkbox" id="remember-me" name="remember" value="1" class="w-5 h-5 cursor-pointer accent-purple-600" {{ old('remember') ? 'checked' : '' }}>
-                            <label for="remember-me" class="text-gray-700 font-medium text-sm cursor-pointer">Ingatkan saya</label>
-                        </div>
-
                         <button
                             type="submit"
                             class="btn-login w-full text-white font-bold py-3.5 px-6 rounded-xl mt-8 text-base uppercase tracking-wide shadow-lg hover:shadow-2xl"

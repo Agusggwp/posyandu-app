@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,6 +13,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->redirectUsersTo(function (Request $request): string {
+            if (Auth::guard('kepala_keluarga')->check()) {
+                return route('kepala-keluarga.dashboard');
+            }
+
+            if (Auth::guard('web')->check()) {
+                return route('dashboard');
+            }
+
+            return route('login');
+        });
+
         $middleware->web(append: [
             \App\Http\Middleware\LogUserActivity::class,
         ]);

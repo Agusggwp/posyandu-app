@@ -48,13 +48,13 @@ class KepalaKeluargaAuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $remember = $request->has('remember');
+        $guard = Auth::guard('kepala_keluarga');
 
-        if (Auth::guard('kepala_keluarga')->attempt($credentials, $remember)) {
-            $user = Auth::guard('kepala_keluarga')->user();
+        if ($guard->attempt($credentials)) {
+            $user = $guard->user();
 
             if (! $user?->email_verified_at) {
-                Auth::guard('kepala_keluarga')->logout();
+                $guard->logout();
 
                 return back()->withErrors([
                     'email' => 'Akun belum diaktivasi melalui email.',
@@ -62,7 +62,7 @@ class KepalaKeluargaAuthController extends Controller
             }
 
             if ($user->status !== 'approved') {
-                Auth::guard('kepala_keluarga')->logout();
+                $guard->logout();
 
                 return back()->withErrors([
                     'email' => $user->status === 'rejected'

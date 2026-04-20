@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MasterData\KeluargaController;
 use App\Http\Controllers\MasterData\BalitaController;
@@ -20,6 +21,14 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\KepalaKeluargaAuthController;
 
 Route::get('/', function () {
+    if (Auth::guard('kepala_keluarga')->check()) {
+        return redirect()->route('kepala-keluarga.dashboard');
+    }
+
+    if (Auth::guard('web')->check()) {
+        return redirect()->route('dashboard');
+    }
+
     return redirect()->route('login');
 });
 

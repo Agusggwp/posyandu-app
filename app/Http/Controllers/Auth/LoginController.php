@@ -61,9 +61,10 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $remember = $request->has('remember');
+        $guard = auth()->guard('web');
 
-        if (auth()->guard('web')->attempt($credentials, $remember)) {
+        if ($guard->attempt($credentials)) {
+
             $request->session()->regenerate();
 
             return redirect()->intended($this->redirectPath());

@@ -1,111 +1,180 @@
 <p align="center">
-  <img src="https://img.icons8.com/color/480/hospital-room.png" width="180" alt="Posyandu Logo">
+  <img src="https://img.icons8.com/color/480/hospital-room.png" width="160" alt="Posyandu Logo" />
 </p>
 
-<h1 align="center">🌿 Sistem Informasi Posyandu</h1>
+<h1 align="center">Sistem Informasi Posyandu</h1>
 
 <p align="center">
-Website Manajemen Posyandu untuk monitoring kesehatan ibu, anak, lansia, dan seluruh anggota keluarga secara digital.
+Platform digital untuk manajemen layanan Posyandu: data keluarga, pemeriksaan kesehatan, panel Kepala Keluarga, dan monitoring admin dalam satu sistem.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Laravel-12-red?style=for-the-badge&logo=laravel">
-  <img src="https://img.shields.io/badge/PHP-8.2-blue?style=for-the-badge&logo=php">
-  <img src="https://img.shields.io/badge/MySQL-Database-orange?style=for-the-badge&logo=mysql">
-  <img src="https://img.shields.io/badge/TailwindCSS-Frontend-38B2AC?style=for-the-badge&logo=tailwind-css">
-  <img src="https://img.shields.io/badge/Status-Development-success?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12" />
+  <img src="https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.2" />
+  <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/TailwindCSS-UI-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind" />
+  <img src="https://img.shields.io/badge/Status-Active%20Development-16A34A?style=for-the-badge" alt="Status" />
 </p>
 
 ---
 
-# 📌 Tentang Project
+## Ringkasan
 
-Sistem Informasi Posyandu adalah platform berbasis web yang dirancang untuk membantu proses pelayanan kesehatan masyarakat secara lebih cepat, modern, dan terstruktur.
+Sistem ini membantu pengelolaan layanan kesehatan masyarakat secara lebih cepat, rapi, dan terukur untuk beberapa peran sekaligus:
 
-Website ini memudahkan:
-
-- Admin Posyandu
+- Admin
+- Kader
 - Bidan
-- Kader Posyandu
-- Orang Tua
-- Perwakilan Keluarga
+- Kepala Keluarga
 
-dalam melakukan pengelolaan data kesehatan anggota keluarga secara online.
+Fokus utama aplikasi adalah pencatatan data dan pemeriksaan kesehatan keluarga berbasis web dengan autentikasi multi-role.
 
 ---
 
-# ✨ Fitur Utama
+## Fitur Aktif
 
-## 👨‍👩‍👧‍👦 Manajemen Data Keluarga
+### 1) Manajemen Data Master
 
 - Data Kepala Keluarga
-- Data Anggota Keluarga
+- Data Balita
 - Data Ibu Hamil
-- Data Bayi & Balita
-- Data Lansia
+- Data Nifas
 - Data Remaja
+- Data Lansia
+
+### 2) Pemeriksaan Kesehatan
+
+- Input dan update pemeriksaan Balita
+- Input dan update pemeriksaan Ibu Hamil
+- Input dan update pemeriksaan Nifas
+- Input dan update pemeriksaan Remaja
+- Input dan update pemeriksaan Lansia
+
+### 3) Panel Kepala Keluarga
+
+- Registrasi akun Kepala Keluarga
+- Aktivasi akun via email
+- Approval akun oleh admin
+- Dashboard anggota keluarga dan informasi layanan
+- Berita layanan dari pengaturan admin
+
+### 4) Login & Keamanan
+
+- Login multi-role (petugas dan Kepala Keluarga)
+- Forgot Password terpisah:
+  - Petugas (Admin/Kader/Bidan) satu jalur
+  - Kepala Keluarga jalur khusus
+- Verifikasi status akun Kepala Keluarga
+
+### 5) Pengaturan Dinamis dari Admin
+
+- Informasi Pusat Kesehatan
+- Kustomisasi Login Kepala Keluarga + preview
+- Pengaturan Berita Kepala Keluarga + preview
+- Kustomisasi Login Admin
+
+### 6) Monitoring Aktivitas
+
+- Activity log aksi penting (login, logout, create, update, delete)
+- Pencatatan aktivitas forgot password
+- Filter berdasarkan user dan jenis aksi
 
 ---
 
-## 🩺 Pemeriksaan Kesehatan
+## Teknologi
 
-- Pemeriksaan Balita
-- Pemeriksaan Ibu Hamil
-- Pemeriksaan Lansia
-- Pemeriksaan Remaja
-- Riwayat Pemeriksaan
-- Grafik Perkembangan Kesehatan
-
----
-
-## 📅 Jadwal & Kegiatan
-
-- Jadwal Posyandu
-- Pengumuman Kegiatan
-- Notifikasi Pemeriksaan
-- Reminder Imunisasi
-
----
-
-## 🔐 Sistem Akun & Verifikasi
-
-- Registrasi Orang Tua / Keluarga
-- Login Multi Role
-- Verifikasi Email
-- Verifikasi Manual oleh Admin
-- Hak Akses Berdasarkan Role
-
----
-
-## 📊 Laporan & Statistik
-
-- Data Kehadiran
-- Laporan Pemeriksaan
-- Statistik Balita
-- Statistik Ibu Hamil
-- Export PDF
-- Export Excel
-
----
-
-# 🛠️ Teknologi yang Digunakan
-
-| Teknologi | Keterangan |
+| Komponen | Stack |
 |---|---|
-| Laravel 12 | Backend Framework |
-| PHP 8.2+ | Bahasa Pemrograman |
-| MySQL | Database |
-| Tailwind CSS | Frontend Styling |
-| JavaScript | Interaktif UI |
-| DOMPDF | Export PDF |
-| Laravel Excel | Export Excel |
+| Backend | Laravel 12 |
+| Bahasa | PHP 8.2+ |
+| Database | MySQL |
+| Frontend | Blade + Tailwind CSS + JavaScript |
+| Build Tool | Vite |
+| Export Dokumen | DOMPDF |
 
 ---
 
-# 🚀 Instalasi Project
+## Struktur Peran
 
-## 1. Clone Repository
+| Peran | Kemampuan Utama |
+|---|---|
+| Admin | Full access, pengaturan sistem, approval akun, monitoring log |
+| Kader | Pengelolaan data sesuai izin role |
+| Bidan | Input dan pembaruan data pemeriksaan |
+| Kepala Keluarga | Akses dashboard keluarga dan informasi kesehatan |
+
+---
+
+## Instalasi
+
+### 1. Clone repository
 
 ```bash
 git clone https://github.com/username/posyandu.git
 cd posyandu
+```
+
+### 2. Install dependency
+
+```bash
+composer install
+npm install
+```
+
+### 3. Buat file environment
+
+```bash
+copy .env.example .env
+php artisan key:generate
+```
+
+### 4. Atur konfigurasi database di .env
+
+Gunakan kredensial MySQL lokal Anda:
+
+- DB_DATABASE
+- DB_USERNAME
+- DB_PASSWORD
+
+### 5. Migrasi dan seed data
+
+```bash
+php artisan migrate --seed
+```
+
+### 6. Jalankan aplikasi
+
+```bash
+php artisan serve
+npm run dev
+```
+
+Akses aplikasi di:
+
+- http://127.0.0.1:8000
+
+---
+
+## Catatan Pengembangan
+
+- Gunakan role admin untuk konfigurasi awal sistem.
+- Untuk pengujian alur Kepala Keluarga, pastikan email activation dan status approval sudah valid.
+- Jika ada perubahan route/config/view, jalankan:
+
+```bash
+php artisan optimize:clear
+```
+
+---
+
+## Roadmap Singkat
+
+- Penyempurnaan dashboard analitik kesehatan
+- Peningkatan laporan statistik lintas kategori
+- Peningkatan notifikasi layanan
+
+---
+
+## Lisensi
+
+Project ini dikembangkan untuk kebutuhan sistem informasi layanan Posyandu.

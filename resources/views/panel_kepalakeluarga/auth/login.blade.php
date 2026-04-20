@@ -89,12 +89,7 @@
                         >
                     </div>
 
-                    <div class="flex items-center justify-between gap-3 text-sm">
-                        <label class="flex items-center gap-2 font-medium text-slate-600">
-                            <input type="checkbox" name="remember" value="1" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" {{ old('remember') ? 'checked' : '' }}>
-                            Ingat saya
-                        </label>
-
+                    <div class="flex items-center justify-end text-sm">
                         @if (Route::has('kepala-keluarga.password.request'))
                             <a href="{{ route('kepala-keluarga.password.request') }}" class="font-semibold text-emerald-700 hover:text-emerald-800 hover:underline">Lupa password?</a>
                         @endif

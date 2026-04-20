@@ -1,59 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.icons8.com/color/480/hospital-room.png" width="180" alt="Posyandu Logo">
 </p>
 
-## About Laravel
+<h1 align="center">🌿 Sistem Informasi Posyandu</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+Website Manajemen Posyandu untuk monitoring kesehatan ibu, anak, lansia, dan seluruh anggota keluarga secara digital.
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-12-red?style=for-the-badge&logo=laravel">
+  <img src="https://img.shields.io/badge/PHP-8.2-blue?style=for-the-badge&logo=php">
+  <img src="https://img.shields.io/badge/MySQL-Database-orange?style=for-the-badge&logo=mysql">
+  <img src="https://img.shields.io/badge/TailwindCSS-Frontend-38B2AC?style=for-the-badge&logo=tailwind-css">
+  <img src="https://img.shields.io/badge/Status-Development-success?style=for-the-badge">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# 📌 Tentang Project
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Sistem Informasi Posyandu adalah platform berbasis web yang dirancang untuk membantu proses pelayanan kesehatan masyarakat secara lebih cepat, modern, dan terstruktur.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Website ini memudahkan:
 
-## Laravel Sponsors
+- Admin Posyandu
+- Bidan
+- Kader Posyandu
+- Orang Tua
+- Perwakilan Keluarga
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+dalam melakukan pengelolaan data kesehatan anggota keluarga secara online.
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# ✨ Fitur Utama
 
-## Contributing
+## 👨‍👩‍👧‍👦 Manajemen Data Keluarga
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Data Kepala Keluarga
+- Data Anggota Keluarga
+- Data Ibu Hamil
+- Data Bayi & Balita
+- Data Lansia
+- Data Remaja
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🩺 Pemeriksaan Kesehatan
 
-## Security Vulnerabilities
+- Pemeriksaan Balita
+- Pemeriksaan Ibu Hamil
+- Pemeriksaan Lansia
+- Pemeriksaan Remaja
+- Riwayat Pemeriksaan
+- Grafik Perkembangan Kesehatan
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 📅 Jadwal & Kegiatan
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Jadwal Posyandu
+- Pengumuman Kegiatan
+- Notifikasi Pemeriksaan
+- Reminder Imunisasi
+
+---
+
+## 🔐 Sistem Akun & Verifikasi
+
+- Registrasi Orang Tua / Keluarga
+- Login Multi Role
+- Verifikasi Email
+- Verifikasi Manual oleh Admin
+- Hak Akses Berdasarkan Role
+
+---
+
+## 📊 Laporan & Statistik
+
+- Data Kehadiran
+- Laporan Pemeriksaan
+- Statistik Balita
+- Statistik Ibu Hamil
+- Export PDF
+- Export Excel
+
+---
+
+# 🛠️ Teknologi yang Digunakan
+
+| Teknologi | Keterangan |
+|---|---|
+| Laravel 12 | Backend Framework |
+| PHP 8.2+ | Bahasa Pemrograman |
+| MySQL | Database |
+| Tailwind CSS | Frontend Styling |
+| JavaScript | Interaktif UI |
+| DOMPDF | Export PDF |
+| Laravel Excel | Export Excel |
+
+---
+
+# 🚀 Instalasi Project
+
+## 1. Clone Repository
+
+```bash
+git clone https://github.com/username/posyandu.git
+cd posyandu

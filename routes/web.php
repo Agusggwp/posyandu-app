@@ -29,6 +29,10 @@ Route::prefix('kepala-keluarga')->name('kepala-keluarga.')->group(function () {
         Route::post('login', [KepalaKeluargaAuthController::class, 'login'])->name('login.post');
         Route::get('register', [KepalaKeluargaAuthController::class, 'showRegisterForm'])->name('register');
         Route::post('register', [KepalaKeluargaAuthController::class, 'register'])->name('register.post');
+        Route::get('password/reset', [App\Http\Controllers\KepalaKeluargaForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+        Route::post('password/email', [App\Http\Controllers\KepalaKeluargaForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+        Route::get('password/reset/{token}', [App\Http\Controllers\KepalaKeluargaResetPasswordController::class, 'showResetForm'])->name('password.reset');
+        Route::post('password/reset', [App\Http\Controllers\KepalaKeluargaResetPasswordController::class, 'reset'])->name('password.update');
         Route::get('activate/{id}/{hash}', [KepalaKeluargaAuthController::class, 'activate'])
             ->middleware('signed')
             ->name('activate');
@@ -182,4 +186,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
     Route::resource('roles', RoleController::class)->except(['show']);
 });
+
 

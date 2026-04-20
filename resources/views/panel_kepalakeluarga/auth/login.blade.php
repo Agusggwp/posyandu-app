@@ -89,10 +89,16 @@
                         >
                     </div>
 
-                    <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
-                        <input type="checkbox" name="remember" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                        Ingat saya
-                    </label>
+                    <div class="flex items-center justify-between gap-3 text-sm">
+                        <label class="flex items-center gap-2 font-medium text-slate-600">
+                            <input type="checkbox" name="remember" value="1" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" {{ old('remember') ? 'checked' : '' }}>
+                            Ingat saya
+                        </label>
+
+                        @if (Route::has('kepala-keluarga.password.request'))
+                            <a href="{{ route('kepala-keluarga.password.request') }}" class="font-semibold text-emerald-700 hover:text-emerald-800 hover:underline">Lupa password?</a>
+                        @endif
+                    </div>
 
                     <button type="submit" class="group w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 font-bold text-white shadow-lg shadow-emerald-200 transition hover:from-emerald-700 hover:to-teal-700">
                         <span class="inline-flex items-center gap-2">
@@ -113,3 +119,6 @@
     </div>
 </body>
 </html>
+
+
+

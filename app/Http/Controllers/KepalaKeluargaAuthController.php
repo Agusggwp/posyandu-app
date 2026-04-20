@@ -48,7 +48,7 @@ class KepalaKeluargaAuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $remember = $request->boolean('remember');
+        $remember = $request->has('remember');
 
         if (Auth::guard('kepala_keluarga')->attempt($credentials, $remember)) {
             $user = Auth::guard('kepala_keluarga')->user();

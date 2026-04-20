@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -51,5 +52,25 @@ class LoginController extends Controller
         ];
 
         return view('auth.login', compact('loginSettings'));
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $remember = $request->has('remember');
+
+        if (auth()->guard('web')->attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 }

@@ -32,7 +32,7 @@
                         <option value="">All Actions</option>
                         @foreach($actions as $action)
                             <option value="{{ $action }}" {{ request('action') == $action ? 'selected' : '' }}>
-                                {{ ucfirst($action) }}
+                                {{ ucfirst(str_replace('_', ' ', $action)) }}
                             </option>
                         @endforeach
                     </select>
@@ -87,11 +87,14 @@
                                             'viewed' => 'bg-cyan-100 text-cyan-800',
                                             'login' => 'bg-purple-100 text-purple-800',
                                             'logout' => 'bg-gray-100 text-gray-800',
+                                            'reset_requested' => 'bg-amber-100 text-amber-800',
+                                            'reset_completed' => 'bg-emerald-100 text-emerald-800',
+                                            'reset_failed' => 'bg-rose-100 text-rose-800',
                                         ];
                                         $color = $colors[$log->action] ?? 'bg-gray-100 text-gray-800';
                                     @endphp
                                     <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $color }}">
-                                        {{ ucfirst($log->action) }}
+                                        {{ ucfirst(str_replace('_', ' ', $log->action)) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
@@ -140,6 +143,9 @@
                         'viewed' => 'bg-cyan-100 text-cyan-800',
                         'login' => 'bg-purple-100 text-purple-800',
                         'logout' => 'bg-gray-100 text-gray-800',
+                        'reset_requested' => 'bg-amber-100 text-amber-800',
+                        'reset_completed' => 'bg-emerald-100 text-emerald-800',
+                        'reset_failed' => 'bg-rose-100 text-rose-800',
                     ];
                     $color = $colors[$log->action] ?? 'bg-gray-100 text-gray-800';
                 @endphp
@@ -149,7 +155,7 @@
                             <p class="font-semibold text-gray-900">{{ $log->user->name ?? 'System' }}</p>
                             <p class="text-xs text-gray-500">{{ $log->user->email ?? '-' }}</p>
                         </div>
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $color }}">{{ ucfirst($log->action) }}</span>
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $color }}">{{ ucfirst(str_replace('_', ' ', $log->action)) }}</span>
                     </div>
                     <p class="mt-2 text-sm text-gray-700">{{ $log->description }}</p>
                     <div class="mt-3 text-xs text-gray-500 space-y-1">

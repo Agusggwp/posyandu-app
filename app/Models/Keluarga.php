@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\KepalaKeluargaResetPasswordNotification;
 
 class Keluarga extends Authenticatable
 {
+    use Notifiable;
     protected $table = 'kepala_keluarga';
 
     protected $fillable = [
@@ -29,6 +32,10 @@ class Keluarga extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new KepalaKeluargaResetPasswordNotification($token));
+    }
     public function balitas()
     {
         return $this->hasMany(Balita::class, 'kepala_keluarga_id');
@@ -84,3 +91,8 @@ class Keluarga extends Authenticatable
         return null;
     }
 }
+
+
+
+
+

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\ActivityLog;
+use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Event;
@@ -24,15 +25,29 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::listen(Login::class, function (Login $event): void {
-            ActivityLog::create([
-                'user_id' => $event->user->id,
-                'action' => 'login',
-                'model' => 'User',
-                'model_id' => $event->user->id,
-                'description' => 'User login: ' . $event->user->name,
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-            ]);
+            $actor = $event->user;
+
+            if (! $actor) {
+                return;
+            }
+
+            $isStaffUser = $actor instanceof User;
+            $actorName = $actor->name ?? $actor->nama_lengkap ?? $actor->email ?? ('ID ' . $actor->id);
+            $actorType = $isStaffUser ? 'User' : class_basename($actor);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => $isStaffUser ? $actor->id : null,
+                    'action' => 'login',
+                    'model' => $actorType,
+                    'model_id' => $actor->id,
+                    'description' => $actorType . ' login: ' . $actorName,
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // Never break authentication flow due to logging issues.
+            }
         });
 
         Event::listen(Logout::class, function (Logout $event): void {
@@ -40,15 +55,24 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
 
-            ActivityLog::create([
-                'user_id' => $event->user->id,
-                'action' => 'logout',
-                'model' => 'User',
-                'model_id' => $event->user->id,
-                'description' => 'User logout: ' . $event->user->name,
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-            ]);
+            $actor = $event->user;
+            $isStaffUser = $actor instanceof User;
+            $actorName = $actor->name ?? $actor->nama_lengkap ?? $actor->email ?? ('ID ' . $actor->id);
+            $actorType = $isStaffUser ? 'User' : class_basename($actor);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => $isStaffUser ? $actor->id : null,
+                    'action' => 'logout',
+                    'model' => $actorType,
+                    'model_id' => $actor->id,
+                    'description' => $actorType . ' logout: ' . $actorName,
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // Never break authentication flow due to logging issues.
+            }
         });
 
         // Register Gates for Permissions

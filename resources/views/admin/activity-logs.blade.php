@@ -99,6 +99,16 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">{{ $log->description }}</div>
+                                    @if(!empty($log->properties['target_label']) || !empty($log->properties['changed_fields']))
+                                        <div class="mt-1 text-xs text-gray-500">
+                                            @if(!empty($log->properties['target_label']))
+                                                <span>Target: {{ $log->properties['target_label'] }}</span>
+                                            @endif
+                                            @if(!empty($log->properties['changed_fields']) && is_array($log->properties['changed_fields']))
+                                                <span class="{{ !empty($log->properties['target_label']) ? 'ml-2' : '' }}">Perubahan: {{ implode(', ', $log->properties['changed_fields']) }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $log->model ?? '-' }}
@@ -158,6 +168,16 @@
                         <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $color }}">{{ ucfirst(str_replace('_', ' ', $log->action)) }}</span>
                     </div>
                     <p class="mt-2 text-sm text-gray-700">{{ $log->description }}</p>
+                    @if(!empty($log->properties['target_label']) || !empty($log->properties['changed_fields']))
+                        <div class="mt-2 text-xs text-gray-500 space-y-1">
+                            @if(!empty($log->properties['target_label']))
+                                <p>Target: {{ $log->properties['target_label'] }}</p>
+                            @endif
+                            @if(!empty($log->properties['changed_fields']) && is_array($log->properties['changed_fields']))
+                                <p>Perubahan: {{ implode(', ', $log->properties['changed_fields']) }}</p>
+                            @endif
+                        </div>
+                    @endif
                     <div class="mt-3 text-xs text-gray-500 space-y-1">
                         <p>Model: {{ $log->model ?? '-' }}</p>
                         <p>IP: {{ $log->ip_address ?? '-' }}</p>

@@ -30,6 +30,17 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $dashboardSettings = [
+            'title' => Setting::getSetting('admin_dashboard_title', 'Admin Dashboard'),
+            'subtitle' => Setting::getSetting('admin_dashboard_subtitle', 'Panel Kontrol Administrasi Sistem'),
+            'show_stats_cards' => Setting::getSetting('admin_show_stats_cards', 'active'),
+            'show_recent_users' => Setting::getSetting('admin_show_recent_users', 'active'),
+            'show_recent_activities' => Setting::getSetting('admin_show_recent_activities', 'active'),
+            'show_activity_chart' => Setting::getSetting('admin_show_activity_chart', 'active'),
+            'show_role_distribution' => Setting::getSetting('admin_show_role_distribution', 'active'),
+            'show_quick_actions' => Setting::getSetting('admin_show_quick_actions', 'active'),
+        ];
+
         $stats = [
             'total_users' => User::count(),
             'total_roles' => Role::count(),
@@ -67,7 +78,7 @@ class AdminController extends Controller
             ];
         }
 
-        return view('admin.dashboard', compact('stats', 'recentUsers', 'usersByRole', 'recentActivities', 'dailyStats'));
+        return view('admin.dashboard', compact('stats', 'recentUsers', 'usersByRole', 'recentActivities', 'dailyStats', 'dashboardSettings'));
     }
 
     /**
@@ -121,6 +132,44 @@ class AdminController extends Controller
     public function settings()
     {
         $settings = [
+            'system_app_name' => Setting::getSetting('system_app_name', 'Sistem Informasi Posyandu'),
+            'system_app_tagline' => Setting::getSetting('system_app_tagline', 'Layanan kesehatan keluarga yang lebih cepat, rapi, dan terukur.'),
+            'main_dashboard_checks_title' => Setting::getSetting('main_dashboard_checks_title', 'Pemeriksaan Bulan Ini'),
+            'main_dashboard_nutrition_title' => Setting::getSetting('main_dashboard_nutrition_title', 'Status Gizi'),
+            'main_dashboard_quick_actions_title' => Setting::getSetting('main_dashboard_quick_actions_title', 'Quick Actions'),
+            'main_dashboard_system_info_title' => Setting::getSetting('main_dashboard_system_info_title', 'Informasi Sistem'),
+            'main_dashboard_stat_note' => Setting::getSetting('main_dashboard_stat_note', 'Data aktif'),
+            'main_dashboard_show_stats_cards' => Setting::getSetting('main_dashboard_show_stats_cards', 'active'),
+            'main_dashboard_show_card_keluarga' => Setting::getSetting('main_dashboard_show_card_keluarga', 'active'),
+            'main_dashboard_show_card_balita' => Setting::getSetting('main_dashboard_show_card_balita', 'active'),
+            'main_dashboard_show_card_ibu_hamil' => Setting::getSetting('main_dashboard_show_card_ibu_hamil', 'active'),
+            'main_dashboard_show_card_nifas' => Setting::getSetting('main_dashboard_show_card_nifas', 'active'),
+            'main_dashboard_show_card_remaja' => Setting::getSetting('main_dashboard_show_card_remaja', 'active'),
+            'main_dashboard_show_card_lansia' => Setting::getSetting('main_dashboard_show_card_lansia', 'active'),
+            'main_dashboard_show_checks_summary' => Setting::getSetting('main_dashboard_show_checks_summary', 'active'),
+            'main_dashboard_show_checks_balita' => Setting::getSetting('main_dashboard_show_checks_balita', 'active'),
+            'main_dashboard_show_checks_ibu_hamil' => Setting::getSetting('main_dashboard_show_checks_ibu_hamil', 'active'),
+            'main_dashboard_show_checks_nifas' => Setting::getSetting('main_dashboard_show_checks_nifas', 'active'),
+            'main_dashboard_show_checks_remaja' => Setting::getSetting('main_dashboard_show_checks_remaja', 'active'),
+            'main_dashboard_show_checks_lansia' => Setting::getSetting('main_dashboard_show_checks_lansia', 'active'),
+            'main_dashboard_show_nutrition' => Setting::getSetting('main_dashboard_show_nutrition', 'active'),
+            'main_dashboard_show_quick_actions' => Setting::getSetting('main_dashboard_show_quick_actions', 'active'),
+            'main_dashboard_show_action_balita' => Setting::getSetting('main_dashboard_show_action_balita', 'active'),
+            'main_dashboard_show_action_ibu_hamil' => Setting::getSetting('main_dashboard_show_action_ibu_hamil', 'active'),
+            'main_dashboard_show_action_nifas' => Setting::getSetting('main_dashboard_show_action_nifas', 'active'),
+            'main_dashboard_show_action_remaja' => Setting::getSetting('main_dashboard_show_action_remaja', 'active'),
+            'main_dashboard_show_action_lansia' => Setting::getSetting('main_dashboard_show_action_lansia', 'active'),
+            'main_dashboard_show_system_info' => Setting::getSetting('main_dashboard_show_system_info', 'active'),
+            'admin_dashboard_title' => Setting::getSetting('admin_dashboard_title', 'Admin Dashboard'),
+            'admin_dashboard_subtitle' => Setting::getSetting('admin_dashboard_subtitle', 'Panel Kontrol Administrasi Sistem'),
+            'admin_show_stats_cards' => Setting::getSetting('admin_show_stats_cards', 'active'),
+            'admin_show_recent_users' => Setting::getSetting('admin_show_recent_users', 'active'),
+            'admin_show_recent_activities' => Setting::getSetting('admin_show_recent_activities', 'active'),
+            'admin_show_activity_chart' => Setting::getSetting('admin_show_activity_chart', 'active'),
+            'admin_show_role_distribution' => Setting::getSetting('admin_show_role_distribution', 'active'),
+            'admin_show_quick_actions' => Setting::getSetting('admin_show_quick_actions', 'active'),
+            'kk_registration_status' => Setting::getSetting('kk_registration_status', 'active'),
+            'kk_auto_approve' => Setting::getSetting('kk_auto_approve', 'inactive'),
             'center_address' => Setting::getSetting('center_address', ''),
             'center_email' => Setting::getSetting('center_email', ''),
             'center_hours_open' => Setting::getSetting('center_hours_open', '08:00'),
@@ -156,6 +205,44 @@ class AdminController extends Controller
     public function updateSettings(Request $request)
     {
         $validated = $request->validate([
+            'system_app_name' => 'sometimes|nullable|string|max:120',
+            'system_app_tagline' => 'sometimes|nullable|string|max:255',
+            'main_dashboard_checks_title' => 'sometimes|nullable|string|max:120',
+            'main_dashboard_nutrition_title' => 'sometimes|nullable|string|max:120',
+            'main_dashboard_quick_actions_title' => 'sometimes|nullable|string|max:120',
+            'main_dashboard_system_info_title' => 'sometimes|nullable|string|max:120',
+            'main_dashboard_stat_note' => 'sometimes|nullable|string|max:80',
+            'main_dashboard_show_stats_cards' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_card_keluarga' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_card_balita' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_card_ibu_hamil' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_card_nifas' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_card_remaja' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_card_lansia' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_checks_summary' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_checks_balita' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_checks_ibu_hamil' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_checks_nifas' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_checks_remaja' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_checks_lansia' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_nutrition' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_quick_actions' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_action_balita' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_action_ibu_hamil' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_action_nifas' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_action_remaja' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_action_lansia' => 'sometimes|in:active,inactive',
+            'main_dashboard_show_system_info' => 'sometimes|in:active,inactive',
+            'admin_dashboard_title' => 'sometimes|nullable|string|max:120',
+            'admin_dashboard_subtitle' => 'sometimes|nullable|string|max:255',
+            'admin_show_stats_cards' => 'sometimes|in:active,inactive',
+            'admin_show_recent_users' => 'sometimes|in:active,inactive',
+            'admin_show_recent_activities' => 'sometimes|in:active,inactive',
+            'admin_show_activity_chart' => 'sometimes|in:active,inactive',
+            'admin_show_role_distribution' => 'sometimes|in:active,inactive',
+            'admin_show_quick_actions' => 'sometimes|in:active,inactive',
+            'kk_registration_status' => 'sometimes|in:active,inactive',
+            'kk_auto_approve' => 'sometimes|in:active,inactive',
             'center_address' => 'sometimes|nullable|string|max:500',
             'center_email' => 'sometimes|nullable|email|max:255',
             'center_hours_open' => 'sometimes|nullable|date_format:H:i',

@@ -175,71 +175,142 @@
 @endpush
 
 @section('content')
+@php
+    $showStatsCards = ($dashboardSettings['show_stats_cards'] ?? 'active') === 'active';
+    $showCardKeluarga = ($dashboardSettings['show_card_keluarga'] ?? 'active') === 'active';
+    $showCardBalita = ($dashboardSettings['show_card_balita'] ?? 'active') === 'active';
+    $showCardIbuHamil = ($dashboardSettings['show_card_ibu_hamil'] ?? 'active') === 'active';
+    $showCardNifas = ($dashboardSettings['show_card_nifas'] ?? 'active') === 'active';
+    $showCardRemaja = ($dashboardSettings['show_card_remaja'] ?? 'active') === 'active';
+    $showCardLansia = ($dashboardSettings['show_card_lansia'] ?? 'active') === 'active';
+
+    $showChecksSummary = ($dashboardSettings['show_checks_summary'] ?? 'active') === 'active';
+    $showChecksBalita = ($dashboardSettings['show_checks_balita'] ?? 'active') === 'active';
+    $showChecksIbuHamil = ($dashboardSettings['show_checks_ibu_hamil'] ?? 'active') === 'active';
+    $showChecksNifas = ($dashboardSettings['show_checks_nifas'] ?? 'active') === 'active';
+    $showChecksRemaja = ($dashboardSettings['show_checks_remaja'] ?? 'active') === 'active';
+    $showChecksLansia = ($dashboardSettings['show_checks_lansia'] ?? 'active') === 'active';
+
+    $showNutrition = ($dashboardSettings['show_nutrition'] ?? 'active') === 'active';
+    $showQuickActions = ($dashboardSettings['show_quick_actions'] ?? 'active') === 'active';
+    $showActionBalita = ($dashboardSettings['show_action_balita'] ?? 'active') === 'active';
+    $showActionIbuHamil = ($dashboardSettings['show_action_ibu_hamil'] ?? 'active') === 'active';
+    $showActionNifas = ($dashboardSettings['show_action_nifas'] ?? 'active') === 'active';
+    $showActionRemaja = ($dashboardSettings['show_action_remaja'] ?? 'active') === 'active';
+    $showActionLansia = ($dashboardSettings['show_action_lansia'] ?? 'active') === 'active';
+
+    $showSystemInfo = ($dashboardSettings['show_system_info'] ?? 'active') === 'active';
+
+    $hasStatsCards = $showCardKeluarga || $showCardBalita || $showCardIbuHamil || $showCardNifas || $showCardRemaja || $showCardLansia;
+    $hasChecksItems = $showChecksBalita || $showChecksIbuHamil || $showChecksNifas || $showChecksRemaja || $showChecksLansia;
+    $hasQuickActions = $showActionBalita || $showActionIbuHamil || $showActionNifas || $showActionRemaja || $showActionLansia;
+@endphp
+
+@if ($showStatsCards && $hasStatsCards)
 <div class="stats-grid">
+    @if ($showCardKeluarga)
     <div class="stat-card purple">
         <span class="stat-watermark"><i class="fa-solid fa-people-roof"></i></span>
         <div class="stat-label"><i class="fa-solid fa-people-roof"></i>Total Keluarga</div>
         <div class="stat-value">{{ $data['total_keluarga'] }}</div>
-        <div class="stat-change">Data aktif</div>
+        <div class="stat-change">{{ $dashboardSettings['stat_note'] ?? 'Data aktif' }}</div>
     </div>
+    @endif
 
+    @if ($showCardBalita)
     <div class="stat-card blue">
         <span class="stat-watermark"><i class="fa-solid fa-baby"></i></span>
         <div class="stat-label"><i class="fa-solid fa-baby"></i>Total Balita</div>
         <div class="stat-value">{{ $data['total_balita'] }}</div>
-        <div class="stat-change">Data aktif</div>
+        <div class="stat-change">{{ $dashboardSettings['stat_note'] ?? 'Data aktif' }}</div>
     </div>
+    @endif
 
+    @if ($showCardIbuHamil)
     <div class="stat-card green">
         <span class="stat-watermark"><i class="fa-solid fa-person-pregnant"></i></span>
         <div class="stat-label"><i class="fa-solid fa-person-pregnant"></i>Total Ibu Hamil</div>
         <div class="stat-value">{{ $data['total_ibu_hamil'] }}</div>
-        <div class="stat-change">Data aktif</div>
+        <div class="stat-change">{{ $dashboardSettings['stat_note'] ?? 'Data aktif' }}</div>
     </div>
+    @endif
 
+    @if ($showCardNifas)
     <div class="stat-card purple">
         <span class="stat-watermark"><i class="fa-solid fa-child-reaching"></i></span>
         <div class="stat-label"><i class="fa-solid fa-child-reaching"></i>Total Nifas</div>
         <div class="stat-value">{{ $data['total_nifas'] }}</div>
-        <div class="stat-change">Data aktif</div>
+        <div class="stat-change">{{ $dashboardSettings['stat_note'] ?? 'Data aktif' }}</div>
     </div>
+    @endif
 
+    @if ($showCardRemaja)
     <div class="stat-card blue">
         <span class="stat-watermark"><i class="fa-solid fa-user-group"></i></span>
         <div class="stat-label"><i class="fa-solid fa-user-group"></i>Total Remaja</div>
         <div class="stat-value">{{ $data['total_remaja'] }}</div>
-        <div class="stat-change">Data aktif</div>
+        <div class="stat-change">{{ $dashboardSettings['stat_note'] ?? 'Data aktif' }}</div>
     </div>
+    @endif
 
+    @if ($showCardLansia)
     <div class="stat-card orange">
         <span class="stat-watermark"><i class="fa-solid fa-person-cane"></i></span>
         <div class="stat-label"><i class="fa-solid fa-person-cane"></i>Total Lansia</div>
         <div class="stat-value">{{ $data['total_lansia'] }}</div>
-        <div class="stat-change">Data aktif</div>
+        <div class="stat-change">{{ $dashboardSettings['stat_note'] ?? 'Data aktif' }}</div>
     </div>
+    @endif
 </div>
+@endif
 
+@if (($showChecksSummary && $hasChecksItems) || $showNutrition || ($showQuickActions && $hasQuickActions))
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    @if ($showChecksSummary && $hasChecksItems)
     <div class="dash-card">
-        <h3 class="dash-card-title">Pemeriksaan Bulan Ini</h3>
+        <h3 class="dash-card-title">{{ $dashboardSettings['checks_title'] ?? 'Pemeriksaan Bulan Ini' }}</h3>
         <div>
+            @if ($showChecksBalita)
             <div class="ringkasan-item green">
                 <span>Pemeriksaan Balita</span>
                 <span class="ringkasan-badge green">{{ $data['total_pemeriksaan_balita'] }}</span>
             </div>
+            @endif
+
+            @if ($showChecksIbuHamil)
             <div class="ringkasan-item blue">
                 <span>Pemeriksaan Ibu Hamil</span>
                 <span class="ringkasan-badge blue">{{ $data['total_pemeriksaan_ibu_hamil'] }}</span>
             </div>
+            @endif
+
+            @if ($showChecksNifas)
+            <div class="ringkasan-item green">
+                <span>Pemeriksaan Nifas</span>
+                <span class="ringkasan-badge green">{{ $data['total_pemeriksaan_nifas'] }}</span>
+            </div>
+            @endif
+
+            @if ($showChecksRemaja)
+            <div class="ringkasan-item blue">
+                <span>Pemeriksaan Remaja</span>
+                <span class="ringkasan-badge blue">{{ $data['total_pemeriksaan_remaja'] }}</span>
+            </div>
+            @endif
+
+            @if ($showChecksLansia)
             <div class="ringkasan-item orange" style="margin-bottom: 0;">
                 <span>Pemeriksaan Lansia</span>
                 <span class="ringkasan-badge orange">{{ $data['total_pemeriksaan_lansia'] }}</span>
             </div>
+            @endif
         </div>
     </div>
+    @endif
 
+    @if ($showNutrition)
     <div class="dash-card">
-        <h3 class="dash-card-title">Status Gizi</h3>
+        <h3 class="dash-card-title">{{ $dashboardSettings['nutrition_title'] ?? 'Status Gizi' }}</h3>
         <div class="bg-rose-50 border border-rose-200 rounded-xl p-5 mb-4">
             <h4 class="text-sm font-semibold text-rose-800 mb-1">Perhatian</h4>
             <p class="text-rose-700">Balita dengan status <strong>Stunting</strong></p>
@@ -249,23 +320,48 @@
             Lihat Detail
         </a>
     </div>
+    @endif
 
+    @if ($showQuickActions && $hasQuickActions)
     <div class="dash-card">
-        <h3 class="dash-card-title">Quick Actions</h3>
+        <h3 class="dash-card-title">{{ $dashboardSettings['quick_actions_title'] ?? 'Quick Actions' }}</h3>
+        @if ($showActionBalita)
         <a href="{{ route('pemeriksaan-balita.create') }}" class="quick-link green">
             Input Pemeriksaan Balita
         </a>
+        @endif
+
+        @if ($showActionIbuHamil)
         <a href="{{ route('pemeriksaan-ibu-hamil.create') }}" class="quick-link blue">
             Input Pemeriksaan Ibu Hamil
         </a>
+        @endif
+
+        @if ($showActionNifas)
+        <a href="{{ route('pemeriksaan-nifas.create') }}" class="quick-link green">
+            Input Pemeriksaan Nifas
+        </a>
+        @endif
+
+        @if ($showActionRemaja)
+        <a href="{{ route('pemeriksaan-remaja.create') }}" class="quick-link blue">
+            Input Pemeriksaan Remaja
+        </a>
+        @endif
+
+        @if ($showActionLansia)
         <a href="{{ route('pemeriksaan-lansia.create') }}" class="quick-link orange" style="margin-bottom: 0;">
             Input Pemeriksaan Lansia
         </a>
+        @endif
     </div>
+    @endif
 </div>
+@endif
 
+@if ($showSystemInfo)
 <div class="dash-card table-card">
-    <h3 class="dash-card-title">Informasi Sistem</h3>
+    <h3 class="dash-card-title">{{ $dashboardSettings['system_info_title'] ?? 'Informasi Sistem' }}</h3>
     <div class="overflow-x-auto">
         <table>
             <thead>
@@ -289,10 +385,11 @@
                 </tr>
                 <tr>
                     <td>Total Data Pemeriksaan (Bulan Ini)</td>
-                    <td>{{ $data['total_pemeriksaan_balita'] + $data['total_pemeriksaan_ibu_hamil'] + $data['total_pemeriksaan_lansia'] }}</td>
+                    <td>{{ $data['total_pemeriksaan_balita'] + $data['total_pemeriksaan_ibu_hamil'] + $data['total_pemeriksaan_nifas'] + $data['total_pemeriksaan_remaja'] + $data['total_pemeriksaan_lansia'] }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+@endif
 @endsection

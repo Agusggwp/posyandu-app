@@ -83,11 +83,23 @@ class KepalaKeluargaAuthController extends Controller
 
     public function showRegisterForm()
     {
+        if (Setting::getSetting('kk_registration_status', 'active') !== 'active') {
+            return redirect()->route('kepala-keluarga.login')
+                ->withErrors(['email' => 'Pendaftaran Kepala Keluarga sedang dinonaktifkan oleh admin.']);
+        }
+
         return view('panel_kepalakeluarga.auth.register');
     }
 
     public function register(Request $request)
     {
+        if (Setting::getSetting('kk_registration_status', 'active') !== 'active') {
+            return redirect()->route('kepala-keluarga.login')
+                ->withErrors(['email' => 'Pendaftaran Kepala Keluarga sedang dinonaktifkan oleh admin.']);
+        }
+
+        $autoApprove = Setting::getSetting('kk_auto_approve', 'inactive') === 'active';
+
         $validated = $request->validate([
             'no_kk' => ['required', 'string', 'max:255', 'unique:kepala_keluarga,no_kk'],
             'nama_lengkap' => ['required', 'string', 'max:255'],
@@ -106,7 +118,7 @@ class KepalaKeluargaAuthController extends Controller
             'alamat' => $validated['alamat'],
             'no_telepon' => $validated['no_telepon'] ?? null,
             'password' => Hash::make($validated['password']),
-            'status' => 'pending',
+            'status' => $autoApprove ? 'approved' : 'pending',
             'email_verified_at' => null,
         ]);
 
@@ -144,7 +156,11 @@ class KepalaKeluargaAuthController extends Controller
             ])->save();
         }
 
-        return redirect()->route('kepala-keluarga.login')->with('success', 'Akun berhasil diaktivasi. Menunggu persetujuan admin.');
+        $message = $keluarga->status === 'approved'
+            ? 'Akun berhasil diaktivasi. Silakan login.'
+            : 'Akun berhasil diaktivasi. Menunggu persetujuan admin.';
+
+        return redirect()->route('kepala-keluarga.login')->with('success', $message);
     }
 
     public function dashboard()

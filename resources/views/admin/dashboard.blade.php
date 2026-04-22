@@ -3,11 +3,12 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-3 sm:px-4">
     <div class="mb-6 sm:mb-8">
-        <h2 class="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Admin Dashboard</h2>
-        <p class="text-slate-600 mt-2">Panel Kontrol Administrasi Sistem</p>
+        <h2 class="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{{ $dashboardSettings['title'] ?? 'Admin Dashboard' }}</h2>
+        <p class="text-slate-600 mt-2">{{ $dashboardSettings['subtitle'] ?? 'Panel Kontrol Administrasi Sistem' }}</p>
     </div>
 
     <!-- Statistics Cards -->
+    @if (($dashboardSettings['show_stats_cards'] ?? 'active') === 'active')
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-2xl shadow-lg border border-indigo-100 p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
             <div class="flex justify-between items-start">
@@ -65,10 +66,13 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Recent Users & Activities -->
+    @if ((($dashboardSettings['show_recent_users'] ?? 'active') === 'active') || (($dashboardSettings['show_recent_activities'] ?? 'active') === 'active'))
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Recent Users -->
+        @if (($dashboardSettings['show_recent_users'] ?? 'active') === 'active')
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
             <div class="flex justify-between items-center mb-4 sm:mb-6">
                 <h3 class="text-xl font-bold text-gray-800">User Terbaru</h3>
@@ -94,8 +98,10 @@
                 @endforeach
             </div>
         </div>
+        @endif
 
         <!-- Recent Activities -->
+        @if (($dashboardSettings['show_recent_activities'] ?? 'active') === 'active')
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
             <div class="flex justify-between items-center mb-4 sm:mb-6">
                 <h3 class="text-xl font-bold text-gray-800">Recent Activities</h3>
@@ -138,11 +144,15 @@
                 @endforelse
             </div>
         </div>
+        @endif
     </div>
+    @endif
 
     <!-- Activity Chart & Role Distribution -->
+    @if ((($dashboardSettings['show_activity_chart'] ?? 'active') === 'active') || (($dashboardSettings['show_role_distribution'] ?? 'active') === 'active'))
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Activity Chart (Last 7 Days) -->
+        @if (($dashboardSettings['show_activity_chart'] ?? 'active') === 'active')
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-6">Activity Trend (Last 7 Days)</h3>
             
@@ -165,7 +175,9 @@
                 @endforeach
             </div>
         </div>
+        @endif
 
+        @if (($dashboardSettings['show_role_distribution'] ?? 'active') === 'active')
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-6">Distribusi Role</h3>
             
@@ -184,8 +196,11 @@
                 @endforeach
             </div>
         </div>
+                @endif
     </div>
+        @endif
   <!-- Quick Actions -->
+        @if (($dashboardSettings['show_quick_actions'] ?? 'active') === 'active')
     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
         <h3 class="text-xl font-bold text-gray-800 mb-6">Quick Actions</h3>
         
@@ -219,5 +234,6 @@
             </a>
         </div>
     </div>
+    @endif
 </div>
 @endsection

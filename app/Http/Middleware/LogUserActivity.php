@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Models\ActivityLog;
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class LogUserActivity
@@ -15,14 +15,24 @@ class LogUserActivity
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $route = $request->route();
+        if (! $route) {
+            return $next($request);
+        }
+
+        $method = strtoupper($request->method());
+
+        // Focus logs on data changes only.
+        if (! in_array($method, ['PUT', 'PATCH'], true)) {
+            return $next($request);
+        }
+
+        $targetModel = $this->extractTargetModel($route?->parameters() ?? []);
+        $beforeState = $targetModel ? $this->snapshotModel($targetModel) : [];
+
         $response = $next($request);
 
         if (! auth()->check()) {
-            return $response;
-        }
-
-        $route = $request->route();
-        if (! $route) {
             return $response;
         }
 
@@ -45,25 +55,21 @@ class LogUserActivity
             return $response;
         }
 
-        $method = strtoupper($request->method());
-
-        $action = match ($method) {
-            'POST' => 'created',
-            'PUT', 'PATCH' => 'updated',
-            'DELETE' => 'deleted',
-            'GET' => 'viewed',
-            default => strtolower($method),
-        };
-
-        // Skip logging view actions - only log crucial actions (create, update, delete)
-        if ($action === 'viewed') {
+        if ($response->getStatusCode() >= 400) {
             return $response;
         }
 
+        $action = 'updated';
         $resource = $this->guessResourceName($controllerClass);
         [$modelId, $targetLabel] = $this->extractTarget($route?->parameters() ?? []);
-        $sanitizedInput = $this->sanitizeInput($request->all());
-        $changedFields = array_keys($sanitizedInput);
+
+        $afterState = $targetModel ? $this->snapshotModel($targetModel->fresh()) : [];
+        $changes = $this->buildChanges($beforeState, $afterState);
+        $changedFields = array_keys($changes);
+
+        if (empty($changedFields)) {
+            return $response;
+        }
 
         $description = $this->buildDescription(
             $action,
@@ -89,7 +95,7 @@ class LogUserActivity
                     'controller_method' => $controllerMethod,
                     'target_label' => $targetLabel,
                     'changed_fields' => $changedFields,
-                    'input_preview' => $this->previewInput($sanitizedInput),
+                    'changes' => $changes,
                     'status_code' => $response->getStatusCode(),
                 ],
                 'ip_address' => $request->ip(),
@@ -212,5 +218,62 @@ class LogUserActivity
         }
 
         return [null, null];
+    }
+
+    private function extractTargetModel(array $routeParameters): ?Model
+    {
+        foreach ($routeParameters as $value) {
+            if ($value instanceof Model) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    private function snapshotModel(?Model $model): array
+    {
+        if (! $model) {
+            return [];
+        }
+
+        return $this->sanitizeInput($model->getAttributes());
+    }
+
+    private function buildChanges(array $before, array $after): array
+    {
+        $changes = [];
+
+        foreach ($after as $field => $afterValue) {
+            $beforeValue = $before[$field] ?? null;
+
+            if ($this->normalizeValue($beforeValue) === $this->normalizeValue($afterValue)) {
+                continue;
+            }
+
+            $changes[$field] = [
+                'before' => $beforeValue,
+                'after' => $afterValue,
+            ];
+        }
+
+        return $changes;
+    }
+
+    private function normalizeValue(mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        if ($value === null) {
+            return 'null';
+        }
+
+        if (is_array($value)) {
+            return json_encode($value);
+        }
+
+        return (string) $value;
     }
 }

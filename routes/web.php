@@ -15,7 +15,10 @@ use App\Http\Controllers\Pemeriksaan\PemeriksaanLansiaController;
 use App\Http\Controllers\Pemeriksaan\PemeriksaanNifasController;
 use App\Http\Controllers\Pemeriksaan\PemeriksaanRemajaController;
 use App\Http\Controllers\Reports\LaporanController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminActivityLogController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\AdminSystemInfoController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\KepalaKeluargaAuthController;
@@ -179,15 +182,15 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Only Routes (Full Power)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
-    Route::put('/settings', [AdminController::class, 'updateSettings'])->name('updateSettings');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings');
+    Route::put('/settings', [AdminSettingsController::class, 'update'])->name('updateSettings');
     
     // Activity Logs
-    Route::get('/activity-logs', [AdminController::class, 'activityLogs'])->name('activity-logs');
+    Route::get('/activity-logs', [AdminActivityLogController::class, 'index'])->name('activity-logs');
     
     // System Information
-    Route::get('/system-info', [AdminController::class, 'systemInfo'])->name('system-info');
+    Route::get('/system-info', [AdminSystemInfoController::class, 'index'])->name('system-info');
 });
 
 // User Management (Admin Only)

@@ -109,6 +109,18 @@
                                             @endif
                                         </div>
                                     @endif
+                                    @if(!empty($log->properties['changes']) && is_array($log->properties['changes']))
+                                        <div class="mt-2 space-y-1 text-xs text-gray-600">
+                                            @foreach($log->properties['changes'] as $field => $change)
+                                                <p>
+                                                    <span class="font-semibold text-gray-700">{{ $field }}</span>:
+                                                    <span class="text-red-600">{{ $change['before'] ?? '-' }}</span>
+                                                    <span class="mx-1">-></span>
+                                                    <span class="text-green-600">{{ $change['after'] ?? '-' }}</span>
+                                                </p>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $log->model ?? '-' }}
@@ -176,6 +188,18 @@
                             @if(!empty($log->properties['changed_fields']) && is_array($log->properties['changed_fields']))
                                 <p>Perubahan: {{ implode(', ', $log->properties['changed_fields']) }}</p>
                             @endif
+                        </div>
+                    @endif
+                    @if(!empty($log->properties['changes']) && is_array($log->properties['changes']))
+                        <div class="mt-2 space-y-1 text-xs text-gray-600">
+                            @foreach($log->properties['changes'] as $field => $change)
+                                <p>
+                                    <span class="font-semibold text-gray-700">{{ $field }}</span>:
+                                    <span class="text-red-600">{{ $change['before'] ?? '-' }}</span>
+                                    <span class="mx-1">-></span>
+                                    <span class="text-green-600">{{ $change['after'] ?? '-' }}</span>
+                                </p>
+                            @endforeach
                         </div>
                     @endif
                     <div class="mt-3 text-xs text-gray-500 space-y-1">

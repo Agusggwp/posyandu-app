@@ -167,6 +167,7 @@ class KepalaKeluargaAuthController extends Controller
     {
         $kepalaKeluarga = Auth::guard('kepala_keluarga')->user();
         $kepalaKeluarga?->load(['balitas', 'ibuHamils', 'lansias', 'nifases', 'remajas']);
+        Carbon::setLocale('id');
 
         $centerInfo = [
             'email' => Setting::getSetting('center_email', '-'),
@@ -177,9 +178,13 @@ class KepalaKeluargaAuthController extends Controller
 
         $news = [
             'status' => Setting::getSetting('kk_news_status', 'active'),
+            'aktif' => Setting::getSetting('kk_news_status', 'active') === 'active',
             'title' => Setting::getSetting('kk_news_title', 'Jadwal layanan Posyandu bulan ini'),
+            'judul' => Setting::getSetting('kk_news_title', 'Jadwal layanan Posyandu bulan ini'),
             'summary' => Setting::getSetting('kk_news_summary', 'Layanan pemeriksaan rutin tersedia sesuai jadwal. Silakan cek detail lengkap pada halaman berita.'),
             'content' => Setting::getSetting('kk_news_content', 'Posyandu membuka layanan pemeriksaan keluarga secara berkala. Pastikan data anggota keluarga sudah lengkap agar proses layanan lebih cepat.'),
+            'isi' => Setting::getSetting('kk_news_content', 'Posyandu membuka layanan pemeriksaan keluarga secara berkala. Pastikan data anggota keluarga sudah lengkap agar proses layanan lebih cepat.'),
+            'gambar' => Setting::getSetting('kk_news_image', ''),
             'link_url' => Setting::getSetting('kk_news_link_url', ''),
             'link_label' => Setting::getSetting('kk_news_link_label', 'Baca informasi lengkap'),
             'published_at' => Setting::getSetting('kk_news_published_at', now()->format('Y-m-d')),
@@ -224,7 +229,257 @@ class KepalaKeluargaAuthController extends Controller
                 ->values();
         }
 
-        return view('panel_kepalakeluarga.dashboard', compact('kepalaKeluarga', 'anggota', 'centerInfo', 'news'));
+        $memberCards = collect();
+        $memberDataJs = [];
+        $checkupHistoryJs = [];
+        $allCheckups = collect();
+
+        foreach ($anggota as $memberMeta) {
+            $memberModel = $this->resolveDashboardMemberModel($kepalaKeluarga, $memberMeta['tipe'], (int) $memberMeta['id']);
+
+            if (! $memberModel) {
+                continue;
+            }
+
+            $checkups = $memberModel->pemeriksaans()
+                ->latest('created_at')
+                ->limit(24)
+                ->get();
+
+            $latest = $checkups->first();
+            $latestDate = $latest ? Carbon::parse($this->resolvePemeriksaanDate($latest)) : null;
+            $status = $this->resolveHealthStatus($latest);
+
+            $allCheckups = $allCheckups->concat(
+                $checkups->map(function ($row) use ($memberMeta) {
+                    return [
+                        'member_name' => $memberMeta['nama'],
+                        'member_type' => $memberMeta['label_tipe'],
+                        'date' => Carbon::parse($this->resolvePemeriksaanDate($row)),
+                    ];
+                })
+            );
+
+            $displayDob = ! empty($memberModel->tanggal_lahir)
+                ? Carbon::parse($memberModel->tanggal_lahir)->translatedFormat('d F Y')
+                : '-';
+
+            $age = $this->resolveMemberAge($memberModel, $memberMeta['tipe']);
+
+            $memberCards->push([
+                'name' => $memberMeta['nama'],
+                'type' => $memberMeta['tipe'],
+                'label' => $memberMeta['label_tipe'],
+                'id' => (int) $memberMeta['id'],
+                'nik' => $memberModel->nik ?? '-',
+                'age' => $age,
+                'status' => $status,
+                'status_color' => $status === 'Sehat' ? 'green' : ($status === 'Belum Diperiksa' ? 'gray' : 'yellow'),
+                'created_at' => $memberModel->created_at,
+                'latest_checkup_date' => $latestDate,
+                'detail_url' => route('kepala-keluarga.anggota.show', ['tipe' => $memberMeta['tipe'], 'id' => $memberMeta['id']]),
+                'checkup_url' => route('kepala-keluarga.anggota.pemeriksaan', ['tipe' => $memberMeta['tipe'], 'id' => $memberMeta['id']]),
+            ]);
+
+            $memberDataJs[$memberMeta['nama']] = [
+                'name' => $memberMeta['nama'],
+                'nik' => $memberModel->nik ?? '-',
+                'dob' => $displayDob,
+                'age' => $age,
+                'gender' => $memberModel->jenis_kelamin ?? '-',
+                'relation' => $memberMeta['label_tipe'],
+                'bp' => $this->resolveDisplayBloodPressure($latest),
+                'weight' => $this->resolveDisplayWeight($latest),
+                'height' => $this->resolveDisplayHeight($latest),
+                'cholesterol' => $latest->kolesterol ?? '-',
+                'glucose' => isset($latest->gula_darah) && $latest->gula_darah !== null ? $latest->gula_darah . ' mg/dL' : '-',
+                'checkupDate' => $latestDate ? $latestDate->translatedFormat('d F Y') : '-',
+                'weightHistory' => $checkups
+                    ->reverse()
+                    ->pluck('berat_badan')
+                    ->filter(fn ($v) => $v !== null && $v !== '')
+                    ->map(fn ($v) => (float) $v)
+                    ->values()
+                    ->all(),
+                'dateLabels' => $checkups
+                    ->reverse()
+                    ->map(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row))->format('d M'))
+                    ->values()
+                    ->all(),
+            ];
+
+            $historyByMonth = $checkups
+                ->groupBy(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row))->translatedFormat('F Y'))
+                ->map(function ($rows, $monthLabel) {
+                    $rows = $rows->sortByDesc(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row)))->values();
+
+                    return [
+                        'month' => $monthLabel,
+                        'checkups' => $rows->map(function ($row) {
+                            return [
+                                'date' => Carbon::parse($this->resolvePemeriksaanDate($row))->translatedFormat('d F Y'),
+                                'weight' => $this->resolveDisplayWeight($row),
+                                'bp' => $this->resolveDisplayBloodPressure($row),
+                                'cholesterol' => $row->kolesterol ?? '-',
+                                'glucose' => isset($row->gula_darah) && $row->gula_darah !== null ? $row->gula_darah . ' mg/dL' : '-',
+                                'status' => $this->resolveHealthStatus($row),
+                            ];
+                        })->values()->all(),
+                        'historicalWeights' => $rows
+                            ->sortBy(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row)))
+                            ->pluck('berat_badan')
+                            ->filter(fn ($v) => $v !== null && $v !== '')
+                            ->map(fn ($v) => (float) $v)
+                            ->values()
+                            ->all(),
+                        'historicalDates' => $rows
+                            ->sortBy(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row)))
+                            ->map(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row))->format('d M'))
+                            ->values()
+                            ->all(),
+                    ];
+                })
+                ->values()
+                ->all();
+
+            $checkupHistoryJs[$memberMeta['nama']] = $historyByMonth;
+        }
+
+        $recentMembers = $memberCards
+            ->sortByDesc('created_at')
+            ->take(2)
+            ->values();
+
+        $recentCheckups = $allCheckups
+            ->sortByDesc('date')
+            ->take(2)
+            ->values();
+
+        $pemeriksaanBulanIni = $allCheckups
+            ->filter(fn ($row) => $row['date']->greaterThanOrEqualTo(now()->startOfMonth()))
+            ->count();
+
+        $latestCheckupDate = $allCheckups->isNotEmpty() ? $allCheckups->sortByDesc('date')->first()['date'] : null;
+
+        $dashboardMetrics = [
+            'total_anggota' => $anggota->count(),
+            'pemeriksaan_bulan_ini' => $pemeriksaanBulanIni,
+            'status_kesehatan' => $memberCards->where('status', 'Perlu Kontrol')->isNotEmpty() ? 'Perlu Kontrol' : 'Baik',
+            'jadwal_berikutnya' => $latestCheckupDate ? $latestCheckupDate->copy()->addDays(30)->translatedFormat('d M Y') : '-',
+        ];
+
+        return view('panel_kepalakeluarga.dashboard', compact(
+            'kepalaKeluarga',
+            'anggota',
+            'centerInfo',
+            'news',
+            'dashboardMetrics',
+            'recentMembers',
+            'recentCheckups',
+            'memberCards',
+            'memberDataJs',
+            'checkupHistoryJs'
+        ));
+    }
+
+    private function resolveDashboardMemberModel(Keluarga $kepalaKeluarga, string $type, int $id)
+    {
+        return match ($type) {
+            'balita' => $kepalaKeluarga->balitas->firstWhere('id', $id),
+            'ibu-hamil' => $kepalaKeluarga->ibuHamils->firstWhere('id', $id),
+            'nifas' => $kepalaKeluarga->nifases->firstWhere('id', $id),
+            'remaja' => $kepalaKeluarga->remajas->firstWhere('id', $id),
+            'lansia' => $kepalaKeluarga->lansias->firstWhere('id', $id),
+            default => null,
+        };
+    }
+
+    private function resolveMemberAge($memberModel, string $type): string
+    {
+        if (! empty($memberModel->umur)) {
+            return $memberModel->umur . ' tahun';
+        }
+
+        if (! empty($memberModel->tanggal_lahir)) {
+            return Carbon::parse($memberModel->tanggal_lahir)->age . ' tahun';
+        }
+
+        return '-';
+    }
+
+    private function resolveHealthStatus($latest): string
+    {
+        if (! $latest) {
+            return 'Belum Diperiksa';
+        }
+
+        if (! empty($latest->tekanan_darah_status)) {
+            return str_contains(strtolower((string) $latest->tekanan_darah_status), 'normal') ? 'Sehat' : 'Perlu Kontrol';
+        }
+
+        $flags = [
+            $latest->status_bb_u ?? null,
+            $latest->status_pb_u ?? null,
+            $latest->status_bb_pb ?? null,
+            $latest->status_lila ?? null,
+        ];
+
+        $filledFlags = array_filter($flags, fn ($v) => $v !== null && $v !== '');
+
+        if (! empty($filledFlags)) {
+            foreach ($filledFlags as $flag) {
+                if (! str_contains(strtolower((string) $flag), 'normal')) {
+                    return 'Perlu Kontrol';
+                }
+            }
+
+            return 'Sehat';
+        }
+
+        return 'Sehat';
+    }
+
+    private function resolveDisplayBloodPressure($latest): string
+    {
+        if (! $latest) {
+            return '-';
+        }
+
+        if (! empty($latest->tekanan_darah)) {
+            return (string) $latest->tekanan_darah;
+        }
+
+        if (isset($latest->sistole) && isset($latest->diastole) && $latest->sistole !== null && $latest->diastole !== null) {
+            return $latest->sistole . '/' . $latest->diastole . ' mmHg';
+        }
+
+        return '-';
+    }
+
+    private function resolveDisplayWeight($latest): string
+    {
+        if (! $latest || ! isset($latest->berat_badan) || $latest->berat_badan === null || $latest->berat_badan === '') {
+            return '-';
+        }
+
+        return $latest->berat_badan . ' kg';
+    }
+
+    private function resolveDisplayHeight($latest): string
+    {
+        if (! $latest) {
+            return '-';
+        }
+
+        if (isset($latest->tinggi_badan) && $latest->tinggi_badan !== null && $latest->tinggi_badan !== '') {
+            return $latest->tinggi_badan . ' cm';
+        }
+
+        if (isset($latest->panjang_badan) && $latest->panjang_badan !== null && $latest->panjang_badan !== '') {
+            return $latest->panjang_badan . ' cm';
+        }
+
+        return '-';
     }
 
     public function showMemberDetail(string $tipe, int $id)

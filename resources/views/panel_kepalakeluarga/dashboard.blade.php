@@ -3,199 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Keluarga</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>Dashboard Kepala Keluarga - POSYANDU</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: linear-gradient(135deg, #f0ebf8 0%, #f5f7fa 50%, #e8f4f8 100%);
-            min-height: 100vh;
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 1000px white inset !important;
+            -webkit-text-fill-color: #333 !important;
         }
 
-        .panel-shell {
-            background: linear-gradient(135deg, #ffffff 0%, #f9fbfd 100%);
-            border: 1px solid rgba(78, 3, 131, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(78, 3, 131, 0.05);
+        .nav-btn {
+            background-color: transparent !important;
+            box-shadow: none !important;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #4e0383 0%, #6b2ba8 50%, #5a1f8a 100%);
-            box-shadow: 0 4px 14px rgba(78, 3, 131, 0.25);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #3a025c 0%, #5a1f8a 50%, #4a1575 100%);
-            box-shadow: 0 12px 25px rgba(78, 3, 131, 0.35);
-            transform: translateY(-2px);
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f9fbfd 100%);
-            border: 1px solid rgba(78, 3, 131, 0.08);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .table-head {
-            background: linear-gradient(135deg, #4e0383 0%, #6b2ba8 100%);
+        .nav-btn.active {
+            background-color: #8e4682 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
         }
     </style>
 </head>
-<body class="text-gray-800">
-    @php
-        $totalAnggota = $anggota->count();
-        $totalKategori = [
-            'Balita' => $kepalaKeluarga->balitas->count(),
-            'Ibu Hamil' => $kepalaKeluarga->ibuHamils->count(),
-            'Nifas' => $kepalaKeluarga->nifases->count(),
-            'Remaja' => $kepalaKeluarga->remajas->count(),
-            'Lansia' => $kepalaKeluarga->lansias->count(),
-        ];
-    @endphp
-
-    <header class="bg-gradient-to-r from-purple-700 via-purple-600 to-purple-500 text-white shadow-lg">
-        <div class="mx-auto max-w-6xl px-6 py-8">
-            <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <p class="text-sm text-purple-100">Sistem Informasi Kesehatan Keluarga</p>
-                    <h1 class="mt-2 text-3xl font-bold">Dashboard Keluarga</h1>
-                    <p class="mt-2 text-purple-100">Pantau data anggota dan lihat detail kesehatan keluarga.</p>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <div class="w-64 text-white flex flex-col fixed h-screen" style="background-color: #a6599e;">
+            <div class="p-6 border-b text-white" style="border-color: #8e4682;">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-home text-3xl"></i>
+                    <div>
+                        <h1 class="text-xl font-bold">POSYANDU</h1>
+                        <p class="text-xs" style="color: #e8d5e8;">Kepala Keluarga</p>
+                    </div>
                 </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <button onclick="showSection('dashboard', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-white font-medium transition" style="color: white;" onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='#8e4682'" onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='transparent'">
+                    <i class="fas fa-chart-line w-5"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="showSection('anggota-keluarga', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg transition" style="color: white;" onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='#8e4682'" onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='transparent'">
+                    <i class="fas fa-users w-5"></i>
+                    <span>Anggota Keluarga</span>
+                </button>
+                <button onclick="showSection('riwayat-pemeriksaan', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg transition" style="color: white;" onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='#8e4682'" onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='transparent'">
+                    <i class="fas fa-history w-5"></i>
+                    <span>Riwayat Pemeriksaan</span>
+                </button>
+                <button onclick="showSection('profile', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg transition" style="color: white;" onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='#8e4682'" onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='transparent'">
+                    <i class="fas fa-user-circle w-5"></i>
+                    <span>Profile Saya</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t" style="border-color: #8e4682;">
                 <form method="POST" action="{{ route('kepala-keluarga.logout') }}">
                     @csrf
-                    <button type="submit" class="rounded-xl bg-rose-500 px-5 py-3 text-sm font-semibold text-white hover:bg-rose-600 transition">
-                        <i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
+                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition" style="background-color: white; color: #ef4444; border: 1px solid #fecaca;" onmouseover="this.style.backgroundColor='#fee2e2'; this.style.color='#dc2626';" onmouseout="this.style.backgroundColor='white'; this.style.color='#ef4444';">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>Logout</span>
                     </button>
                 </form>
             </div>
         </div>
-    </header>
 
-    <div class="mx-auto max-w-6xl p-6">
-        <section class="panel-shell rounded-2xl p-6 md:p-8">
-            <div class="grid gap-4 lg:grid-cols-2">
-                <div class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-6">
-                    <h2 class="text-lg font-bold text-emerald-900">Informasi Pusat Kesehatan</h2>
-                    <div class="mt-4 space-y-2 text-sm text-emerald-900">
-                        <p><span class="font-semibold">Email:</span> {{ $centerInfo['email'] ?: '-' }}</p>
-                        <p><span class="font-semibold">Jam Operasional:</span> {{ $centerInfo['hours_open'] ?: '-' }} - {{ $centerInfo['hours_close'] ?: '-' }}</p>
-                        <p><span class="font-semibold">Alamat:</span> {{ $centerInfo['address'] ?: '-' }}</p>
+        <div class="ml-64 flex-1 overflow-auto">
+            <div class="bg-white border-b border-gray-200 px-6 py-6 flex justify-between items-center sticky top-0 z-10">
+                <div>
+                    <h2 id="page-title" class="text-2xl font-bold text-gray-800">Dashboard</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-gray-700">{{ $kepalaKeluarga->nama_lengkap }}</p>
+                        <p class="text-xs text-gray-500">NIK: {{ $kepalaKeluarga->no_nik ?: '-' }}</p>
                     </div>
-                </div>
-
-                <div class="rounded-2xl border border-blue-100 bg-blue-50/60 p-6">
-                    <div class="flex items-center justify-between gap-4">
-                        <h2 class="text-lg font-bold text-blue-900">Berita Terbaru</h2>
-                        <span class="rounded-full px-3 py-1 text-xs font-semibold {{ ($news['status'] ?? 'inactive') === 'active' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600' }}">
-                            {{ ($news['status'] ?? 'inactive') === 'active' ? 'Aktif' : 'Nonaktif' }}
-                        </span>
-                    </div>
-                    <p class="mt-3 text-base font-semibold text-gray-900">{{ $news['title'] ?? '-' }}</p>
-                    <p class="mt-2 text-sm text-gray-700">{{ $news['summary'] ?? '-' }}</p>
-                    <div class="mt-4 rounded-xl border border-blue-100 bg-white p-4">
-                        <p class="text-sm leading-7 text-gray-700 whitespace-pre-line">{{ $news['content'] ?? '-' }}</p>
-                        @if (!empty($news['link_url']))
-                            <div class="mt-4">
-                                <a href="{{ $news['link_url'] }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700">
-                                    <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>{{ $news['link_label'] ?? 'Baca informasi lengkap' }}
-                                </a>
-                            </div>
-                        @endif
-                    </div>
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($kepalaKeluarga->nama_lengkap) }}&background=a6599e&color=fff" alt="Avatar" class="w-10 h-10 rounded-full">
                 </div>
             </div>
 
-            <div class="grid gap-4 md:grid-cols-3">
-                <div class="stat-card rounded-2xl border-l-4 border-violet-500 p-5">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Nama Kepala Keluarga</p>
-                    <p class="mt-3 text-xl font-bold text-gray-900">{{ $kepalaKeluarga->nama_lengkap }}</p>
-                </div>
-                <div class="stat-card rounded-2xl border-l-4 border-orange-500 p-5">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Email</p>
-                    <p class="mt-3 break-all text-xl font-bold text-gray-900">{{ $kepalaKeluarga->email }}</p>
-                </div>
-                <div class="stat-card rounded-2xl border-l-4 border-emerald-500 p-5">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Nomor Kartu Keluarga</p>
-                    <p class="mt-3 text-xl font-bold text-gray-900">{{ $kepalaKeluarga->no_kk }}</p>
-                </div>
+            <div class="p-8">
+                @include('panel_kepalakeluarga.dashboard.partials.summary')
+                @include('panel_kepalakeluarga.dashboard.partials.member-cards')
+                @include('panel_kepalakeluarga.dashboard.partials.member-detail-modal')
+                @include('panel_kepalakeluarga.dashboard.partials.riwayat-pemeriksaan')
+                @include('panel_kepalakeluarga.dashboard.partials.profile')
             </div>
-
-            <div class="mt-6 grid gap-4 md:grid-cols-3">
-                <div class="stat-card rounded-2xl border-l-4 border-purple-500 p-6">
-                    <p class="text-sm font-semibold text-gray-600">Total Anggota</p>
-                    <p class="mt-2 text-4xl font-bold text-purple-700">{{ $totalAnggota }}</p>
-                    <p class="mt-2 text-xs text-gray-500">anggota terdaftar</p>
-                </div>
-                <div class="stat-card rounded-2xl border-l-4 border-blue-500 p-6 md:col-span-2">
-                    <p class="text-sm font-semibold text-gray-600">Distribusi Kategori</p>
-                    <div class="mt-4 grid grid-cols-2 gap-3 md:grid-cols-5">
-                        @foreach($totalKategori as $label => $count)
-                            <div class="rounded-xl bg-white p-3 text-center shadow-sm">
-                                <p class="text-xs text-gray-500">{{ $label }}</p>
-                                <p class="mt-1 text-2xl font-bold text-gray-900">{{ $count }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 rounded-2xl border border-purple-100 bg-white p-6">
-                <h2 class="text-xl font-bold text-gray-900">Data Keluarga</h2>
-                <div class="mt-4 grid gap-3 text-sm text-gray-700 md:grid-cols-2">
-                    <div><span class="font-semibold text-gray-500">NIK:</span> {{ $kepalaKeluarga->no_nik ?? '-' }}</div>
-                    <div><span class="font-semibold text-gray-500">Telepon:</span> {{ $kepalaKeluarga->no_telepon ?? '-' }}</div>
-                    <div class="md:col-span-2"><span class="font-semibold text-gray-500">Alamat:</span> {{ $kepalaKeluarga->alamat }}</div>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="panel-shell mt-6 rounded-2xl p-6 md:p-8">
-            <div class="mb-5 flex items-center justify-between">
-                <h2 class="text-xl font-bold text-gray-900"><i class="fa-solid fa-people-group mr-2 text-purple-700"></i>Nama Anggota Keluarga</h2>
-                <span class="rounded-lg bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700">{{ $totalAnggota }} anggota</span>
-            </div>
-
-            @if($anggota->isEmpty())
-                <div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-sm text-gray-500">
-                    Belum ada data anggota keluarga.
-                </div>
-            @else
-                <div class="overflow-x-auto rounded-xl border border-gray-100">
-                    <table class="min-w-full border-collapse">
-                        <thead class="table-head text-white">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Nama</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Kategori</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white text-sm text-gray-700">
-                            @foreach($anggota as $item)
-                                <tr class="border-b border-gray-100 hover:bg-purple-50/40">
-                                    <td class="px-4 py-3 font-semibold text-gray-900">{{ $item['nama'] }}</td>
-                                    <td class="px-4 py-3">{{ $item['label_tipe'] }}</td>
-                                    <td class="px-4 py-3">
-                                        <div class="flex flex-wrap gap-2">
-                                            <a
-                                                href="{{ route('kepala-keluarga.anggota.show', ['tipe' => $item['tipe'], 'id' => $item['id']]) }}"
-                                                class="btn-primary inline-flex items-center rounded-lg px-4 py-2 text-xs font-semibold text-white transition"
-                                            >
-                                                <i class="fa-solid fa-eye mr-2"></i>Lihat Detail
-                                            </a>
-                                            <a
-                                                href="{{ route('kepala-keluarga.anggota.pemeriksaan', ['tipe' => $item['tipe'], 'id' => $item['id']]) }}"
-                                                class="inline-flex items-center rounded-lg bg-orange-500 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-orange-600"
-                                            >
-                                                <i class="fa-solid fa-chart-column mr-2"></i>Lihat Pemeriksaan
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
-        </section>
+        </div>
     </div>
+
+    @include('panel_kepalakeluarga.dashboard.partials.news-detail-modal')
+
+    @include('panel_kepalakeluarga.dashboard.partials.scripts')
 </body>
 </html>

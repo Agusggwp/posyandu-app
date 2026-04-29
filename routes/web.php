@@ -55,6 +55,8 @@ Route::prefix('kepala-keluarga')->name('kepala-keluarga.')->group(function () {
         Route::get('anggota/{tipe}/{id}', [KepalaKeluargaAuthController::class, 'showMemberDetail'])->name('anggota.show');
         Route::get('anggota/{tipe}/{id}/pemeriksaan', [KepalaKeluargaAuthController::class, 'showMemberPemeriksaanStats'])->name('anggota.pemeriksaan');
         Route::get('anggota/{tipe}/{id}/pemeriksaan/export/{format}', [KepalaKeluargaAuthController::class, 'exportMemberPemeriksaan'])->name('anggota.pemeriksaan.export');
+        Route::put('profile/update', [KepalaKeluargaAuthController::class, 'updateProfile'])->name('profile.update');
+        Route::put('profile/password', [KepalaKeluargaAuthController::class, 'updatePassword'])->name('profile.password');
         Route::post('logout', [KepalaKeluargaAuthController::class, 'logout'])->name('logout');
     });
 });
@@ -120,6 +122,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('pemeriksaan-balita/create', [PemeriksaanBalitaController::class, 'create'])->name('pemeriksaan-balita.create');
         Route::post('pemeriksaan-balita', [PemeriksaanBalitaController::class, 'store'])->name('pemeriksaan-balita.store');
         Route::get('pemeriksaan-ibu-hamil/create', [PemeriksaanIbuHamilController::class, 'create'])->name('pemeriksaan-ibu-hamil.create');
+        Route::get('pemeriksaan-ibu-hamil/stage/{stage}', [PemeriksaanIbuHamilController::class, 'stage'])->name('pemeriksaan-ibu-hamil.stage');
+        Route::post('pemeriksaan-ibu-hamil/stage/{stage}', [PemeriksaanIbuHamilController::class, 'stageStore'])->name('pemeriksaan-ibu-hamil.stage-store');
         Route::post('pemeriksaan-ibu-hamil', [PemeriksaanIbuHamilController::class, 'store'])->name('pemeriksaan-ibu-hamil.store');
         Route::get('pemeriksaan-lansia/create', [PemeriksaanLansiaController::class, 'create'])->name('pemeriksaan-lansia.create');
         Route::post('pemeriksaan-lansia', [PemeriksaanLansiaController::class, 'store'])->name('pemeriksaan-lansia.store');

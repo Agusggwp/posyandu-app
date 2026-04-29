@@ -869,4 +869,39 @@ class KepalaKeluargaAuthController extends Controller
 
         return redirect()->route('kepala-keluarga.login');
     }
+
+    public function updateProfile(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'no_telepon' => 'nullable|string|max:20',
+            'email' => 'required|email|max:255|unique:kepala_keluarga,email,' . auth('kepala_keluarga')->id(),
+            'alamat' => 'nullable|string|max:500',
+        ]);
+
+        $kepalaKeluarga = auth('kepala_keluarga')->user();
+        $kepalaKeluarga->update($validated);
+
+        return redirect()->route('kepala-keluarga.dashboard')->with('success', 'Profile berhasil diperbarui.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $kepalaKeluarga = auth('kepala_keluarga')->user();
+
+        if (!Hash::check($request->old_password, $kepalaKeluarga->password)) {
+            return back()->withErrors(['old_password' => 'Password lama tidak sesuai.']);
+        }
+
+        $kepalaKeluarga->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return back()->with('success', 'Password berhasil diubah.');
+    }
 }

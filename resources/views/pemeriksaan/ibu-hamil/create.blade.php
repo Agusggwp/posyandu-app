@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-3 sm:px-4">
+<div class="max-w-5xl mx-auto px-3 sm:px-4">
     <div class="mb-4 sm:mb-6">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Input Pemeriksaan Ibu Hamil</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Pemeriksaan Ibu Hamil - Sistem 4 Tahap</h2>
+        <p class="text-gray-600 mt-1">Pilih meja/tahap pemeriksaan yang ingin dilanjutkan</p>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="hover:text-purple-600">Pemeriksaan Ibu Hamil</a>
             <span class="mx-2">/</span>
@@ -11,151 +12,140 @@
         </nav>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
-        <form action="{{ route('pemeriksaan-ibu-hamil.store') }}" method="POST">
-            @csrf
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="ibu_hamil_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Ibu Hamil <span class="text-red-500">*</span></label>
-                    <select name="ibu_hamil_identitas_id" id="ibu_hamil_identitas_id" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('ibu_hamil_identitas_id') border-red-500 @enderror" required>
-                        <option value="">-- Pilih Ibu Hamil --</option>
-                        @foreach($ibuHamils as $ibuHamil)
-                            <option value="{{ $ibuHamil->id }}" {{ old('ibu_hamil_identitas_id') == $ibuHamil->id ? 'selected' : '' }}>
-                                {{ $ibuHamil->nama }} - {{ $ibuHamil->nik }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('ibu_hamil_identitas_id')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-5 mb-6">
+        <p class="text-sm text-blue-900">
+            Pemeriksaan dibagi menjadi 4 meja. Setiap tahap bisa dilanjutkan oleh user berbeda sesuai alur pemeriksaan.
+        </p>
+    </div>
 
-                <div>
-                    <label for="tanggal_kunjungan" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kunjungan <span class="text-red-500">*</span></label>
-                    <input type="date" name="tanggal_kunjungan" id="tanggal_kunjungan" 
-                           value="{{ old('tanggal_kunjungan', date('Y-m-d')) }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('tanggal_kunjungan') border-red-500 @enderror" required>
-                    @error('tanggal_kunjungan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-violet-500">
+            <div class="p-6 bg-gradient-to-r from-violet-50 to-purple-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-violet-600 text-white flex items-center justify-center text-xl font-bold">1</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Penimbangan & Pengukuran</h3>
+                        <p class="text-sm text-gray-600">Usia kehamilan, berat badan, LILA, status BB, status LILA</p>
+                    </div>
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="tinggi_badan" class="block text-sm font-medium text-gray-700 mb-2">Tinggi Badan (cm)</label>
-                    <input type="number" step="0.01" name="tinggi_badan" id="tinggi_badan"
-                           value="{{ old('tinggi_badan') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('tinggi_badan') border-red-500 @enderror">
-                    @error('tinggi_badan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="tekanan_darah" class="block text-sm font-medium text-gray-700 mb-2">Tekanan Darah</label>
-                    <input type="text" name="tekanan_darah" id="tekanan_darah" 
-                           value="{{ old('tekanan_darah') }}" placeholder="120/80"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('tekanan_darah') border-red-500 @enderror">
-                    @error('tekanan_darah')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="berat_badan" class="block text-sm font-medium text-gray-700 mb-2">Berat Badan (kg)</label>
-                    <input type="number" step="0.01" name="berat_badan" id="berat_badan" 
-                           value="{{ old('berat_badan') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('berat_badan') border-red-500 @enderror">
-                    @error('berat_badan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="lingkar_lengan" class="block text-sm font-medium text-gray-700 mb-2">Lingkar Lengan (cm)</label>
-                    <input type="number" step="0.01" name="lingkar_lengan" id="lingkar_lengan" 
-                           value="{{ old('lingkar_lengan') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('lingkar_lengan') border-red-500 @enderror">
-                    @error('lingkar_lengan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="denyut_jantung" class="block text-sm font-medium text-gray-700 mb-2">Denyut Jantung</label>
-                    <input type="text" name="denyut_jantung" id="denyut_jantung" 
-                           value="{{ old('denyut_jantung') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('denyut_jantung') border-red-500 @enderror">
-                    @error('denyut_jantung')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="waktu_ke_posyandu" class="block text-sm font-medium text-gray-700 mb-2">Waktu ke Posyandu</label>
-                    <input type="time" name="waktu_ke_posyandu" id="waktu_ke_posyandu" 
-                           value="{{ old('waktu_ke_posyandu') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('waktu_ke_posyandu') border-red-500 @enderror">
-                    @error('waktu_ke_posyandu')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <div>
-                    <label for="kondisi_ibu" class="block text-sm font-medium text-gray-700 mb-2">Kondisi Ibu</label>
-                    <input type="text" name="kondisi_ibu" id="kondisi_ibu" 
-                           value="{{ old('kondisi_ibu') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('kondisi_ibu') border-red-500 @enderror">
-                    @error('kondisi_ibu')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="petugas" class="block text-sm font-medium text-gray-700 mb-2">Petugas</label>
-                    <input type="text" name="petugas" id="petugas" 
-                           value="{{ old('petugas') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('petugas') border-red-500 @enderror">
-                    @error('petugas')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="mt-6">
-                <label for="keluhan" class="block text-sm font-medium text-gray-700 mb-2">Keluhan</label>
-                <textarea name="keluhan" id="keluhan" rows="2"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('keluhan') border-red-500 @enderror">{{ old('keluhan') }}</textarea>
-                @error('keluhan')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="mt-6">
-                <label for="catatan" class="block text-sm font-medium text-gray-700 mb-2">Catatan</label>
-                <textarea name="catatan" id="catatan" rows="3"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('catatan') border-red-500 @enderror">{{ old('catatan') }}</textarea>
-                @error('catatan')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
-                <button type="submit" class="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
-                    Simpan
-                </button>
-                <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
-                    Batal
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-ibu-hamil.stage', 1) }}" class="block w-full text-center bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 1
                 </a>
             </div>
-        </form>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-blue-500">
+            <div class="p-6 bg-gradient-to-r from-blue-50 to-cyan-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl font-bold">2</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Pemeriksaan</h3>
+                        <p class="text-sm text-gray-600">Tekanan darah, status tekanan darah, skrining TBC</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-ibu-hamil.stage', 2) }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 2
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-emerald-500">
+            <div class="p-6 bg-gradient-to-r from-emerald-50 to-green-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl font-bold">3</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Pelayanan Kesehatan</h3>
+                        <p class="text-sm text-gray-600">Tablet tambah darah, PMT bumil, kelas ibu hamil</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-ibu-hamil.stage', 3) }}" class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 3
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-orange-500">
+            <div class="p-6 bg-gradient-to-r from-orange-50 to-amber-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center text-xl font-bold">4</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Edukasi & Rujukan</h3>
+                        <p class="text-sm text-gray-600">Ringkasan semua tahap + simpan final</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-ibu-hamil.stage', 4) }}" class="block w-full text-center bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 4
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-clipboard-list text-purple-600 mr-2"></i>
+                Pemeriksaan yang Belum Selesai
+            </h3>
+            <span class="text-sm text-gray-500">{{ $pemeriksaanBelumSelesai->count() }} data</span>
+        </div>
+
+        @if($pemeriksaanBelumSelesai->isEmpty())
+            <div class="text-center py-10 text-gray-500">
+                <i class="fas fa-check-circle text-4xl mb-3 text-green-400"></i>
+                <p>Belum ada pemeriksaan yang tertunda.</p>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ibu Hamil</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal Kunjungan</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tahap Terakhir</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($pemeriksaanBelumSelesai as $item)
+                            @php
+                                $nextStage = max(1, min(4, (int) $item->tahap_terakhir + 1));
+                            @endphp
+                            <tr>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $item->ibuHamil->nama ?? $item->ibu_hamil_identitas_id }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                                    {{ $item->tanggal_kunjungan ? \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('d M Y') : '-' }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                                    Tahap {{ $item->tahap_terakhir ?: 1 }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                    <a href="{{ route('pemeriksaan-ibu-hamil.stage', ['stage' => $nextStage, 'pemeriksaan_id' => $item->id]) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium">
+                                        Lanjutkan
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+
+    <div class="mt-8">
+        <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium">
+            <i class="fas fa-arrow-left"></i>
+            Kembali ke daftar pemeriksaan
+        </a>
     </div>
 </div>
 @endsection

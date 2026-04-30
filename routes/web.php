@@ -120,14 +120,16 @@ Route::middleware(['auth'])->group(function () {
     // Pemeriksaan Routes - Bidan dan Admin dapat menginput
     Route::middleware(['permission:manage_pemeriksaan'])->group(function () {
         Route::get('pemeriksaan-balita/create', [PemeriksaanBalitaController::class, 'create'])->name('pemeriksaan-balita.create');
+        Route::get('pemeriksaan-balita/stage/{stage}', [PemeriksaanBalitaController::class, 'stage'])->name('pemeriksaan-balita.stage');
+        Route::post('pemeriksaan-balita/stage/{stage}', [PemeriksaanBalitaController::class, 'stageStore'])->name('pemeriksaan-balita.stage-store');
         Route::post('pemeriksaan-balita', [PemeriksaanBalitaController::class, 'store'])->name('pemeriksaan-balita.store');
         Route::get('pemeriksaan-ibu-hamil/create', [PemeriksaanIbuHamilController::class, 'create'])->name('pemeriksaan-ibu-hamil.create');
         Route::get('pemeriksaan-ibu-hamil/stage/{stage}', [PemeriksaanIbuHamilController::class, 'stage'])->name('pemeriksaan-ibu-hamil.stage');
         Route::post('pemeriksaan-ibu-hamil/stage/{stage}', [PemeriksaanIbuHamilController::class, 'stageStore'])->name('pemeriksaan-ibu-hamil.stage-store');
         Route::post('pemeriksaan-ibu-hamil', [PemeriksaanIbuHamilController::class, 'store'])->name('pemeriksaan-ibu-hamil.store');
-        Route::get('pemeriksaan-lansia/create', [PemeriksaanLansiaController::class, 'create'])->name('pemeriksaan-lansia.create');
-        Route::post('pemeriksaan-lansia', [PemeriksaanLansiaController::class, 'store'])->name('pemeriksaan-lansia.store');
         Route::get('pemeriksaan-nifas/create', [PemeriksaanNifasController::class, 'create'])->name('pemeriksaan-nifas.create');
+        Route::get('pemeriksaan-nifas/stage/{stage}', [PemeriksaanNifasController::class, 'stage'])->name('pemeriksaan-nifas.stage');
+        Route::post('pemeriksaan-nifas/stage/{stage}', [PemeriksaanNifasController::class, 'stageStore'])->name('pemeriksaan-nifas.stage-store');
         Route::post('pemeriksaan-nifas', [PemeriksaanNifasController::class, 'store'])->name('pemeriksaan-nifas.store');
         Route::get('pemeriksaan-remaja/create', [PemeriksaanRemajaController::class, 'create'])->name('pemeriksaan-remaja.create');
         Route::post('pemeriksaan-remaja', [PemeriksaanRemajaController::class, 'store'])->name('pemeriksaan-remaja.store');

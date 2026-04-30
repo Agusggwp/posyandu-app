@@ -1,267 +1,151 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-3 sm:px-4">
+<div class="max-w-5xl mx-auto px-3 sm:px-4">
     <div class="mb-4 sm:mb-6">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Input Pemeriksaan Balita</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Pemeriksaan Balita - Sistem 4 Tahap</h2>
+        <p class="text-gray-600 mt-1">Pilih meja/tahap pemeriksaan yang ingin dilanjutkan</p>
         <nav class="text-sm text-gray-600 mt-2">
-            <a href="{{ route('pemeriksaan-balita.index') }}" class="hover:text-indigo-600 transition-colors">Pemeriksaan Balita</a>
+            <a href="{{ route('pemeriksaan-balita.index') }}" class="hover:text-teal-600">Pemeriksaan Balita</a>
             <span class="mx-2">/</span>
             <span>Tambah</span>
         </nav>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-8 border border-indigo-100">
-        <form action="{{ route('pemeriksaan-balita.store') }}" method="POST">
-            @csrf
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="balita_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Balita <span class="text-red-500">*</span></label>
-                    <select name="balita_identitas_id" id="balita_identitas_id" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('balita_identitas_id') border-red-500 @enderror">
-                        <option value="">-- Pilih Balita --</option>
-                        @foreach($balitas as $balita)
-                            <option value="{{ $balita->id }}" {{ old('balita_identitas_id') == $balita->id ? 'selected' : '' }}>
-                                {{ $balita->nama }} - {{ $balita->nik }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('balita_identitas_id')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-5 mb-6">
+        <p class="text-sm text-blue-900">
+            Pemeriksaan dibagi menjadi 4 meja. Setiap tahap bisa dilanjutkan oleh user berbeda sesuai alur pemeriksaan.
+        </p>
+    </div>
 
-                <div>
-                    <label for="umur" class="block text-sm font-medium text-gray-700 mb-2">Umur</label>
-                    <input type="number" name="umur" id="umur" value="{{ old('umur') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('umur') border-red-500 @enderror">
-                </div>
-
-                <div>
-                    <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan <span class="text-red-500">*</span></label>
-                          <input type="date" name="waktu_kunjungan" id="waktu_kunjungan" 
-                              value="{{ old('waktu_kunjungan', now()->format('Y-m-d')) }}" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('waktu_kunjungan') border-red-500 @enderror">
-                    @error('waktu_kunjungan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-teal-500">
+            <div class="p-6 bg-gradient-to-r from-teal-50 to-cyan-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-teal-600 text-white flex items-center justify-center text-xl font-bold">1</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Penimbangan & Pengukuran</h3>
+                        <p class="text-sm text-gray-600">Berat badan, panjang badan, lingkar kepala</p>
+                    </div>
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="berat_badan" class="block text-sm font-medium text-gray-700 mb-2">Berat Badan (kg) <span class="text-red-500">*</span></label>
-                    <input type="number" step="0.01" name="berat_badan" id="berat_badan" 
-                           value="{{ old('berat_badan') }}" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('berat_badan') border-red-500 @enderror">
-                    @error('berat_badan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="panjang_badan" class="block text-sm font-medium text-gray-700 mb-2">Panjang Badan (cm) <span class="text-red-500">*</span></label>
-                    <input type="number" step="0.01" name="panjang_badan" id="panjang_badan" 
-                           value="{{ old('panjang_badan') }}" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('panjang_badan') border-red-500 @enderror">
-                    @error('panjang_badan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="lingkar_kepala" class="block text-sm font-medium text-gray-700 mb-2">Lingkar Kepala (cm)</label>
-                    <input type="number" step="0.01" name="lingkar_kepala" id="lingkar_kepala" 
-                           value="{{ old('lingkar_kepala') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('lingkar_kepala') border-red-500 @enderror">
-                    @error('lingkar_kepala')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="imunisasi" class="block text-sm font-medium text-gray-700 mb-2">Imunisasi</label>
-                    <input type="text" name="imunisasi" id="imunisasi" 
-                           value="{{ old('imunisasi') }}" placeholder="Contoh: BCG, Polio 1"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('imunisasi') border-red-500 @enderror">
-                    @error('imunisasi')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="vitamin_a" class="block text-sm font-medium text-gray-700 mb-2">Vitamin A</label>
-                    <select name="vitamin_a" id="vitamin_a" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('vitamin_a') border-red-500 @enderror">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('vitamin_a') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('vitamin_a') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                    @error('vitamin_a')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="status_pb_u" class="block text-sm font-medium text-gray-700 mb-2">Status PB/U</label>
-                    <input type="text" name="status_pb_u" id="status_pb_u" value="{{ old('status_pb_u') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('status_pb_u') border-red-500 @enderror">
-                    @error('status_pb_u')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="status_bb_u" class="block text-sm font-medium text-gray-700 mb-2">Status BB/U</label>
-                    <input type="text" name="status_bb_u" id="status_bb_u" value="{{ old('status_bb_u') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('status_bb_u') border-red-500 @enderror">
-                    @error('status_bb_u')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="status_bb_pb" class="block text-sm font-medium text-gray-700 mb-2">Status BB/PB</label>
-                    <input type="text" name="status_bb_pb" id="status_bb_pb" value="{{ old('status_bb_pb') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('status_bb_pb') border-red-500 @enderror">
-                    @error('status_bb_pb')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="catatan_kesehatan" class="block text-sm font-medium text-gray-700 mb-2">Catatan Kesehatan</label>
-                    <input type="text" name="catatan_kesehatan" id="catatan_kesehatan" value="{{ old('catatan_kesehatan') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('catatan_kesehatan') border-red-500 @enderror">
-                    @error('catatan_kesehatan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-            <div class="mt-6">
-                <label for="edukasi" class="block text-sm font-medium text-gray-700 mb-2">Edukasi</label>
-                <textarea name="edukasi" id="edukasi" rows="3"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('edukasi') border-red-500 @enderror">{{ old('edukasi') }}</textarea>
-                @error('edukasi')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="naik_tidak_naik" class="block text-sm font-medium text-gray-700 mb-2">Naik/Tidak Naik</label>
-                    <input type="text" name="naik_tidak_naik" id="naik_tidak_naik" value="{{ old('naik_tidak_naik') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('naik_tidak_naik') border-red-500 @enderror">
-                </div>
-                <div>
-                    <label for="status_lila" class="block text-sm font-medium text-gray-700 mb-2">Status LILA</label>
-                    <input type="text" name="status_lila" id="status_lila" value="{{ old('status_lila') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('status_lila') border-red-500 @enderror">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="lingkar_lengan" class="block text-sm font-medium text-gray-700 mb-2">Lingkar Lengan</label>
-                    <input type="number" step="0.01" name="lingkar_lengan" id="lingkar_lengan" value="{{ old('lingkar_lengan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('lingkar_lengan') border-red-500 @enderror">
-                </div>
-                <div>
-                    <label for="batuk" class="block text-sm font-medium text-gray-700 mb-2">Batuk</label>
-                    <select name="batuk" id="batuk" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('batuk') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('batuk') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="demam" class="block text-sm font-medium text-gray-700 mb-2">Demam</label>
-                    <select name="demam" id="demam" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('demam') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('demam') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="bb_turun" class="block text-sm font-medium text-gray-700 mb-2">BB Turun</label>
-                    <select name="bb_turun" id="bb_turun" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('bb_turun') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('bb_turun') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="kontak_tbc" class="block text-sm font-medium text-gray-700 mb-2">Kontak TBC</label>
-                    <select name="kontak_tbc" id="kontak_tbc" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('kontak_tbc') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('kontak_tbc') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="perkembangan" class="block text-sm font-medium text-gray-700 mb-2">Perkembangan</label>
-                    <select name="perkembangan" id="perkembangan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('perkembangan') border-red-500 @enderror">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('perkembangan') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('perkembangan') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="asi_eksklusif" class="block text-sm font-medium text-gray-700 mb-2">ASI Eksklusif</label>
-                    <select name="asi_eksklusif" id="asi_eksklusif" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('asi_eksklusif') border-red-500 @enderror">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('asi_eksklusif') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('asi_eksklusif') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="mpasi" class="block text-sm font-medium text-gray-700 mb-2">MP-ASI</label>
-                    <select name="mpasi" id="mpasi" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('mpasi') border-red-500 @enderror">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('mpasi') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('mpasi') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="obat_cacing" class="block text-sm font-medium text-gray-700 mb-2">Obat Cacing</label>
-                    <select name="obat_cacing" id="obat_cacing" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('obat_cacing') border-red-500 @enderror">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('obat_cacing') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('obat_cacing') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                    <label for="mt_pangan" class="block text-sm font-medium text-gray-700 mb-2">MT Pangan Lokal</label>
-                    <select name="mt_pangan" id="mt_pangan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('mt_pangan') border-red-500 @enderror">
-                        <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('mt_pangan') === '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('mt_pangan') === '0' ? 'selected' : '' }}>Tidak</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="rujukan" class="block text-sm font-medium text-gray-700 mb-2">Rujukan</label>
-                    <input type="text" name="rujukan" id="rujukan" value="{{ old('rujukan') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('rujukan') border-red-500 @enderror">
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
-                <button type="submit" class="bg-gradient-to-r from-indigo-500  to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
-                    Simpan
-                </button>
-                <a href="{{ route('pemeriksaan-balita.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
-                    Batal
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-balita.stage', 1) }}" class="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 1
                 </a>
             </div>
-        </form>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-cyan-500">
+            <div class="p-6 bg-gradient-to-r from-cyan-50 to-sky-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-xl font-bold">2</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Status Gizi & Pengukuran</h3>
+                        <p class="text-sm text-gray-600">Status BB/U, PB/U, BB/PB, LILA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-balita.stage', 2) }}" class="block w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 2
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-sky-500">
+            <div class="p-6 bg-gradient-to-r from-sky-50 to-blue-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-sky-600 text-white flex items-center justify-center text-xl font-bold">3</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Skrining TBC & Perkembangan</h3>
+                        <p class="text-sm text-gray-600">Gejala TBC, status perkembangan</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-balita.stage', 3) }}" class="block w-full text-center bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 3
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden border-t-4 border-amber-500">
+            <div class="p-6 bg-gradient-to-r from-amber-50 to-yellow-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-600 text-white flex items-center justify-center text-xl font-bold">4</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Edukasi & Rujukan</h3>
+                        <p class="text-sm text-gray-600">Intervensi, edukasi, rujukan final</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <a href="{{ route('pemeriksaan-balita.stage', 4) }}" class="block w-full text-center bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl transition">
+                    Mulai Tahap 4
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-clipboard-list text-teal-600 mr-2"></i>
+                Pemeriksaan yang Belum Selesai
+            </h3>
+            <span class="text-sm text-gray-500">{{ $pemeriksaanBelumSelesai->count() }} data</span>
+        </div>
+
+        @if($pemeriksaanBelumSelesai->isEmpty())
+            <div class="text-center py-10 text-gray-500">
+                <i class="fas fa-check-circle text-4xl mb-3 text-green-400"></i>
+                <p>Belum ada pemeriksaan yang tertunda.</p>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Balita</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal Kunjungan</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tahap Terakhir</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($pemeriksaanBelumSelesai as $item)
+                            @php
+                                $nextStage = max(1, min(4, (int) $item->tahap_terakhir + 1));
+                            @endphp
+                            <tr>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $item->balita->nama_bayi ?? $item->balita_identitas_id }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                                    {{ $item->tanggal_kunjungan ? \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('d M Y') : '-' }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                                    Tahap {{ $item->tahap_terakhir ?: 1 }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                    <a href="{{ route('pemeriksaan-balita.stage', ['stage' => $nextStage, 'pemeriksaan_id' => $item->id]) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium">
+                                        Lanjutkan
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+
+    <div class="mt-8">
+        <a href="{{ route('pemeriksaan-balita.index') }}" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium">
+            <i class="fas fa-arrow-left"></i>
+            Kembali ke daftar pemeriksaan
+        </a>
     </div>
 </div>
 @endsection

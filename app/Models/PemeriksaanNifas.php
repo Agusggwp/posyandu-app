@@ -10,6 +10,8 @@ class PemeriksaanNifas extends Model
 
     protected $fillable = [
         'nifas_identitas_id',
+        'tahap_terakhir',
+        'tanggal_kunjungan',
         'waktu_kunjungan',
         'berat_badan',
         'naik_turun',
@@ -23,6 +25,7 @@ class PemeriksaanNifas extends Model
         'demam',
         'bb_turun',
         'kontak_tbc',
+        'status_tbc',
         'vitamin_a',
         'menyusui',
         'kb',

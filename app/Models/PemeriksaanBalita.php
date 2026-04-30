@@ -10,6 +10,8 @@ class PemeriksaanBalita extends Model
 
     protected $fillable = [
         'balita_identitas_id',
+        'tahap_terakhir',
+        'tanggal_kunjungan',
         'umur',
         'waktu_kunjungan',
         'berat_badan',

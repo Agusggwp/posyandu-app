@@ -18,8 +18,64 @@ class PemeriksaanNifasController extends Controller
 
     public function create()
     {
-        $nifases = Nifas::latest()->get();
-        return view('pemeriksaan.nifas.create', compact('nifases'));
+        $nifases = Nifas::orderBy('nama_ibu')->get();
+        $pemeriksaanBelumSelesai = PemeriksaanNifas::with('nifas')
+            ->where('tahap_terakhir', '<', 4)
+            ->orderByDesc('updated_at')
+            ->get();
+
+        return view('pemeriksaan.nifas.create', compact('nifases', 'pemeriksaanBelumSelesai'));
+    }
+
+    public function stage(Request $request, int $stage = 1)
+    {
+        if (!in_array($stage, [1, 2, 3, 4], true)) {
+            return redirect()->route('pemeriksaan-nifas.create');
+        }
+
+        $nifases = Nifas::orderBy('nama_ibu')->get();
+        $pemeriksaan = null;
+
+        if ($request->filled('pemeriksaan_id')) {
+            $pemeriksaan = PemeriksaanNifas::with('nifas')->findOrFail($request->query('pemeriksaan_id'));
+        }
+
+        $data = $pemeriksaan ? $pemeriksaan->toArray() : $request->session()->get('pemeriksaan_nifas_stage', []);
+
+        return view('pemeriksaan.nifas.stages.stage' . $stage, compact('stage', 'nifases', 'data', 'pemeriksaan'));
+    }
+
+    public function stageStore(Request $request, int $stage = 1)
+    {
+        if (!in_array($stage, [1, 2, 3, 4], true)) {
+            return redirect()->route('pemeriksaan-nifas.create');
+        }
+
+        $validated = $request->validate($this->stageRules($stage));
+        $pemeriksaanId = $request->input('pemeriksaan_id');
+
+        if ($stage === 1 && empty($pemeriksaanId)) {
+            PemeriksaanNifas::create($validated + ['tahap_terakhir' => 1]);
+
+            return redirect()->route('pemeriksaan-nifas.create')->with('success', 'Tahap 1 berhasil disimpan.');
+        }
+
+        if (empty($pemeriksaanId)) {
+            PemeriksaanNifas::create($validated + ['tahap_terakhir' => $stage]);
+
+            return redirect()->route('pemeriksaan-nifas.create')->with('success', 'Tahap ' . $stage . ' berhasil disimpan.');
+        }
+
+        $pemeriksaan = PemeriksaanNifas::findOrFail($pemeriksaanId);
+        $pemeriksaan->update(array_merge($pemeriksaan->toArray(), $validated, [
+            'tahap_terakhir' => $stage,
+        ]));
+
+        if ($stage < 4) {
+            return redirect()->route('pemeriksaan-nifas.create')->with('success', 'Tahap ' . $stage . ' berhasil disimpan.');
+        }
+
+        return redirect()->route('pemeriksaan-nifas.create')->with('success', 'Tahap 4 berhasil disimpan. Pemeriksaan sudah selesai.');
     }
 
     public function store(Request $request)
@@ -96,5 +152,43 @@ class PemeriksaanNifasController extends Controller
     {
         $pemeriksaan_nifas->delete();
         return redirect()->route('pemeriksaan-nifas.index')->with('success', 'Pemeriksaan nifas berhasil dihapus');
+    }
+
+    private function stageRules(int $stage): array
+    {
+        $baseRules = [
+            'nifas_identitas_id' => 'required|exists:nifas_identitas,id',
+            'tanggal_kunjungan' => 'required|date',
+        ];
+
+        return match ($stage) {
+            1 => $baseRules + [
+                'berat_badan' => 'nullable|numeric|min:0',
+                'naik_turun' => 'nullable|in:Naik,Turun,Tetap',
+                'tinggi_badan' => 'nullable|numeric|min:0',
+                'lila' => 'nullable|numeric|min:0|max:100',
+                'status_gizi' => 'nullable|in:Hijau,Kuning,Merah',
+            ],
+            2 => $baseRules + [
+                'sistole' => 'nullable|integer|min:0|max:300',
+                'diastole' => 'nullable|integer|min:0|max:300',
+                'tekanan_darah_status' => 'nullable|in:Rendah,Normal,Tinggi',
+                'batuk' => 'nullable|boolean',
+                'demam' => 'nullable|boolean',
+                'bb_turun' => 'nullable|boolean',
+                'kontak_tbc' => 'nullable|boolean',
+                'status_tbc' => 'nullable|in:Ya,Tidak,Dirujuk',
+            ],
+            3 => $baseRules + [
+                'vitamin_a' => 'nullable|boolean',
+                'menyusui' => 'nullable|boolean',
+                'kb' => 'nullable|in:Pil,Kondom,Suntik,IUD,Implan,Lain-lain',
+            ],
+            4 => $baseRules + [
+                'edukasi' => 'nullable|string|max:2000',
+                'rujukan' => 'nullable|in:Pustu,Puskesmas,Rumah Sakit,Tidak',
+            ],
+            default => $baseRules,
+        };
     }
 }

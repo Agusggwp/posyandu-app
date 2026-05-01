@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pemeriksaan;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanBalita;
 use App\Models\Balita;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class PemeriksaanBalitaController extends Controller
@@ -63,6 +64,24 @@ class PemeriksaanBalitaController extends Controller
                 'tahap_terakhir' => $stage,
                 ...$validated,
             ]);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => auth()->id(),
+                    'action' => 'created',
+                    'model' => 'PemeriksaanBalita',
+                    'model_id' => $pemeriksaan->id,
+                    'description' => 'Membuat PemeriksaanBalita [' . $pemeriksaan->id . '] | Tahap: ' . $stage,
+                    'properties' => [
+                        'route' => request()->route()?->getName(),
+                        'stage' => $stage,
+                    ],
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // ignore logging errors
+            }
         } else {
             // Update pemeriksaan yang ada
             $pemeriksaan = PemeriksaanBalita::find($pemeriksaanId);
@@ -70,6 +89,24 @@ class PemeriksaanBalitaController extends Controller
                 'tahap_terakhir' => $stage,
                 ...$validated,
             ]);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => auth()->id(),
+                    'action' => 'updated',
+                    'model' => 'PemeriksaanBalita',
+                    'model_id' => $pemeriksaan->id,
+                    'description' => 'Memperbarui PemeriksaanBalita [' . $pemeriksaan->id . '] | Tahap: ' . $stage,
+                    'properties' => [
+                        'route' => request()->route()?->getName(),
+                        'stage' => $stage,
+                    ],
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // ignore
+            }
         }
 
         return redirect()->route('pemeriksaan-balita.create')->with('success', "Tahap {$stage} berhasil disimpan. Lanjutkan ke tahap berikutnya.");
@@ -127,7 +164,8 @@ class PemeriksaanBalitaController extends Controller
     public function edit(PemeriksaanBalita $pemeriksaanBalita)
     {
         $balitas = Balita::orderBy('nama_bayi')->get();
-        return view('pemeriksaan.balita.edit', compact('pemeriksaanBalita', 'balitas'));
+        $pemeriksaan = $pemeriksaanBalita;
+        return view('pemeriksaan.balita.edit', compact('pemeriksaan', 'balitas'));
     }
 
     public function update(Request $request, PemeriksaanBalita $pemeriksaanBalita)
@@ -166,7 +204,26 @@ class PemeriksaanBalitaController extends Controller
 
     public function destroy(PemeriksaanBalita $pemeriksaanBalita)
     {
+        $id = $pemeriksaanBalita->id;
         $pemeriksaanBalita->delete();
+
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'deleted',
+                'model' => 'PemeriksaanBalita',
+                'model_id' => $id,
+                'description' => 'Menghapus PemeriksaanBalita [' . $id . ']',
+                'properties' => [
+                    'route' => request()->route()?->getName(),
+                ],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore logging errors
+        }
+
         return redirect()->route('pemeriksaan-balita.index')->with('success', 'Data pemeriksaan berhasil dihapus');
     }
 }

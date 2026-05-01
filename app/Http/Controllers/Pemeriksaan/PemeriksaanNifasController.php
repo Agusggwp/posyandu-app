@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Nifas;
 use App\Models\PemeriksaanNifas;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class PemeriksaanNifasController extends Controller
@@ -55,13 +56,49 @@ class PemeriksaanNifasController extends Controller
         $pemeriksaanId = $request->input('pemeriksaan_id');
 
         if ($stage === 1 && empty($pemeriksaanId)) {
-            PemeriksaanNifas::create($validated + ['tahap_terakhir' => 1]);
+            $pemeriksaan = PemeriksaanNifas::create($validated + ['tahap_terakhir' => 1]);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => auth()->id(),
+                    'action' => 'created',
+                    'model' => 'PemeriksaanNifas',
+                    'model_id' => $pemeriksaan->id,
+                    'description' => 'Membuat PemeriksaanNifas [' . $pemeriksaan->id . '] | Tahap: 1',
+                    'properties' => [
+                        'route' => request()->route()?->getName(),
+                        'stage' => 1,
+                    ],
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // do not block flow on logging error
+            }
 
             return redirect()->route('pemeriksaan-nifas.create')->with('success', 'Tahap 1 berhasil disimpan.');
         }
 
         if (empty($pemeriksaanId)) {
-            PemeriksaanNifas::create($validated + ['tahap_terakhir' => $stage]);
+            $pemeriksaan = PemeriksaanNifas::create($validated + ['tahap_terakhir' => $stage]);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => auth()->id(),
+                    'action' => 'created',
+                    'model' => 'PemeriksaanNifas',
+                    'model_id' => $pemeriksaan->id,
+                    'description' => 'Membuat PemeriksaanNifas [' . $pemeriksaan->id . '] | Tahap: ' . $stage,
+                    'properties' => [
+                        'route' => request()->route()?->getName(),
+                        'stage' => $stage,
+                    ],
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // ignore logging errors
+            }
 
             return redirect()->route('pemeriksaan-nifas.create')->with('success', 'Tahap ' . $stage . ' berhasil disimpan.');
         }
@@ -70,6 +107,24 @@ class PemeriksaanNifasController extends Controller
         $pemeriksaan->update(array_merge($pemeriksaan->toArray(), $validated, [
             'tahap_terakhir' => $stage,
         ]));
+
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'updated',
+                'model' => 'PemeriksaanNifas',
+                'model_id' => $pemeriksaan->id,
+                'description' => 'Memperbarui PemeriksaanNifas [' . $pemeriksaan->id . '] | Tahap: ' . $stage,
+                'properties' => [
+                    'route' => request()->route()?->getName(),
+                    'stage' => $stage,
+                ],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore
+        }
 
         if ($stage < 4) {
             return redirect()->route('pemeriksaan-nifas.create')->with('success', 'Tahap ' . $stage . ' berhasil disimpan.');
@@ -150,7 +205,26 @@ class PemeriksaanNifasController extends Controller
 
     public function destroy(PemeriksaanNifas $pemeriksaan_nifas)
     {
+        $id = $pemeriksaan_nifas->id;
         $pemeriksaan_nifas->delete();
+
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'deleted',
+                'model' => 'PemeriksaanNifas',
+                'model_id' => $id,
+                'description' => 'Menghapus PemeriksaanNifas [' . $id . ']',
+                'properties' => [
+                    'route' => request()->route()?->getName(),
+                ],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore logging errors
+        }
+
         return redirect()->route('pemeriksaan-nifas.index')->with('success', 'Pemeriksaan nifas berhasil dihapus');
     }
 

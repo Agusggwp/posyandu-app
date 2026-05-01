@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pemeriksaan;
 use App\Http\Controllers\Controller;
 use App\Models\PemeriksaanIbuHamil;
 use App\Models\IbuHamil;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class PemeriksaanIbuHamilController extends Controller
@@ -54,13 +55,49 @@ class PemeriksaanIbuHamilController extends Controller
         $pemeriksaanId = $request->input('pemeriksaan_id');
 
         if ($stage === 1 && empty($pemeriksaanId)) {
-            PemeriksaanIbuHamil::create($validated + ['tahap_terakhir' => 1]);
+            $pemeriksaan = PemeriksaanIbuHamil::create($validated + ['tahap_terakhir' => 1]);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => auth()->id(),
+                    'action' => 'created',
+                    'model' => 'PemeriksaanIbuHamil',
+                    'model_id' => $pemeriksaan->id,
+                    'description' => 'Membuat PemeriksaanIbuHamil [' . $pemeriksaan->id . '] | Tahap: 1',
+                    'properties' => [
+                        'route' => request()->route()?->getName(),
+                        'stage' => 1,
+                    ],
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // do not block on logging
+            }
 
             return redirect()->route('pemeriksaan-ibu-hamil.create')->with('success', 'Tahap 1 berhasil disimpan.');
         }
 
         if (empty($pemeriksaanId)) {
-            PemeriksaanIbuHamil::create($validated + ['tahap_terakhir' => $stage]);
+            $pemeriksaan = PemeriksaanIbuHamil::create($validated + ['tahap_terakhir' => $stage]);
+
+            try {
+                ActivityLog::create([
+                    'user_id' => auth()->id(),
+                    'action' => 'created',
+                    'model' => 'PemeriksaanIbuHamil',
+                    'model_id' => $pemeriksaan->id,
+                    'description' => 'Membuat PemeriksaanIbuHamil [' . $pemeriksaan->id . '] | Tahap: ' . $stage,
+                    'properties' => [
+                        'route' => request()->route()?->getName(),
+                        'stage' => $stage,
+                    ],
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } catch (\Throwable $e) {
+                // ignore logging errors
+            }
 
             return redirect()->route('pemeriksaan-ibu-hamil.create')->with('success', 'Tahap ' . $stage . ' berhasil disimpan.');
         }
@@ -69,6 +106,24 @@ class PemeriksaanIbuHamilController extends Controller
         $pemeriksaan->update(array_merge($pemeriksaan->toArray(), $validated, [
             'tahap_terakhir' => $stage,
         ]));
+
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'updated',
+                'model' => 'PemeriksaanIbuHamil',
+                'model_id' => $pemeriksaan->id,
+                'description' => 'Memperbarui PemeriksaanIbuHamil [' . $pemeriksaan->id . '] | Tahap: ' . $stage,
+                'properties' => [
+                    'route' => request()->route()?->getName(),
+                    'stage' => $stage,
+                ],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore
+        }
 
         if ($stage < 4) {
             return redirect()->route('pemeriksaan-ibu-hamil.create')->with('success', 'Tahap ' . $stage . ' berhasil disimpan.');
@@ -94,7 +149,25 @@ class PemeriksaanIbuHamilController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        PemeriksaanIbuHamil::create($validated);
+        $pemeriksaan = PemeriksaanIbuHamil::create($validated);
+
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'created',
+                'model' => 'PemeriksaanIbuHamil',
+                'model_id' => $pemeriksaan->id,
+                'description' => 'Membuat PemeriksaanIbuHamil [' . $pemeriksaan->id . ']',
+                'properties' => [
+                    'route' => request()->route()?->getName(),
+                ],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore logging errors
+        }
+
         return redirect()->route('pemeriksaan-ibu-hamil.index')->with('success', 'Data pemeriksaan berhasil ditambahkan');
     }
 
@@ -130,12 +203,49 @@ class PemeriksaanIbuHamilController extends Controller
         ]);
 
         $pemeriksaanIbuHamil->update($validated);
+
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'updated',
+                'model' => 'PemeriksaanIbuHamil',
+                'model_id' => $pemeriksaanIbuHamil->id,
+                'description' => 'Memperbarui PemeriksaanIbuHamil [' . $pemeriksaanIbuHamil->id . ']',
+                'properties' => [
+                    'route' => request()->route()?->getName(),
+                ],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore logging errors
+        }
+
         return redirect()->route('pemeriksaan-ibu-hamil.index')->with('success', 'Data pemeriksaan berhasil diperbarui');
     }
 
     public function destroy(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
     {
+        $id = $pemeriksaanIbuHamil->id;
         $pemeriksaanIbuHamil->delete();
+
+        try {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'deleted',
+                'model' => 'PemeriksaanIbuHamil',
+                'model_id' => $id,
+                'description' => 'Menghapus PemeriksaanIbuHamil [' . $id . ']',
+                'properties' => [
+                    'route' => request()->route()?->getName(),
+                ],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore logging errors
+        }
+
         return redirect()->route('pemeriksaan-ibu-hamil.index')->with('success', 'Data pemeriksaan berhasil dihapus');
     }
 

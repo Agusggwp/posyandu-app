@@ -27,10 +27,10 @@ class KepalaKeluargaResetPasswordNotification extends Notification
         ]);
 
         return (new MailMessage)
-            ->subject('Reset Password Kepala Keluarga')
-            ->greeting('Halo ' . ($notifiable->nama_lengkap ?? 'Kepala Keluarga'))
-            ->line('Kami menerima permintaan reset password untuk akun Kepala Keluarga Anda.')
-            ->action('Reset Password', $resetUrl)
-            ->line('Jika Anda tidak meminta reset password, abaikan email ini.');
+            ->subject('Reset Kata Sandi - Sistem Posyandu')
+            ->view('emails.kepala-keluarga-password-reset', [
+                'kepalaKeluarga' => $notifiable,
+                'resetUrl' => $resetUrl,
+            ]);
     }
 }

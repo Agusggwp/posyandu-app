@@ -90,14 +90,12 @@
 
                     <div>
                         <label for="naik_turun" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status BB (Naik/Turun)
+                            Status BB (Naik/Turun/Tetap)
                         </label>
-                        <select name="naik_turun" id="naik_turun" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent">
-                            <option value="">-- Pilih --</option>
-                            <option value="Naik" {{ ($pemeriksaan->naik_turun ?? $data['naik_turun'] ?? '') == 'Naik' ? 'selected' : '' }}>Naik</option>
-                            <option value="Turun" {{ ($pemeriksaan->naik_turun ?? $data['naik_turun'] ?? '') == 'Turun' ? 'selected' : '' }}>Turun</option>
-                            <option value="Tetap" {{ ($pemeriksaan->naik_turun ?? $data['naik_turun'] ?? '') == 'Tetap' ? 'selected' : '' }}>Tetap</option>
-                        </select>
+                        <div id="naik_turun_display" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-slate-50 text-gray-800">
+                            {{ $pemeriksaan->naik_turun ?? $data['naik_turun'] ?? 'Akan dihitung otomatis setelah input berat badan' }}
+                        </div>
+                        <input type="hidden" name="naik_turun" id="naik_turun" value="{{ $pemeriksaan->naik_turun ?? $data['naik_turun'] ?? '' }}">
                     </div>
 
                     <div>
@@ -138,6 +136,17 @@
                         <p class="text-xs text-gray-500 mt-1">Hijau ≥23.5 | Kuning 23.0-23.4 | Merah &lt;23.0</p>
                     </div>
                 </div>
+
+                @if($stage === 1)
+                <div class="mt-6 col-span-full">
+                    <div class="bg-slate-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
+                        <div class="font-semibold text-gray-800 mb-2">Ringkasan Akumulasi Berat</div>
+                        <p id="status_summary" class="mb-2">Pilih ibu nifas dan masukkan berat badan untuk melihat akumulasi.</p>
+                        <p id="summary_previous_weight" class="mb-1 text-sm text-gray-600"></p>
+                        <p id="summary_note" class="text-sm text-gray-500"></p>
+                    </div>
+                </div>
+                @endif
             </div>
 
             <!-- Form Actions -->
@@ -157,10 +166,10 @@
 </div>
 
 <script>
-document.getElementById('lila').addEventListener('input', function() {
-    const lila = parseFloat(this.value);
+function updateStatusGizi() {
+    const lila = parseFloat(document.getElementById('lila').value);
     let status = '-';
-    
+
     if (lila >= 23.5) {
         status = 'Hijau (Normal)';
     } else if (lila >= 23.0) {
@@ -168,9 +177,85 @@ document.getElementById('lila').addEventListener('input', function() {
     } else if (lila > 0) {
         status = 'Merah (Buruk)';
     }
-    
+
     document.getElementById('status_lila').textContent = status;
     document.getElementById('status_gizi').value = status.split(' ')[0] || '';
-});
+}
+
+function setSummary(message, previous, note) {
+    const summary = document.getElementById('status_summary');
+    const previousWeight = document.getElementById('summary_previous_weight');
+    const noteText = document.getElementById('summary_note');
+
+    if (summary) summary.textContent = message || '';
+    if (previousWeight) previousWeight.textContent = previous || '';
+    if (noteText) noteText.textContent = note || '';
+}
+
+function formatKg(value) {
+    return Number(value).toFixed(1).replace(/\.0$/, '') + ' kg';
+}
+
+function updateNifasSummary() {
+    const select = document.getElementById('nifas_identitas_id');
+    const weightInput = document.getElementById('berat_badan');
+    const statusDisplay = document.getElementById('naik_turun_display');
+    const statusInput = document.getElementById('naik_turun');
+    const selectedId = select ? select.value : null;
+    const currentWeight = parseFloat(weightInput.value);
+    const previous = selectedId ? (window.previousWeights?.[selectedId] ?? null) : null;
+
+    if (!selectedId) {
+        if (statusDisplay) statusDisplay.textContent = 'Pilih ibu nifas dan masukkan berat badan untuk menghitung status BB.';
+        if (statusInput) statusInput.value = '';
+        setSummary('Pilih ibu nifas dan masukkan berat badan untuk melihat akumulasi.', '', '');
+        return;
+    }
+
+    if (!previous) {
+        const message = currentWeight ? 'Pengukuran pertama untuk ibu ini.' : 'Masukkan berat badan untuk melihat akumulasi.';
+        if (statusDisplay) statusDisplay.textContent = currentWeight ? 'Pertama kali, status BB akan disimpan sebagai Pertama.' : 'Masukkan berat badan untuk menghitung status BB.';
+        if (statusInput) statusInput.value = currentWeight ? 'Pertama' : '';
+        setSummary(message, '', '');
+        return;
+    }
+
+    if (isNaN(currentWeight)) {
+        if (statusDisplay) statusDisplay.textContent = 'Masukkan berat badan untuk menghitung naik/turun/tetap dibanding pemeriksaan sebelumnya.';
+        if (statusInput) statusInput.value = '';
+        setSummary('Data berat sebelumnya ditemukan.', `Berat sebelumnya: ${formatKg(previous.berat_badan)} pada ${previous.tanggal_kunjungan}.`, 'Masukkan berat badan saat ini untuk melihat perubahan.');
+        return;
+    }
+
+    const prevWeight = parseFloat(previous.berat_badan);
+    let status;
+    if (currentWeight > prevWeight) {
+        status = 'Naik';
+    } else if (currentWeight < prevWeight) {
+        status = 'Turun';
+    } else {
+        status = 'Tetap';
+    }
+
+    if (statusDisplay) statusDisplay.textContent = `${status} (sebelumnya ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}).`;
+    if (statusInput) statusInput.value = status;
+    setSummary(`Perubahan berat: ${status}.`, `Berat sebelumnya: ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}.`, `Selisih: ${(currentWeight - prevWeight).toFixed(1)} kg.`);
+}
+
+if (document.getElementById('lila')) {
+    document.getElementById('lila').addEventListener('input', updateStatusGizi);
+    updateStatusGizi();
+}
+
+if (document.getElementById('nifas_identitas_id')) {
+    document.getElementById('nifas_identitas_id').addEventListener('change', updateNifasSummary);
+}
+if (document.getElementById('berat_badan')) {
+    document.getElementById('berat_badan').addEventListener('input', updateNifasSummary);
+}
+
+window.previousWeights = @json($previousWeights ?? []);
+
+updateNifasSummary();
 </script>
 @endsection

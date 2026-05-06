@@ -103,33 +103,21 @@
 
                     <div>
                         <label for="status_bb" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status BB (Naik/Tidak)
+                            Status BB (Naik/Turun/Tetap)
                         </label>
-                        <select name="status_bb" id="status_bb"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('status_bb') border-red-500 @enderror">
-                            <option value="">-- Pilih Status --</option>
-                            <option value="Naik" {{ ($data['status_bb'] ?? null) === 'Naik' ? 'selected' : '' }}>Naik</option>
-                            <option value="Tidak" {{ ($data['status_bb'] ?? null) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('status_bb')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                        <div id="status_bb_display" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-slate-50 text-gray-800">
+                            {{ $data['status_bb'] ?? 'Akan dihitung otomatis dari berat sebelumnya' }}
+                        </div>
+                        <input type="hidden" name="status_bb" id="status_bb" value="{{ $data['status_bb'] ?? '' }}">
                     </div>
+                </div>
 
-                    <div>
-                        <label for="status_lila" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status LILA
-                        </label>
-                        <select name="status_lila" id="status_lila"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('status_lila') border-red-500 @enderror">
-                            <option value="">-- Pilih Status --</option>
-                            <option value="Hijau" {{ ($data['status_lila'] ?? null) === 'Hijau' ? 'selected' : '' }}>Hijau</option>
-                            <option value="Kuning" {{ ($data['status_lila'] ?? null) === 'Kuning' ? 'selected' : '' }}>Kuning</option>
-                            <option value="Merah" {{ ($data['status_lila'] ?? null) === 'Merah' ? 'selected' : '' }}>Merah</option>
-                        </select>
-                        @error('status_lila')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                <div class="mt-6 col-span-full">
+                    <div class="bg-slate-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
+                        <div class="font-semibold text-gray-800 mb-2">Ringkasan Akumulasi Berat</div>
+                        <p id="status_summary" class="mb-2">Pilih ibu hamil dan masukkan berat badan untuk melihat akumulasi.</p>
+                        <p id="summary_previous_weight" class="mb-1 text-sm text-gray-600"></p>
+                        <p id="summary_note" class="text-sm text-gray-500"></p>
                     </div>
                 </div>
             </div>
@@ -145,4 +133,81 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ibuSelect = document.getElementById('ibu_hamil_identitas_id');
+        const beratInput = document.getElementById('berat_badan');
+        const statusDisplay = document.getElementById('status_bb_display');
+        const statusInput = document.getElementById('status_bb');
+
+        const previousWeights = @json($previousWeights ?? []);
+
+        function formatKg(value) {
+            return Number(value).toFixed(2).replace(/\.00$/, '') + ' kg';
+        }
+
+        function setSummary(message, previous, note) {
+            const summary = document.getElementById('status_summary');
+            const previousWeight = document.getElementById('summary_previous_weight');
+            const noteText = document.getElementById('summary_note');
+
+            if (summary) summary.textContent = message || '';
+            if (previousWeight) previousWeight.textContent = previous || '';
+            if (noteText) noteText.textContent = note || '';
+        }
+
+        function updateStatus() {
+            const selectedId = ibuSelect ? ibuSelect.value : null;
+            const currentWeight = parseFloat(beratInput.value);
+            const previous = selectedId ? previousWeights[selectedId] ?? null : null;
+
+            if (!selectedId) {
+                statusDisplay.textContent = 'Pilih ibu hamil dan masukkan berat badan untuk menghitung status BB.';
+                statusInput.value = '';
+                setSummary('Pilih ibu hamil dan masukkan berat badan untuk melihat akumulasi.', '', '');
+                return;
+            }
+
+            if (!previous) {
+                statusDisplay.textContent = currentWeight ? 'Pertama kali, status BB akan disimpan sebagai Pertama.' : 'Masukkan berat badan untuk menghitung status BB.';
+                statusInput.value = currentWeight ? 'Pertama' : '';
+                setSummary(currentWeight ? 'Pengukuran pertama untuk ibu ini.' : 'Masukkan berat badan untuk melihat akumulasi.', '', '');
+                return;
+            }
+
+            if (isNaN(currentWeight)) {
+                statusDisplay.textContent = 'Masukkan berat badan untuk menghitung naik/turun/tetap dibanding pemeriksaan sebelumnya.';
+                statusInput.value = '';
+                setSummary('Data berat sebelumnya ditemukan.', `Berat sebelumnya: ${formatKg(previous.berat_badan)} pada ${previous.tanggal_kunjungan}.`, 'Masukkan berat badan saat ini untuk melihat perubahan.');
+                return;
+            }
+
+            const prevWeight = parseFloat(previous.berat_badan);
+            let status;
+            if (currentWeight > prevWeight) {
+                status = 'Naik';
+            } else if (currentWeight < prevWeight) {
+                status = 'Turun';
+            } else {
+                status = 'Tetap';
+            }
+
+            statusDisplay.textContent = `${status} (sebelumnya ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}).`;
+            statusInput.value = status;
+            setSummary(`Perubahan berat: ${status}.`, `Berat sebelumnya: ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}.`, `Selisih: ${(currentWeight - prevWeight).toFixed(2)} kg.`);
+        }
+
+        if (ibuSelect) {
+            ibuSelect.addEventListener('change', updateStatus);
+        }
+        if (beratInput) {
+            beratInput.addEventListener('input', updateStatus);
+        }
+
+        updateStatus();
+    });
+</script>
+@endpush
 @endsection

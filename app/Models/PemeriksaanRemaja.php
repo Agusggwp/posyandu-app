@@ -11,6 +11,7 @@ class PemeriksaanRemaja extends Model
     protected $fillable = [
         'remaja_identitas_id',
         'waktu_kunjungan',
+        'tahap_terakhir',
         'berat_badan',
         'tinggi_badan',
         'imt_status',

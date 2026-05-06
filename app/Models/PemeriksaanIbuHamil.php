@@ -15,7 +15,6 @@ class PemeriksaanIbuHamil extends Model
         'lingkar_lengan',
         'usia_kehamilan',
         'status_bb',
-        'status_lila',
         'tekanan_darah',
         'denyut_jantung',
         'status_tekanan_darah',

@@ -36,6 +36,7 @@ class PemeriksaanNifasController extends Controller
 
         $nifases = Nifas::orderBy('nama_ibu')->get();
         $pemeriksaan = null;
+        $previousWeights = [];
 
         if ($request->filled('pemeriksaan_id')) {
             $pemeriksaan = PemeriksaanNifas::with('nifas')->findOrFail($request->query('pemeriksaan_id'));
@@ -43,7 +44,27 @@ class PemeriksaanNifasController extends Controller
 
         $data = $pemeriksaan ? $pemeriksaan->toArray() : $request->session()->get('pemeriksaan_nifas_stage', []);
 
-        return view('pemeriksaan.nifas.stages.stage' . $stage, compact('stage', 'nifases', 'data', 'pemeriksaan'));
+        if ($stage === 1) {
+            $previousWeights = PemeriksaanNifas::when($request->filled('pemeriksaan_id'), function ($query) use ($request) {
+                    return $query->where('id', '!=', $request->query('pemeriksaan_id'));
+                })
+                ->whereNotNull('berat_badan')
+                ->whereNotNull('tanggal_kunjungan')
+                ->orderByDesc('tanggal_kunjungan')
+                ->get()
+                ->unique('nifas_identitas_id')
+                ->mapWithKeys(function ($item) {
+                    return [
+                        $item->nifas_identitas_id => [
+                            'berat_badan' => $item->berat_badan,
+                            'tanggal_kunjungan' => optional($item->tanggal_kunjungan)->format('Y-m-d') ?? '-',
+                        ],
+                    ];
+                })
+                ->toArray();
+        }
+
+        return view('pemeriksaan.nifas.stages.stage' . $stage, compact('stage', 'nifases', 'data', 'pemeriksaan', 'previousWeights'));
     }
 
     public function stageStore(Request $request, int $stage = 1)
@@ -54,6 +75,26 @@ class PemeriksaanNifasController extends Controller
 
         $validated = $request->validate($this->stageRules($stage));
         $pemeriksaanId = $request->input('pemeriksaan_id');
+
+        if ($stage === 1 && isset($validated['nifas_identitas_id'], $validated['berat_badan'])) {
+            $previous = PemeriksaanNifas::where('nifas_identitas_id', $validated['nifas_identitas_id'])
+                ->whereNotNull('berat_badan')
+                ->when($pemeriksaanId, fn($q) => $q->where('id', '!=', $pemeriksaanId))
+                ->orderByDesc('tanggal_kunjungan')
+                ->first();
+
+            if ($previous) {
+                if ($validated['berat_badan'] > $previous->berat_badan) {
+                    $validated['naik_turun'] = 'Naik';
+                } elseif ($validated['berat_badan'] < $previous->berat_badan) {
+                    $validated['naik_turun'] = 'Turun';
+                } else {
+                    $validated['naik_turun'] = 'Tetap';
+                }
+            } elseif (!empty($validated['berat_badan'])) {
+                $validated['naik_turun'] = 'Pertama';
+            }
+        }
 
         if ($stage === 1 && empty($pemeriksaanId)) {
             $pemeriksaan = PemeriksaanNifas::create($validated + ['tahap_terakhir' => 1]);

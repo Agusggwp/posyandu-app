@@ -21,7 +21,6 @@ class PemeriksaanBalita extends Model
         'status_pb_u',
         'status_bb_pb',
         'lingkar_lengan',
-        'status_lila',
         'lingkar_kepala',
         'batuk',
         'demam',

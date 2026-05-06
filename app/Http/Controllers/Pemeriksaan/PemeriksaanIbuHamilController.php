@@ -35,6 +35,7 @@ class PemeriksaanIbuHamilController extends Controller
 
         $ibuHamils = IbuHamil::orderBy('nama_ibu')->get();
         $pemeriksaan = null;
+        $previousWeights = [];
 
         if ($request->filled('pemeriksaan_id')) {
             $pemeriksaan = PemeriksaanIbuHamil::with('ibuHamil')->findOrFail($request->query('pemeriksaan_id'));
@@ -42,7 +43,27 @@ class PemeriksaanIbuHamilController extends Controller
 
         $data = $pemeriksaan ? $pemeriksaan->toArray() : $request->session()->get('pemeriksaan_ibu_hamil_stage', []);
 
-        return view('pemeriksaan.ibu-hamil.stages.stage' . $stage, compact('stage', 'ibuHamils', 'data', 'pemeriksaan'));
+        if ($stage === 1) {
+            $previousWeights = PemeriksaanIbuHamil::when($request->filled('pemeriksaan_id'), function ($query) use ($request) {
+                    return $query->where('id', '!=', $request->query('pemeriksaan_id'));
+                })
+                ->whereNotNull('berat_badan')
+                ->whereNotNull('ibu_hamil_identitas_id')
+                ->orderByDesc('tanggal_kunjungan')
+                ->get()
+                ->unique('ibu_hamil_identitas_id')
+                ->mapWithKeys(function ($item) {
+                    return [
+                        $item->ibu_hamil_identitas_id => [
+                            'berat_badan' => $item->berat_badan,
+                            'tanggal_kunjungan' => optional($item->tanggal_kunjungan)->format('Y-m-d') ?? '-',
+                        ],
+                    ];
+                })
+                ->toArray();
+        }
+
+        return view('pemeriksaan.ibu-hamil.stages.stage' . $stage, compact('stage', 'ibuHamils', 'data', 'pemeriksaan', 'previousWeights'));
     }
 
     public function stageStore(Request $request, int $stage = 1)
@@ -53,6 +74,37 @@ class PemeriksaanIbuHamilController extends Controller
 
         $validated = $request->validate($this->stageRules($stage));
         $pemeriksaanId = $request->input('pemeriksaan_id');
+
+        if ($stage === 1 && isset($validated['ibu_hamil_identitas_id'], $validated['berat_badan'])) {
+            $previous = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $validated['ibu_hamil_identitas_id'])
+                ->whereNotNull('berat_badan')
+                ->when($pemeriksaanId, fn($q) => $q->where('id', '!=', $pemeriksaanId))
+                ->orderByDesc('tanggal_kunjungan')
+                ->first();
+
+            if ($previous) {
+                if ($validated['berat_badan'] > $previous->berat_badan) {
+                    $validated['status_bb'] = 'Naik';
+                } elseif ($validated['berat_badan'] < $previous->berat_badan) {
+                    $validated['status_bb'] = 'Turun';
+                } else {
+                    $validated['status_bb'] = 'Tetap';
+                }
+            } elseif (!empty($validated['berat_badan'])) {
+                $validated['status_bb'] = 'Pertama';
+            }
+        }
+
+        // Check for duplicate data
+        $existing = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $validated['ibu_hamil_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->when($pemeriksaanId, fn($q) => $q->where('id', '!=', $pemeriksaanId))
+            ->first();
+
+        if ($existing) {
+            // Add info message but continue
+            session()->flash('info', 'Peringatan: Sudah ada pemeriksaan untuk ibu hamil ini pada tanggal yang sama.');
+        }
 
         if ($stage === 1 && empty($pemeriksaanId)) {
             $pemeriksaan = PemeriksaanIbuHamil::create($validated + ['tahap_terakhir' => 1]);
@@ -262,7 +314,6 @@ class PemeriksaanIbuHamilController extends Controller
                 'berat_badan' => 'nullable|numeric|min:0',
                 'lingkar_lengan' => 'nullable|numeric|min:0',
                 'status_bb' => 'nullable|in:Naik,Tidak',
-                'status_lila' => 'nullable|in:Hijau,Kuning,Merah',
             ],
             2 => $baseRules + [
                 'tekanan_darah' => 'nullable|string|max:255',

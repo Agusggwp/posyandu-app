@@ -159,22 +159,6 @@
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    <div>
-                        <label for="status_lila" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status LILA
-                        </label>
-                        <select name="status_lila" id="status_lila"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            <option value="">-- Pilih --</option>
-                            <option value="Hijau" {{ ($data['status_lila'] ?? null) === 'Hijau' ? 'selected' : '' }}>Hijau (Normal)</option>
-                            <option value="Kuning" {{ ($data['status_lila'] ?? null) === 'Kuning' ? 'selected' : '' }}>Kuning (Kurang)</option>
-                            <option value="Merah" {{ ($data['status_lila'] ?? null) === 'Merah' ? 'selected' : '' }}>Merah (Gawat)</option>
-                        </select>
-                        @error('status_lila')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
                 </div>
             </div>
 

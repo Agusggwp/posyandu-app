@@ -27,7 +27,7 @@
             @csrf
 
             @if($pemeriksaan)
-                <input type="hidden" name="balita_identitas_id" value="{{ $pemeriksaan->balita_identitas_id }}">
+                <input type="hidden" id="balita_identitas_id" name="balita_identitas_id" value="{{ $pemeriksaan->balita_identitas_id }}">
                 <input type="hidden" name="tanggal_kunjungan" value="{{ optional($pemeriksaan->tanggal_kunjungan)->format('Y-m-d') ?? $pemeriksaan->tanggal_kunjungan }}">
                 <input type="hidden" name="pemeriksaan_id" value="{{ $pemeriksaan->id }}">
 
@@ -86,19 +86,12 @@
                     </div>
 
                     <div>
-                        <label for="naik_tidak_naik" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status BB (Naik/Tidak)
+                        <label for="previous_weight" class="block text-sm font-medium text-gray-700 mb-2">
+                            Berat Sebelumnya
                         </label>
-                        <select name="naik_tidak_naik" id="naik_tidak_naik"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('naik_tidak_naik') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Naik" {{ ($data['naik_tidak_naik'] ?? null) === 'Naik' ? 'selected' : '' }}>Naik</option>
-                            <option value="Tidak Naik" {{ ($data['naik_tidak_naik'] ?? null) === 'Tidak Naik' ? 'selected' : '' }}>Tidak Naik</option>
-                            <option value="Tetap" {{ ($data['naik_tidak_naik'] ?? null) === 'Tetap' ? 'selected' : '' }}>Tetap</option>
-                        </select>
-                        @error('naik_tidak_naik')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                        <div id="previous_weight" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-slate-50 text-gray-800">
+                            {{ $data['naik_tidak_naik'] ?? 'Pilih balita dan masukkan berat badan untuk melihat akumulasi' }}
+                        </div>
                     </div>
 
                     <div>
@@ -126,6 +119,15 @@
                         @enderror
                     </div>
                 </div>
+
+                <div class="mt-6 grid grid-cols-1 gap-4">
+                    <div class="bg-slate-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
+                        <div class="font-semibold text-gray-800 mb-2">Ringkasan Akumulasi Berat</div>
+                        <p id="weight_trend" class="mb-2">Pilih balita dan masukkan berat badan untuk melihat perubahan.</p>
+                        <p id="weight_delta" class="mb-1"></p>
+                        <p id="weight_previous_date" class="text-sm text-gray-500"></p>
+                    </div>
+                </div>
             </div>
 
             <!-- Form Actions -->
@@ -140,4 +142,71 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const balitaSelect = document.getElementById('balita_identitas_id');
+        const beratInput = document.getElementById('berat_badan');
+        const prevWeightBox = document.getElementById('previous_weight');
+        const weightTrend = document.getElementById('weight_trend');
+        const weightDelta = document.getElementById('weight_delta');
+        const weightPreviousDate = document.getElementById('weight_previous_date');
+
+        const previousWeights = @json($previousWeights ?? []);
+
+        function formatKg(value) {
+            return Number(value).toFixed(1).replace(/\.0$/, '') + ' kg';
+        }
+
+        function updateAccumulation() {
+            const selectedId = balitaSelect ? balitaSelect.value : null;
+            const currentWeight = parseFloat(beratInput.value);
+            const previous = selectedId ? (previousWeights[selectedId] ?? null) : null;
+
+            if (!selectedId) {
+                prevWeightBox.textContent = 'Pilih balita untuk melihat data pemeriksaan sebelumnya.';
+                weightTrend.textContent = 'Pilih balita dan masukkan berat badan untuk melihat perubahan.';
+                weightDelta.textContent = '';
+                weightPreviousDate.textContent = '';
+                return;
+            }
+
+            if (!previous) {
+                prevWeightBox.textContent = 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
+                weightTrend.textContent = currentWeight ? 'Ini adalah pengukuran pertama.' : 'Masukkan berat badan untuk menghitung perubahan.';
+                weightDelta.textContent = '';
+                weightPreviousDate.textContent = '';
+                return;
+            }
+
+            const previousDate = previous.tanggal_kunjungan || 'tanggal tidak tersedia';
+            prevWeightBox.textContent = `Terakhir tercatat ${formatKg(previous.berat_badan)} pada ${previousDate}.`;
+            weightPreviousDate.textContent = previous.tanggal_kunjungan ? `Tanggal pemeriksaan sebelumnya: ${previous.tanggal_kunjungan}` : '';
+
+            if (isNaN(currentWeight)) {
+                weightTrend.textContent = 'Masukkan berat badan untuk menghitung perubahan terhadap pemeriksaan sebelumnya.';
+                weightDelta.textContent = '';
+                return;
+            }
+
+            const delta = currentWeight - parseFloat(previous.berat_badan);
+            const sign = delta > 0 ? '+' : '';
+            const trend = delta > 0 ? 'Naik' : delta < 0 ? 'Turun' : 'Tetap';
+
+            weightTrend.textContent = `Perubahan berat: ${trend}.`;
+            weightDelta.textContent = `Selisih: ${sign}${delta.toFixed(1)} kg dibanding pemeriksaan sebelumnya.`;
+        }
+
+        if (balitaSelect) {
+            balitaSelect.addEventListener('change', updateAccumulation);
+        }
+        if (beratInput) {
+            beratInput.addEventListener('input', updateAccumulation);
+        }
+
+        updateAccumulation();
+    });
+</script>
+@endpush
 @endsection

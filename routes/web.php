@@ -132,6 +132,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('pemeriksaan-nifas/stage/{stage}', [PemeriksaanNifasController::class, 'stageStore'])->name('pemeriksaan-nifas.stage-store');
         Route::post('pemeriksaan-nifas', [PemeriksaanNifasController::class, 'store'])->name('pemeriksaan-nifas.store');
         Route::get('pemeriksaan-remaja/create', [PemeriksaanRemajaController::class, 'create'])->name('pemeriksaan-remaja.create');
+        Route::get('pemeriksaan-remaja/stage/{stage}', [PemeriksaanRemajaController::class, 'stage'])->name('pemeriksaan-remaja.stage');
+        Route::post('pemeriksaan-remaja/stage/{stage}', [PemeriksaanRemajaController::class, 'stageStore'])->name('pemeriksaan-remaja.stage-store');
         Route::post('pemeriksaan-remaja', [PemeriksaanRemajaController::class, 'store'])->name('pemeriksaan-remaja.store');
         Route::get('pemeriksaan-lansia/create', [PemeriksaanLansiaController::class, 'create'])->name('pemeriksaan-lansia.create');
         Route::post('pemeriksaan-lansia', [PemeriksaanLansiaController::class, 'store'])->name('pemeriksaan-lansia.store');

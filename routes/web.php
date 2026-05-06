@@ -17,6 +17,7 @@ use App\Http\Controllers\Pemeriksaan\PemeriksaanRemajaController;
 use App\Http\Controllers\Reports\LaporanController;
 use App\Http\Controllers\Admin\AdminActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminGitHubCommitLogController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminSystemInfoController;
 use App\Http\Controllers\Admin\UserController;
@@ -198,6 +199,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Activity Logs
     Route::get('/activity-logs', [AdminActivityLogController::class, 'index'])->name('activity-logs');
+    Route::get('/github-commits', [AdminGitHubCommitLogController::class, 'index'])->name('github-commits');
     
     // System Information
     Route::get('/system-info', [AdminSystemInfoController::class, 'index'])->name('system-info');

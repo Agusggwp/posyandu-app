@@ -425,6 +425,7 @@
                     <a href="{{ route('users.index') }}" class="menu-item {{ request()->routeIs('users.*') ? 'active' : '' }}"><span class="menu-item-icon"><i class="fa-solid fa-users-gear"></i></span><span>Kelola User</span></a>
                     <a href="{{ route('roles.index') }}" class="menu-item {{ request()->routeIs('roles.*') ? 'active' : '' }}"><span class="menu-item-icon"><i class="fa-solid fa-user-shield"></i></span><span>Kelola Role</span></a>
                     <a href="{{ route('admin.activity-logs') }}" class="menu-item {{ request()->routeIs('admin.activity-logs') ? 'active' : '' }}"><span class="menu-item-icon"><i class="fa-solid fa-file-lines"></i></span><span>Activity Logs</span></a>
+                    <a href="{{ route('admin.github-commits') }}" class="menu-item {{ request()->routeIs('admin.github-commits') ? 'active' : '' }}"><span class="menu-item-icon"><i class="fa-brands fa-github"></i></span><span>GitHub Commits</span></a>
                     <a href="{{ route('admin.system-info') }}" class="menu-item {{ request()->routeIs('admin.system-info') ? 'active' : '' }}"><span class="menu-item-icon"><i class="fa-solid fa-circle-info"></i></span><span>System Info</span></a>
                     <a href="{{ route('admin.settings') }}" class="menu-item {{ request()->routeIs('admin.settings') ? 'active' : '' }}"><span class="menu-item-icon"><i class="fa-solid fa-sliders"></i></span><span>Pengaturan</span></a>
                 </div>

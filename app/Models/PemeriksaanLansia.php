@@ -14,6 +14,7 @@ class PemeriksaanLansia extends Model
         'berat_badan',
         'tinggi_badan',
         'imt',
+        'status_berat_badan',
         'lingkar_perut',
         'sistole',
         'diastole',
@@ -38,6 +39,7 @@ class PemeriksaanLansia extends Model
         'kontak_tbc',
         'edukasi',
         'rujukan',
+        'tahap_terakhir',
     ];
 
     protected $casts = [

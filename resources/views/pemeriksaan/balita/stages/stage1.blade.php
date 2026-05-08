@@ -127,6 +127,14 @@
                         <p id="weight_delta" class="mb-1"></p>
                         <p id="weight_previous_date" class="text-sm text-gray-500"></p>
                     </div>
+
+                    <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-sm text-teal-800">
+                        <div class="font-semibold text-teal-900 mb-2">Keterangan Status Berat</div>
+                        <p><span class="font-semibold">Naik:</span> Berat saat ini lebih tinggi dari pemeriksaan sebelumnya.</p>
+                        <p><span class="font-semibold">Turun:</span> Berat saat ini lebih rendah dari pemeriksaan sebelumnya.</p>
+                        <p><span class="font-semibold">Tetap:</span> Berat saat ini sama dengan pemeriksaan sebelumnya.</p>
+                        <p><span class="font-semibold">Pertama:</span> Belum ada data pemeriksaan sebelumnya.</p>
+                    </div>
                 </div>
             </div>
 

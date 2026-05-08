@@ -146,6 +146,16 @@
                         <p id="summary_note" class="text-sm text-gray-500"></p>
                     </div>
                 </div>
+
+                <div class="mt-4 col-span-full">
+                    <div class="bg-violet-50 border border-violet-200 rounded-lg p-4 text-sm text-violet-800">
+                        <div class="font-semibold text-violet-900 mb-2">Keterangan Status Berat</div>
+                        <p><span class="font-semibold">Naik:</span> Berat saat ini lebih tinggi dari pemeriksaan sebelumnya.</p>
+                        <p><span class="font-semibold">Turun:</span> Berat saat ini lebih rendah dari pemeriksaan sebelumnya.</p>
+                        <p><span class="font-semibold">Tetap:</span> Berat saat ini sama dengan pemeriksaan sebelumnya.</p>
+                        <p><span class="font-semibold">Pertama:</span> Belum ada data pemeriksaan sebelumnya.</p>
+                    </div>
+                </div>
                 @endif
             </div>
 

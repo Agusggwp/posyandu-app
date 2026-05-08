@@ -113,6 +113,17 @@
                         @enderror
                     </div>
                 </div>
+
+                <div class="mt-6 col-span-full">
+                    <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-4 text-sm text-cyan-800">
+                        <div class="font-semibold text-cyan-900 mb-2">Keterangan Status IMT</div>
+                        <p><span class="font-semibold">Sangat Kurus:</span> IMT &lt; 17</p>
+                        <p><span class="font-semibold">Kurus:</span> IMT 17 - 18.4</p>
+                        <p><span class="font-semibold">Normal:</span> IMT 18.5 - 24.9</p>
+                        <p><span class="font-semibold">Gemuk:</span> IMT 25 - 29.9</p>
+                        <p><span class="font-semibold">Obesitas:</span> IMT ≥ 30</p>
+                    </div>
+                </div>
             </div>
 
             <div class="flex gap-3 pt-6 border-t">

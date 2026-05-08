@@ -14,7 +14,7 @@
         </a>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
             <p class="text-xs uppercase tracking-wide text-slate-500">Total Commit</p>
             <p class="mt-1 text-2xl font-bold text-slate-900">{{ $stats['total'] ?? 0 }}</p>
@@ -32,46 +32,6 @@
             <p class="mt-1 text-sm font-semibold text-slate-900">{{ $stats['last_update'] ?? '-' }}</p>
             <p class="text-xs text-slate-500 mt-1">WIB (Asia/Jakarta)</p>
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
-            <p class="text-xs uppercase tracking-wide text-slate-500">Commit Minggu Ini</p>
-            <p class="mt-1 text-2xl font-bold text-slate-900">{{ $stats['this_week'] ?? 0 }}</p>
-        </div>
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
-            <p class="text-xs uppercase tracking-wide text-slate-500">Top Author</p>
-            <p class="mt-1 text-sm font-semibold text-slate-900 truncate">{{ $stats['top_author'] ?? '-' }}</p>
-        </div>
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
-            <p class="text-xs uppercase tracking-wide text-slate-500">Hari Terpadat</p>
-            <p class="mt-1 text-sm font-semibold text-slate-900 truncate">{{ $stats['peak_day'] ?? '-' }}</p>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 mb-6">
-        <div class="flex items-center justify-between gap-4 mb-4">
-            <div>
-                <h3 class="text-lg font-semibold text-slate-900">Aktivitas 7 Hari Terakhir</h3>
-                <p class="text-sm text-slate-500">Ringkasan jumlah commit per hari berdasarkan filter aktif.</p>
-            </div>
-        </div>
-
-        @php
-            $maxDaily = collect($dailyActivity ?? [])->max('count') ?: 1;
-        @endphp
-
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-            @foreach(($dailyActivity ?? []) as $day)
-                @php
-                    $height = max(8, (int) (($day['count'] / $maxDaily) * 96));
-                @endphp
-                <div class="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                    <div class="h-24 flex items-end">
-                        <div class="w-full rounded-md bg-gradient-to-t from-indigo-600 to-cyan-500" style="height: {{ $height }}px"></div>
-                    </div>
-                    <p class="mt-2 text-xs text-slate-500">{{ $day['label'] }}</p>
-                    <p class="text-sm font-semibold text-slate-900">{{ $day['count'] }} commit</p>
-                </div>
-            @endforeach
-        </div>
     </div>
 
     <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
@@ -80,20 +40,14 @@
                 <h3 class="text-lg font-semibold text-slate-900">Commit Terbaru</h3>
                 <p class="text-sm text-slate-500">Menampilkan hingga 50 commit terbaru, termasuk jam dan waktu relatif.</p>
             </div>
-            <div class="flex items-center gap-2">
-                <a href="{{ route('admin.github-commits', array_filter(['q' => $search ?? '', 'author' => $authorFilter ?? '', 'branch' => $branch ?? '', 'from_date' => $fromDate ?? '', 'to_date' => $toDate ?? '', 'sort' => $sort ?? '', 'per_page' => $perPage ?? 50, 'export' => 'csv'])) }}" class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-100">
-                    <i class="fa-solid fa-file-csv"></i>
-                    Export CSV
-                </a>
-                <a href="{{ route('admin.github-commits') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
-                    <i class="fa-solid fa-sync"></i>
-                    Refresh
-                </a>
-            </div>
+            <a href="{{ route('admin.github-commits') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
+                <i class="fa-solid fa-sync"></i>
+                Refresh
+            </a>
         </div>
 
         <form method="GET" action="{{ route('admin.github-commits') }}" class="grid grid-cols-1 md:grid-cols-12 gap-3 mb-6">
-            <div class="md:col-span-4">
+            <div class="md:col-span-8">
                 <label for="q" class="block text-xs font-semibold text-slate-600 mb-1">Cari Commit</label>
                 <input type="text" id="q" name="q" value="{{ $search ?? '' }}" placeholder="Cari hash, author, atau pesan commit..."
                        class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-400 focus:ring-0">
@@ -105,36 +59,6 @@
                     @foreach(($authors ?? []) as $author)
                         <option value="{{ $author }}" {{ ($authorFilter ?? '') === $author ? 'selected' : '' }}>{{ $author }}</option>
                     @endforeach
-                </select>
-            </div>
-            <div class="md:col-span-2">
-                <label for="branch" class="block text-xs font-semibold text-slate-600 mb-1">Branch</label>
-                <input type="text" id="branch" name="branch" value="{{ $branch ?? '' }}" placeholder="main"
-                       class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-400 focus:ring-0">
-            </div>
-            <div class="md:col-span-2">
-                <label for="from_date" class="block text-xs font-semibold text-slate-600 mb-1">Dari Tanggal</label>
-                <input type="date" id="from_date" name="from_date" value="{{ $fromDate ?? '' }}"
-                       class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-400 focus:ring-0">
-            </div>
-            <div class="md:col-span-2">
-                <label for="to_date" class="block text-xs font-semibold text-slate-600 mb-1">Sampai Tanggal</label>
-                <input type="date" id="to_date" name="to_date" value="{{ $toDate ?? '' }}"
-                       class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-400 focus:ring-0">
-            </div>
-            <div class="md:col-span-2">
-                <label for="sort" class="block text-xs font-semibold text-slate-600 mb-1">Urutan</label>
-                <select id="sort" name="sort" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-400 focus:ring-0">
-                    <option value="newest" {{ ($sort ?? 'newest') === 'newest' ? 'selected' : '' }}>Terbaru</option>
-                    <option value="oldest" {{ ($sort ?? 'newest') === 'oldest' ? 'selected' : '' }}>Terlama</option>
-                </select>
-            </div>
-            <div class="md:col-span-2">
-                <label for="per_page" class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Data</label>
-                <select id="per_page" name="per_page" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-400 focus:ring-0">
-                    <option value="25" {{ (int) ($perPage ?? 50) === 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ (int) ($perPage ?? 50) === 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ (int) ($perPage ?? 50) === 100 ? 'selected' : '' }}>100</option>
                 </select>
             </div>
             <div class="md:col-span-2 flex items-end gap-2">
@@ -160,7 +84,6 @@
                 <table class="min-w-full divide-y divide-slate-200 text-sm">
                     <thead class="bg-slate-50">
                         <tr>
-                            <th class="px-4 py-3 text-left font-semibold text-slate-700">No</th>
                             <th class="px-4 py-3 text-left font-semibold text-slate-700">Hash</th>
                             <th class="px-4 py-3 text-left font-semibold text-slate-700">Author</th>
                             <th class="px-4 py-3 text-left font-semibold text-slate-700">Tanggal</th>
@@ -170,9 +93,8 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 bg-white">
-                        @foreach($commits as $index => $commit)
+                        @foreach($commits as $commit)
                             <tr>
-                                <td class="px-4 py-3 text-slate-500">{{ $index + 1 }}</td>
                                 <td class="px-4 py-3 font-mono text-slate-700">{{ $commit['short_hash'] ?? $commit['hash'] }}</td>
                                 <td class="px-4 py-3 text-slate-700">
                                     <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
@@ -184,13 +106,7 @@
                                     <div>{{ $commit['time'] ?? '-' }}</div>
                                     <div class="text-xs text-slate-500">{{ $commit['relative_time'] ?? '-' }}</div>
                                 </td>
-                                <td class="px-4 py-3 text-slate-700">
-                                    <div>{{ $commit['message_short'] ?? $commit['message'] }}</div>
-                                    <button type="button" class="mt-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700" onclick="toggleCommitMessage('commit-{{ $index }}')">
-                                        Lihat detail
-                                    </button>
-                                    <div id="commit-{{ $index }}" class="mt-2 hidden rounded-lg border border-slate-200 bg-slate-50 p-2 text-xs text-slate-600 whitespace-pre-wrap">{{ $commit['message'] }}</div>
-                                </td>
+                                <td class="px-4 py-3 text-slate-700">{{ $commit['message_short'] ?? $commit['message'] }}</td>
                                 <td class="px-4 py-3 text-slate-700">
                                     <div class="flex flex-wrap gap-2">
                                         <button type="button" class="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50" onclick="copyHash('{{ $commit['hash'] }}')">
@@ -223,12 +139,6 @@ function copyHash(hash) {
     }).catch(function () {
         showToast('Gagal menyalin hash commit', true);
     });
-}
-
-function toggleCommitMessage(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.toggle('hidden');
 }
 
 function showToast(message, isError) {

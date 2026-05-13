@@ -154,15 +154,13 @@
             </div>
 
             <!-- Tombol Aksi -->
-            <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
-                <button type="submit" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl transition">
-                    <i class="fas fa-arrow-right mr-2"></i>
-                    Lanjutkan ke Tahap 2
-                </button>
-                <a href="{{ route('pemeriksaan-lansia.create') }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
-                    <i class="fas fa-times mr-2"></i>
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
+                <a href="{{ route('pemeriksaan-lansia.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
+                <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl transition w-full sm:w-auto">
+                    Lanjutkan ke Tahap 2
+                </button>
             </div>
         </form>
     </div>

@@ -4,7 +4,7 @@
 <div class="max-w-4xl mx-auto px-3 sm:px-4">
     <div class="mb-4 sm:mb-6">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Pemeriksaan Balita - Tahap 3</h2>
-        <p class="text-gray-600 mt-1">Skrining TBC & Perkembangan</p>
+        <p class="text-gray-600 mt-1">Skrining TBC, Perkembangan & Pemberian</p>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-balita.index') }}" class="hover:text-sky-600">Pemeriksaan Balita</a>
             <span class="mx-2">/</span>
@@ -78,7 +78,7 @@
                         <p class="text-sky-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
                     </div>
                     <div>
-                        <p class="text-sky-700 font-medium">Panjang Badan</p>
+                        <p class="text-sky-700 font-medium">Tinggi Badan</p>
                         <p class="text-sky-900">{{ $data['panjang_badan'] ?? '-' }} cm</p>
                     </div>
                     <div>
@@ -103,7 +103,7 @@
                                {{ ($data['batuk'] ?? false) ? 'checked' : '' }}
                                class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
                         <label for="batuk" class="ml-2 text-sm text-gray-700">
-                            Batuk terus-menerus (Ya/Tidak)
+                            Batuk terus-menerus
                         </label>
                     </div>
 
@@ -112,7 +112,7 @@
                                {{ ($data['demam'] ?? false) ? 'checked' : '' }}
                                class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
                         <label for="demam" class="ml-2 text-sm text-gray-700">
-                            Demam kurang lebih 2 minggu (Ya/Tidak)
+                            Demam kurang lebih 2 minggu
                         </label>
                     </div>
 
@@ -121,7 +121,7 @@
                                {{ ($data['bb_turun'] ?? false) ? 'checked' : '' }}
                                class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
                         <label for="bb_turun" class="ml-2 text-sm text-gray-700">
-                            BB tidak naik atau turun dalam 2 bulan berturut-turut (Ya/Tidak)
+                            BB tidak naik atau turun dalam 2 bulan berturut-turut
                         </label>
                     </div>
 
@@ -130,7 +130,7 @@
                                {{ ($data['kontak_tbc'] ?? false) ? 'checked' : '' }}
                                class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
                         <label for="kontak_tbc" class="ml-2 text-sm text-gray-700">
-                            Kontak erat dengan pasien TBC (Ya/Tidak)
+                            Kontak erat dengan pasien TBC
                         </label>
                     </div>
                 </div>
@@ -156,19 +156,79 @@
                 </div>
             </div>
 
+            <div class="border-t pt-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Pemberian & Intervensi</h3>
+
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="asi_eksklusif" id="asi_eksklusif" value="1"
+                               {{ ($data['asi_eksklusif'] ?? false) ? 'checked' : '' }}
+                               class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
+                        <label for="asi_eksklusif" class="ml-2 text-sm text-gray-700">
+                            ASI Eksklusif diberikan
+                        </label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" name="mpasi" id="mpasi" value="1"
+                               {{ ($data['mpasi'] ?? false) ? 'checked' : '' }}
+                               class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
+                        <label for="mpasi" class="ml-2 text-sm text-gray-700">
+                            MP-ASI diberikan
+                        </label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" name="imunisasi" id="imunisasi" value="1"
+                               {{ ($data['imunisasi'] ?? false) ? 'checked' : '' }}
+                               class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
+                        <label for="imunisasi" class="ml-2 text-sm text-gray-700">
+                            Imunisasi lengkap
+                        </label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" name="vitamin_a" id="vitamin_a" value="1"
+                               {{ ($data['vitamin_a'] ?? false) ? 'checked' : '' }}
+                               class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
+                        <label for="vitamin_a" class="ml-2 text-sm text-gray-700">
+                            Vitamin A diberikan
+                        </label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" name="obat_cacing" id="obat_cacing" value="1"
+                               {{ ($data['obat_cacing'] ?? false) ? 'checked' : '' }}
+                               class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
+                        <label for="obat_cacing" class="ml-2 text-sm text-gray-700">
+                            Obat cacing diberikan
+                        </label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" name="mt_pangan" id="mt_pangan" value="1"
+                               {{ ($data['mt_pangan'] ?? false) ? 'checked' : '' }}
+                               class="w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-2 focus:ring-sky-500">
+                        <label for="mt_pangan" class="ml-2 text-sm text-gray-700">
+                            Makanan Tradisional / Pangan Lokal diberikan
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <!-- Form Actions -->
-            <div class="flex gap-3 pt-6 border-t mt-6">
-                @if($pemeriksaan)
-                <a href="{{ route('pemeriksaan-balita.stage', ['stage' => 2, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    ← Kembali
-                </a>
-                @endif
-                <button type="submit" class="px-6 py-2 text-white bg-sky-600 hover:bg-sky-700 rounded-lg font-medium transition">
-                    Simpan Tahap 3
-                </button>
-                <a href="{{ route('pemeriksaan-balita.create') }}" class="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-medium transition">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-balita.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-balita.stage', ['stage' => 2, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 2
+                </a>
+                @endif
+                <button type="submit" class="px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Lanjutkan ke Tahap 4
+                </button>
             </div>
         </form>
     </div>

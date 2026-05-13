@@ -54,6 +54,19 @@ class PemeriksaanRemajaController extends Controller
         }
 
         $validated = $request->validate($this->stageRules($stage));
+
+        if ($stage === 2) {
+            $sistole = isset($validated['sistole']) ? (int) $validated['sistole'] : null;
+            $diastole = isset($validated['diastole']) ? (int) $validated['diastole'] : null;
+
+            if (!is_null($sistole) && !is_null($diastole)) {
+                $validated['tekanan_darah_status'] = $this->calculateBloodPressureStatus($sistole, $diastole);
+            }
+        }
+
+        if ($stage === 2 && isset($validated['gula_darah']) && $validated['gula_darah'] !== '') {
+            $validated['gula_darah'] = (string) $validated['gula_darah'];
+        }
         $pemeriksaanId = $request->input('pemeriksaan_id');
 
         if (empty($pemeriksaanId)) {
@@ -96,7 +109,7 @@ class PemeriksaanRemajaController extends Controller
                 'sistole' => 'nullable|integer|min:0',
                 'diastole' => 'nullable|integer|min:0',
                 'tekanan_darah_status' => 'nullable|string|max:20',
-                'gula_darah' => 'nullable|string|max:20',
+                'gula_darah' => 'nullable|numeric|min:0|max:1000',
                 'hemoglobin' => 'nullable|string|max:20',
                 'anemia' => 'nullable|string|max:5',
             ]),
@@ -105,8 +118,6 @@ class PemeriksaanRemajaController extends Controller
                 'demam' => 'nullable|string|max:5',
                 'bb_turun' => 'nullable|string|max:5',
                 'kontak_tbc' => 'nullable|string|max:5',
-            ]),
-            4 => array_merge($baseRules, [
                 'masalah_rumah' => 'nullable|string|max:5',
                 'masalah_pendidikan' => 'nullable|string|max:5',
                 'masalah_makan' => 'nullable|string|max:5',
@@ -115,11 +126,26 @@ class PemeriksaanRemajaController extends Controller
                 'masalah_seksual' => 'nullable|string|max:5',
                 'masalah_emosi' => 'nullable|string|max:5',
                 'masalah_keamanan' => 'nullable|string|max:5',
+            ]),
+            4 => array_merge($baseRules, [
                 'edukasi' => 'nullable|string',
                 'rujukan' => 'nullable|string|max:100',
             ]),
             default => $baseRules,
         };
+    }
+
+    private function calculateBloodPressureStatus(int $sistole, int $diastole): string
+    {
+        if ($sistole >= 140 || $diastole >= 90) {
+            return 'Tinggi';
+        }
+
+        if ($sistole < 90 || $diastole < 60) {
+            return 'Rendah';
+        }
+
+        return 'Normal';
     }
 
     public function store(Request $request)

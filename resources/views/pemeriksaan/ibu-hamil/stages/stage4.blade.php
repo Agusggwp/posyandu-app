@@ -4,7 +4,7 @@
 <div class="max-w-4xl mx-auto px-3 sm:px-4">
     <div class="mb-4 sm:mb-6">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Pemeriksaan Ibu Hamil - Tahap 4</h2>
-        <p class="text-gray-600 mt-1">Edukasi & Rujukan + Ringkasan Data</p>
+        <p class="text-gray-600 mt-1">Edukasi & Rujukan</p>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="hover:text-purple-600">Pemeriksaan Ibu Hamil</a>
             <span class="mx-2">/</span>
@@ -26,8 +26,46 @@
         <form action="{{ route('pemeriksaan-ibu-hamil.stage-store', ['stage' => 4, 'pemeriksaan_id' => $pemeriksaan->id ?? request('pemeriksaan_id')]) }}" method="POST">
             @csrf
 
-            <input type="hidden" name="ibu_hamil_identitas_id" value="{{ $pemeriksaan->ibu_hamil_identitas_id ?? ($data['ibu_hamil_identitas_id'] ?? '') }}">
-            <input type="hidden" name="tanggal_kunjungan" value="{{ optional($pemeriksaan->tanggal_kunjungan ?? null)->format('Y-m-d') ?? ($data['tanggal_kunjungan'] ?? '') }}">
+            @if($pemeriksaan)
+                <input type="hidden" name="ibu_hamil_identitas_id" value="{{ $pemeriksaan->ibu_hamil_identitas_id }}">
+                <input type="hidden" name="tanggal_kunjungan" value="{{ optional($pemeriksaan->tanggal_kunjungan)->format('Y-m-d') ?? $pemeriksaan->tanggal_kunjungan }}">
+
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                    <p class="text-sm text-green-900 font-medium">Melanjutkan pemeriksaan untuk {{ $pemeriksaan->ibuHamil->nama ?? '-' }}. Data ibu hamil dan tanggal kunjungan sudah dikunci dari tahap sebelumnya.</p>
+                </div>
+            @else
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="ibu_hamil_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">
+                            Pilih Ibu Hamil <span class="text-red-500">*</span>
+                        </label>
+                        <select name="ibu_hamil_identitas_id" id="ibu_hamil_identitas_id"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('ibu_hamil_identitas_id') border-red-500 @enderror" required>
+                            <option value="">-- Pilih Ibu Hamil --</option>
+                            @foreach($ibuHamils as $ibuHamil)
+                                <option value="{{ $ibuHamil->id }}" {{ (old('ibu_hamil_identitas_id', $data['ibu_hamil_identitas_id'] ?? null)) == $ibuHamil->id ? 'selected' : '' }}>
+                                    {{ $ibuHamil->nama }} - {{ $ibuHamil->nik }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('ibu_hamil_identitas_id')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="tanggal_kunjungan" class="block text-sm font-medium text-gray-700 mb-2">
+                            Tanggal Kunjungan <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" name="tanggal_kunjungan" id="tanggal_kunjungan"
+                               value="{{ old('tanggal_kunjungan', $data['tanggal_kunjungan'] ?? date('Y-m-d')) }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('tanggal_kunjungan') border-red-500 @enderror" required>
+                        @error('tanggal_kunjungan')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            @endif
 
             <!-- Summary dari Semua Tahap -->
             @if($data)
@@ -74,10 +112,6 @@
                                 <span class="text-gray-600">Status TD:</span>
                                 <span class="font-medium">{{ $data['status_tekanan_darah'] ?? '-' }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Skrining TBC:</span>
-                                <span class="font-medium">{{ $data['tb_skrining_hasil'] ?? '-' }}</span>
-                            </div>
                         </div>
                     </div>
 
@@ -97,23 +131,13 @@
                                 <span class="text-gray-600">Kelas Ibu Hamil:</span>
                                 <span class="font-medium">{{ $data['kelas_ibu_hamil'] ? '✓ Ya' : '-' }}</span>
                             </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Skrining TBC:</span>
+                                <span class="font-medium">{{ $data['tb_skrining_hasil'] ?? '-' }}</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Info Lainnya -->
-                    <div class="border-l-4 border-orange-500 pl-4">
-                        <h4 class="font-semibold text-orange-900 mb-3">Informasi Tambahan</h4>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Tanggal Kunjungan:</span>
-                                <span class="font-medium">{{ $data['tanggal_kunjungan'] ? \Carbon\Carbon::parse($data['tanggal_kunjungan'])->format('d M Y') : '-' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Waktu ke Posyandu:</span>
-                                <span class="font-medium">{{ $data['waktu_ke_posyandu'] ?? '-' }}</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             @endif
@@ -150,94 +174,15 @@
                 </div>
             </div>
 
-            <!-- Data Tambahan -->
-            <div class="border-t pt-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Tambahan</h3>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label for="denyut_jantung" class="block text-sm font-medium text-gray-700 mb-2">
-                            Denyut Jantung
-                        </label>
-                        <input type="text" name="denyut_jantung" id="denyut_jantung"
-                               value="{{ $data['denyut_jantung'] ?? '' }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('denyut_jantung') border-red-500 @enderror">
-                        @error('denyut_jantung')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="kondisi_ibu" class="block text-sm font-medium text-gray-700 mb-2">
-                            Kondisi Ibu
-                        </label>
-                        <input type="text" name="kondisi_ibu" id="kondisi_ibu"
-                               value="{{ $data['kondisi_ibu'] ?? '' }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('kondisi_ibu') border-red-500 @enderror">
-                        @error('kondisi_ibu')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="keluhan" class="block text-sm font-medium text-gray-700 mb-2">
-                            Keluhan
-                        </label>
-                        <input type="text" name="keluhan" id="keluhan"
-                               value="{{ $data['keluhan'] ?? '' }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('keluhan') border-red-500 @enderror">
-                        @error('keluhan')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="waktu_ke_posyandu" class="block text-sm font-medium text-gray-700 mb-2">
-                            Waktu ke Posyandu
-                        </label>
-                        <input type="time" name="waktu_ke_posyandu" id="waktu_ke_posyandu"
-                               value="{{ $data['waktu_ke_posyandu'] ?? '' }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('waktu_ke_posyandu') border-red-500 @enderror">
-                        @error('waktu_ke_posyandu')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="petugas" class="block text-sm font-medium text-gray-700 mb-2">
-                            Petugas
-                        </label>
-                        <input type="text" name="petugas" id="petugas"
-                               value="{{ $data['petugas'] ?? '' }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('petugas') border-red-500 @enderror">
-                        @error('petugas')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div>
-                    <label for="catatan" class="block text-sm font-medium text-gray-700 mb-2">
-                        Catatan
-                    </label>
-                    <textarea name="catatan" id="catatan" rows="3"
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('catatan') border-red-500 @enderror"
-                              placeholder="Catatan tambahan...">{{ $data['catatan'] ?? '' }}</textarea>
-                    @error('catatan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
-                <a href="{{ route('pemeriksaan-ibu-hamil.create') }}" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-ibu-hamil.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
-                <a href="{{ route('pemeriksaan-ibu-hamil.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id ?? request('pemeriksaan_id')]) }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
+                <a href="{{ route('pemeriksaan-ibu-hamil.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id ?? request('pemeriksaan_id')]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Kembali ke Tahap 3
                 </a>
-                <button type="submit" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
-                    Simpan Tahap 4
+                <button type="submit" class="px-6 py-2 text-white bg-purple-600 hover:bg-purple-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Selesaikan Pemeriksaan
                 </button>
             </div>
         </form>

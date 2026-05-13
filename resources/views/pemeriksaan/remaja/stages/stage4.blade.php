@@ -4,7 +4,7 @@
 <div class="max-w-4xl mx-auto px-3 sm:px-4">
     <div class="mb-4 sm:mb-6">
         <h2 class="text-2xl sm:text-3xl font-bold text-cyan-900">Pemeriksaan Remaja - Tahap 4</h2>
-        <p class="text-gray-600 mt-1">Masalah Kesehatan, Edukasi & Rujukan</p>
+        <p class="text-gray-600 mt-1">Edukasi & Rujukan</p>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-remaja.index') }}" class="hover:text-cyan-600">Pemeriksaan Remaja</a>
             <span class="mx-2">/</span>
@@ -69,115 +69,6 @@
                 </div>
             @endif
 
-            <div class="bg-slate-50 border border-gray-200 rounded-lg p-4 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Masalah Kesehatan</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="masalah_rumah" class="block text-sm font-medium text-gray-700 mb-2">Masalah Rumah</label>
-                        <select name="masalah_rumah" id="masalah_rumah"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_rumah') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_rumah', $data['masalah_rumah'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_rumah', $data['masalah_rumah'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_rumah')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="masalah_pendidikan" class="block text-sm font-medium text-gray-700 mb-2">Masalah Pendidikan</label>
-                        <select name="masalah_pendidikan" id="masalah_pendidikan"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_pendidikan') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_pendidikan', $data['masalah_pendidikan'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_pendidikan', $data['masalah_pendidikan'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_pendidikan')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="masalah_makan" class="block text-sm font-medium text-gray-700 mb-2">Masalah Makan</label>
-                        <select name="masalah_makan" id="masalah_makan"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_makan') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_makan', $data['masalah_makan'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_makan', $data['masalah_makan'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_makan')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="masalah_aktivitas" class="block text-sm font-medium text-gray-700 mb-2">Masalah Aktivitas</label>
-                        <select name="masalah_aktivitas" id="masalah_aktivitas"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_aktivitas') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_aktivitas', $data['masalah_aktivitas'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_aktivitas', $data['masalah_aktivitas'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_aktivitas')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="masalah_obat" class="block text-sm font-medium text-gray-700 mb-2">Masalah Obat</label>
-                        <select name="masalah_obat" id="masalah_obat"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_obat') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_obat', $data['masalah_obat'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_obat', $data['masalah_obat'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_obat')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="masalah_seksual" class="block text-sm font-medium text-gray-700 mb-2">Masalah Seksual</label>
-                        <select name="masalah_seksual" id="masalah_seksual"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_seksual') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_seksual', $data['masalah_seksual'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_seksual', $data['masalah_seksual'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_seksual')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="masalah_emosi" class="block text-sm font-medium text-gray-700 mb-2">Masalah Emosi</label>
-                        <select name="masalah_emosi" id="masalah_emosi"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_emosi') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_emosi', $data['masalah_emosi'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_emosi', $data['masalah_emosi'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_emosi')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="masalah_keamanan" class="block text-sm font-medium text-gray-700 mb-2">Masalah Keamanan</label>
-                        <select name="masalah_keamanan" id="masalah_keamanan"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('masalah_keamanan') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('masalah_keamanan', $data['masalah_keamanan'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('masalah_keamanan', $data['masalah_keamanan'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('masalah_keamanan')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-            </div>
-
             <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Edukasi & Rujukan</h3>
                 <div class="grid grid-cols-1 gap-6">
@@ -201,12 +92,15 @@
                 </div>
             </div>
 
-            <div class="flex gap-3 pt-6 border-t">
-                <a href="{{ route('pemeriksaan-remaja.stage', ['stage' => 3, 'pemeriksaan_id' => old('pemeriksaan_id', $data['id'] ?? '')]) }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    Kembali
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-remaja.index') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Batal
                 </a>
-                <button type="submit" class="px-6 py-2 text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg font-medium transition">
-                    Simpan Tahap 4
+                <a href="{{ route('pemeriksaan-remaja.stage', ['stage' => 3, 'pemeriksaan_id' => old('pemeriksaan_id', $data['id'] ?? '')]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 3
+                </a>
+                <button type="submit" class="px-6 py-2 text-white bg-cyan-600 hover:bg-cyan-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Selesaikan Pemeriksaan
                 </button>
             </div>
         </form>

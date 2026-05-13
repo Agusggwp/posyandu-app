@@ -38,7 +38,7 @@ class PemeriksaanLansiaController extends Controller
             $pemeriksaan = null;
         }
 
-        return view("pemeriksaan.lansia.stage-{$stage}", compact('stage', 'lansias', 'pemeriksaan'));
+        return view("pemeriksaan.lansia.stages.stage-{$stage}", compact('stage', 'lansias', 'pemeriksaan'));
     }
 
     public function store(Request $request)
@@ -48,9 +48,14 @@ class PemeriksaanLansiaController extends Controller
         
         // Validation based on stage
         $validationRules = [
-            'dewasa_identitas_id' => 'required_if:stage,1|exists:dewasa_identitas,id',
-            'waktu_kunjungan' => 'required_if:stage,1|date',
+            'dewasa_identitas_id' => 'nullable|exists:dewasa_identitas,id',
+            'waktu_kunjungan' => 'nullable|date',
         ];
+
+        if (!$pemeriksaan_id) {
+            $validationRules['dewasa_identitas_id'] = 'required|exists:dewasa_identitas,id';
+            $validationRules['waktu_kunjungan'] = 'required|date';
+        }
 
         if ($stage == 1) {
             $validationRules = array_merge($validationRules, [

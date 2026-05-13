@@ -127,7 +127,7 @@
 
                     <div>
                         <label for="status_gizi" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status Gizi (otomatis)
+                            Status LILA (otomatis)
                         </label>
                         <input type="text" name="status_gizi" id="status_gizi"
                                value="{{ $pemeriksaan->status_gizi ?? ($data['status_gizi'] ?? '') }}"
@@ -160,16 +160,13 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="flex gap-3 pt-6 border-t">
-                <a href="{{ route('pemeriksaan-nifas.create') }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    Kembali
-                </a>
-                <button type="submit" class="px-6 py-2 text-white bg-violet-600 hover:bg-violet-700 rounded-lg font-medium transition">
-                    Simpan Tahap 1
-                </button>
-                <a href="{{ route('pemeriksaan-nifas.create') }}" class="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-medium transition">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-nifas.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
+                <button type="submit" class="px-6 py-2 text-white bg-rose-600 hover:bg-rose-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Lanjutkan ke Tahap 2
+                </button>
             </div>
         </form>
     </div>

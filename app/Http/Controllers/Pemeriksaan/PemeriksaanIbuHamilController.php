@@ -73,6 +73,18 @@ class PemeriksaanIbuHamilController extends Controller
         }
 
         $validated = $request->validate($this->stageRules($stage));
+
+        if ($stage === 2) {
+            $sistole = isset($validated['sistole']) ? (int) $validated['sistole'] : null;
+            $diastole = isset($validated['diastole']) ? (int) $validated['diastole'] : null;
+
+            if (!is_null($sistole) && !is_null($diastole)) {
+                $validated['tekanan_darah'] = $sistole . '/' . $diastole;
+                $validated['status_tekanan_darah'] = $this->calculateBloodPressureStatus($sistole, $diastole);
+            }
+
+            unset($validated['sistole'], $validated['diastole']);
+        }
         $pemeriksaanId = $request->input('pemeriksaan_id');
 
         if ($stage === 1 && isset($validated['ibu_hamil_identitas_id'], $validated['berat_badan'])) {
@@ -316,30 +328,37 @@ class PemeriksaanIbuHamilController extends Controller
                 'status_bb' => 'nullable|in:Naik,Tidak',
             ],
             2 => $baseRules + [
-                'tekanan_darah' => 'nullable|string|max:255',
-                'status_tekanan_darah' => 'nullable|in:Normal,Tinggi,Rendah',
+                'sistole' => 'nullable|integer|min:50|max:260',
+                'diastole' => 'nullable|integer|min:30|max:180',
+            ],
+            3 => $baseRules + [
+                'tablet_tambah_darah' => 'nullable|boolean',
+                'pmt_bumil' => 'nullable|boolean',
+                'kelas_ibu_hamil' => 'nullable|boolean',
                 'tb_skrining_batuk' => 'nullable|boolean',
                 'tb_skrining_demam' => 'nullable|boolean',
                 'tb_skrining_bb_turun' => 'nullable|boolean',
                 'tb_skrining_kontak' => 'nullable|boolean',
                 'tb_skrining_hasil' => 'nullable|in:Ya,Tidak,Dirujuk',
             ],
-            3 => $baseRules + [
-                'tablet_tambah_darah' => 'nullable|boolean',
-                'pmt_bumil' => 'nullable|boolean',
-                'kelas_ibu_hamil' => 'nullable|boolean',
-            ],
             4 => $baseRules + [
                 'edukasi' => 'nullable|string|max:2000',
                 'rujukan' => 'nullable|in:Pustu,Puskesmas,Rumah Sakit,Tidak',
-                'denyut_jantung' => 'nullable|string|max:255',
-                'kondisi_ibu' => 'nullable|string|max:255',
-                'keluhan' => 'nullable|string|max:255',
-                'waktu_ke_posyandu' => 'nullable|date_format:H:i',
-                'petugas' => 'nullable|string|max:255',
-                'catatan' => 'nullable|string',
             ],
             default => $baseRules,
         };
+    }
+
+    private function calculateBloodPressureStatus(int $sistole, int $diastole): string
+    {
+        if ($sistole >= 140 || $diastole >= 90) {
+            return 'Tinggi';
+        }
+
+        if ($sistole < 90 || $diastole < 60) {
+            return 'Rendah';
+        }
+
+        return 'Normal';
     }
 }

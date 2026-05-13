@@ -10,8 +10,8 @@
             <span class="mx-2">/</span>
             <span>Tahap 2</span>
         </nav>
-    </div>
-
+                    <div>
+                        <p class="text-blue-700 font-medium">Status LILA</p>
     <!-- Progress Bar -->
     <div class="mb-6">
         <div class="flex gap-2 mb-2">
@@ -52,7 +52,7 @@
                 <p class="font-semibold">{{ $pemeriksaan->lila ?? $data['lila'] ?? '-' }} cm</p>
             </div>
             <div>
-                <p class="text-gray-600">Status Gizi:</p>
+                <p class="text-gray-600">Status LILA:</p>
                 <p class="font-semibold">{{ $pemeriksaan->status_gizi ?? $data['status_gizi'] ?? '-' }}</p>
             </div>
         </div>
@@ -119,7 +119,7 @@
                         <p class="text-blue-900">{{ $data['lila'] ?? '-' }} cm</p>
                     </div>
                     <div>
-                        <p class="text-blue-700 font-medium">Status Gizi</p>
+                        <p class="text-blue-700 font-medium">Status LILA</p>
                         <p class="text-blue-900">{{ $data['status_gizi'] ?? '-' }}</p>
                     </div>
                 </div>
@@ -168,77 +168,19 @@
                 </div>
             </div>
 
-            <!-- Skrining TBC -->
-            <div class="border-t pt-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Skrining TBC</h3>
-                <p class="text-sm text-gray-600 mb-4">Jika 2 gejala terpenuhi maka dirujuk ke Puskesmas</p>
-
-                <div class="space-y-3 mb-6">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="batuk" id="batuk" value="1"
-                               {{ ($data['batuk'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
-                        <label for="batuk" class="ml-2 text-sm text-gray-700">
-                            Batuk terus-menerus (Ya/Tidak)
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="demam" id="demam" value="1"
-                               {{ ($data['demam'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
-                        <label for="demam" class="ml-2 text-sm text-gray-700">
-                            Demam kurang lebih 2 minggu (Ya/Tidak)
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="bb_turun" id="bb_turun" value="1"
-                               {{ ($data['bb_turun'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
-                        <label for="bb_turun" class="ml-2 text-sm text-gray-700">
-                            BB tidak naik atau turun dalam 2 bulan berturut-turut (Ya/Tidak)
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="kontak_tbc" id="kontak_tbc" value="1"
-                               {{ ($data['kontak_tbc'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
-                        <label for="kontak_tbc" class="ml-2 text-sm text-gray-700">
-                            Kontak erat dengan pasien TBC (Ya/Tidak)
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-t pt-6">
-                <h3 class="text-sm font-semibold text-gray-800 mb-3">Hasil Skrining TBC</h3>
-                <select name="status_tbc" id="status_tbc"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_tbc') border-red-500 @enderror">
-                    <option value="">-- Pilih --</option>
-                    <option value="Ya" {{ ($data['status_tbc'] ?? null) === 'Ya' ? 'selected' : '' }}>Ya (Perlu Rujukan)</option>
-                    <option value="Tidak" {{ ($data['status_tbc'] ?? null) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                    <option value="Dirujuk" {{ ($data['status_tbc'] ?? null) === 'Dirujuk' ? 'selected' : '' }}>Dirujuk</option>
-                </select>
-                @error('status_tbc')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-            </div>
-
             <!-- Form Actions -->
-            <div class="flex gap-3 pt-6 border-t mt-6">
-                @if($pemeriksaan)
-                <a href="{{ route('pemeriksaan-nifas.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    ← Kembali
-                </a>
-                @endif
-                <button type="submit" class="px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition">
-                    Simpan Tahap 2
-                </button>
-                <a href="{{ route('pemeriksaan-nifas.create') }}" class="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-medium transition">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-nifas.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-nifas.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 1
+                </a>
+                @endif
+                <button type="submit" class="px-6 py-2 text-white bg-rose-600 hover:bg-rose-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Lanjutkan ke Tahap 3
+                </button>
             </div>
         </form>
     </div>

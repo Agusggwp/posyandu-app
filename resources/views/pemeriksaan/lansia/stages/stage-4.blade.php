@@ -28,7 +28,34 @@
             @csrf
             
             <input type="hidden" name="stage" value="4">
-            <input type="hidden" name="pemeriksaan_id" value="{{ $pemeriksaan->id }}">
+            @if($pemeriksaan)
+                <input type="hidden" name="pemeriksaan_id" value="{{ $pemeriksaan->id }}">
+            @else
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="dewasa_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Lansia <span class="text-red-500">*</span></label>
+                        <select name="dewasa_identitas_id" id="dewasa_identitas_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('dewasa_identitas_id') border-red-500 @enderror" required>
+                            <option value="">-- Pilih Lansia --</option>
+                            @foreach($lansias as $lansia)
+                                <option value="{{ $lansia->id }}" {{ old('dewasa_identitas_id', $data['dewasa_identitas_id'] ?? '') == $lansia->id ? 'selected' : '' }}>
+                                    {{ $lansia->nama }} - {{ $lansia->nik }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('dewasa_identitas_id')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan <span class="text-red-500">*</span></label>
+                        <input type="date" name="waktu_kunjungan" id="waktu_kunjungan" value="{{ old('waktu_kunjungan', $data['waktu_kunjungan'] ?? now()->format('Y-m-d')) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('waktu_kunjungan') border-red-500 @enderror" required>
+                        @error('waktu_kunjungan')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            @endif
 
             <!-- Skrining TBC -->
             <div class="mb-8">
@@ -193,10 +220,17 @@
                     <i class="fas fa-check mr-2"></i>
                     Selesaikan Pemeriksaan
                 </button>
-                <a href="{{ route('pemeriksaan-lansia.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali
-                </a>
+                @if($pemeriksaan)
+                    <a href="{{ route('pemeriksaan-lansia.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Kembali
+                    </a>
+                @else
+                    <a href="{{ route('pemeriksaan-lansia.index') }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Kembali
+                    </a>
+                @endif
             </div>
         </form>
     </div>

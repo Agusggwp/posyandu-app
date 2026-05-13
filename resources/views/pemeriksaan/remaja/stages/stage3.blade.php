@@ -4,7 +4,7 @@
 <div class="max-w-4xl mx-auto px-3 sm:px-4">
     <div class="mb-4 sm:mb-6">
         <h2 class="text-2xl sm:text-3xl font-bold text-cyan-900">Pemeriksaan Remaja - Tahap 3</h2>
-        <p class="text-gray-600 mt-1">Skrining TBC</p>
+        <p class="text-gray-600 mt-1">Skrining TBC & Masalah Kesehatan</p>
         <nav class="text-sm text-gray-600 mt-2">
             <a href="{{ route('pemeriksaan-remaja.index') }}" class="hover:text-cyan-600">Pemeriksaan Remaja</a>
             <span class="mx-2">/</span>
@@ -126,12 +126,93 @@
                 </div>
             </div>
 
-            <div class="flex gap-3 pt-6 border-t">
-                <a href="{{ route('pemeriksaan-remaja.stage', ['stage' => 2, 'pemeriksaan_id' => old('pemeriksaan_id', $data['id'] ?? '')]) }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    Kembali
+            <div class="border-t pt-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Masalah Kesehatan</h3>
+
+                <div class="space-y-3">
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_rumah" id="masalah_rumah" value="Ya"
+                               {{ old('masalah_rumah', $data['masalah_rumah'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_rumah" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Rumah
+                        </label>
+                    </div>
+
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_pendidikan" id="masalah_pendidikan" value="Ya"
+                               {{ old('masalah_pendidikan', $data['masalah_pendidikan'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_pendidikan" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Pendidikan
+                        </label>
+                    </div>
+
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_makan" id="masalah_makan" value="Ya"
+                               {{ old('masalah_makan', $data['masalah_makan'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_makan" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Makan
+                        </label>
+                    </div>
+
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_aktivitas" id="masalah_aktivitas" value="Ya"
+                               {{ old('masalah_aktivitas', $data['masalah_aktivitas'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_aktivitas" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Aktivitas
+                        </label>
+                    </div>
+
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_obat" id="masalah_obat" value="Ya"
+                               {{ old('masalah_obat', $data['masalah_obat'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_obat" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Obat
+                        </label>
+                    </div>
+
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_seksual" id="masalah_seksual" value="Ya"
+                               {{ old('masalah_seksual', $data['masalah_seksual'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_seksual" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Seksual
+                        </label>
+                    </div>
+
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_emosi" id="masalah_emosi" value="Ya"
+                               {{ old('masalah_emosi', $data['masalah_emosi'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_emosi" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Emosi
+                        </label>
+                    </div>
+
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="masalah_keamanan" id="masalah_keamanan" value="Ya"
+                               {{ old('masalah_keamanan', $data['masalah_keamanan'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="masalah_keamanan" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Masalah Keamanan
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-remaja.index') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Batal
                 </a>
-                <button type="submit" class="px-6 py-2 text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg font-medium transition">
-                    Simpan Tahap 3
+                <a href="{{ route('pemeriksaan-remaja.stage', ['stage' => 2, 'pemeriksaan_id' => old('pemeriksaan_id', $data['id'] ?? '')]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 2
+                </a>
+                <button type="submit" class="px-6 py-2 text-white bg-cyan-600 hover:bg-cyan-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Lanjutkan ke Tahap 4
                 </button>
             </div>
         </form>

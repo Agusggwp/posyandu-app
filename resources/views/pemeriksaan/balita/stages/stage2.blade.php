@@ -82,7 +82,7 @@
                         <p class="text-teal-900">{{ $data['naik_tidak_naik'] ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-teal-700 font-medium">Panjang Badan</p>
+                        <p class="text-teal-700 font-medium">Tinggi Badan</p>
                         <p class="text-teal-900">{{ $data['panjang_badan'] ?? '-' }} cm</p>
                     </div>
                     <div>
@@ -98,54 +98,33 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="status_bb_u" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status BB/U
+                        <label for="status_bb_u_display" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status BB/U (Otomatis)
                         </label>
-                        <select name="status_bb_u" id="status_bb_u"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            <option value="">-- Pilih --</option>
-                            <option value="Sangat Kurang" {{ ($data['status_bb_u'] ?? null) === 'Sangat Kurang' ? 'selected' : '' }}>Sangat Kurang</option>
-                            <option value="Kurang" {{ ($data['status_bb_u'] ?? null) === 'Kurang' ? 'selected' : '' }}>Kurang</option>
-                            <option value="Normal" {{ ($data['status_bb_u'] ?? null) === 'Normal' ? 'selected' : '' }}>Normal</option>
-                            <option value="Lebih" {{ ($data['status_bb_u'] ?? null) === 'Lebih' ? 'selected' : '' }}>Lebih</option>
-                        </select>
-                        @error('status_bb_u')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                        <input type="text" id="status_bb_u_display"
+                               value="{{ $data['status_bb_u'] ?? '-' }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
+                               readonly>
                     </div>
 
                     <div>
-                        <label for="status_pb_u" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status PB/U
+                        <label for="status_pb_u_display" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status TB/U (Otomatis)
                         </label>
-                        <select name="status_pb_u" id="status_pb_u"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            <option value="">-- Pilih --</option>
-                            <option value="Sangat Pendek" {{ ($data['status_pb_u'] ?? null) === 'Sangat Pendek' ? 'selected' : '' }}>Sangat Pendek</option>
-                            <option value="Pendek" {{ ($data['status_pb_u'] ?? null) === 'Pendek' ? 'selected' : '' }}>Pendek</option>
-                            <option value="Normal" {{ ($data['status_pb_u'] ?? null) === 'Normal' ? 'selected' : '' }}>Normal</option>
-                            <option value="Tinggi" {{ ($data['status_pb_u'] ?? null) === 'Tinggi' ? 'selected' : '' }}>Tinggi</option>
-                        </select>
-                        @error('status_pb_u')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                        <input type="text" id="status_pb_u_display"
+                               value="{{ $data['status_pb_u'] ?? '-' }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
+                               readonly>
                     </div>
 
                     <div>
-                        <label for="status_bb_pb" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status BB/PB
+                        <label for="status_bb_pb_display" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status BB/TB (Otomatis)
                         </label>
-                        <select name="status_bb_pb" id="status_bb_pb"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            <option value="">-- Pilih --</option>
-                            <option value="Buruk" {{ ($data['status_bb_pb'] ?? null) === 'Buruk' ? 'selected' : '' }}>Buruk</option>
-                            <option value="Kurang" {{ ($data['status_bb_pb'] ?? null) === 'Kurang' ? 'selected' : '' }}>Kurang</option>
-                            <option value="Normal" {{ ($data['status_bb_pb'] ?? null) === 'Normal' ? 'selected' : '' }}>Normal</option>
-                            <option value="Lebih" {{ ($data['status_bb_pb'] ?? null) === 'Lebih' ? 'selected' : '' }}>Lebih</option>
-                        </select>
-                        @error('status_bb_pb')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                        <input type="text" id="status_bb_pb_display"
+                               value="{{ $data['status_bb_pb'] ?? '-' }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
+                               readonly>
                     </div>
 
                     <div>
@@ -163,18 +142,18 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="flex gap-3 pt-6 border-t">
-                @if($pemeriksaan)
-                <a href="{{ route('pemeriksaan-balita.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    ← Kembali
-                </a>
-                @endif
-                <button type="submit" class="px-6 py-2 text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg font-medium transition">
-                    Simpan Tahap 2
-                </button>
-                <a href="{{ route('pemeriksaan-balita.create') }}" class="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-medium transition">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-balita.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-balita.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 1
+                </a>
+                @endif
+                <button type="submit" class="px-6 py-2 text-white bg-cyan-600 hover:bg-cyan-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Lanjutkan ke Tahap 3
+                </button>
             </div>
         </form>
     </div>

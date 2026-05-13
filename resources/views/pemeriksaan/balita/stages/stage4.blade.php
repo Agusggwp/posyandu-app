@@ -94,66 +94,6 @@
             @endif
 
             <div class="border-t pt-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Pemberian & Intervensi</h3>
-
-                <div class="space-y-3 mb-6">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="asi_eksklusif" id="asi_eksklusif" value="1"
-                               {{ ($data['asi_eksklusif'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-2 focus:ring-amber-500">
-                        <label for="asi_eksklusif" class="ml-2 text-sm text-gray-700">
-                            ASI Eksklusif diberikan
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="mpasi" id="mpasi" value="1"
-                               {{ ($data['mpasi'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-2 focus:ring-amber-500">
-                        <label for="mpasi" class="ml-2 text-sm text-gray-700">
-                            MP-ASI diberikan
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="imunisasi" id="imunisasi" value="1"
-                               {{ ($data['imunisasi'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-2 focus:ring-amber-500">
-                        <label for="imunisasi" class="ml-2 text-sm text-gray-700">
-                            Imunisasi lengkap
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="vitamin_a" id="vitamin_a" value="1"
-                               {{ ($data['vitamin_a'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-2 focus:ring-amber-500">
-                        <label for="vitamin_a" class="ml-2 text-sm text-gray-700">
-                            Vitamin A diberikan
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="obat_cacing" id="obat_cacing" value="1"
-                               {{ ($data['obat_cacing'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-2 focus:ring-amber-500">
-                        <label for="obat_cacing" class="ml-2 text-sm text-gray-700">
-                            Obat cacing diberikan
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="mt_pangan" id="mt_pangan" value="1"
-                               {{ ($data['mt_pangan'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-2 focus:ring-amber-500">
-                        <label for="mt_pangan" class="ml-2 text-sm text-gray-700">
-                            Makanan Tradisional / Pangan Lokal diberikan
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Edukasi</h3>
 
                 <div>
@@ -205,18 +145,18 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="flex gap-3 pt-6 border-t mt-6">
-                @if($pemeriksaan)
-                <a href="{{ route('pemeriksaan-balita.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    ← Kembali
-                </a>
-                @endif
-                <button type="submit" class="px-6 py-2 text-white bg-amber-600 hover:bg-amber-700 rounded-lg font-medium transition">
-                    ✓ Selesaikan Pemeriksaan
-                </button>
-                <a href="{{ route('pemeriksaan-balita.create') }}" class="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-medium transition">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-balita.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-balita.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 3
+                </a>
+                @endif
+                <button type="submit" class="px-6 py-2 text-white bg-amber-600 hover:bg-amber-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Selesaikan Pemeriksaan
+                </button>
             </div>
         </form>
     </div>

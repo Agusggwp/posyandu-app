@@ -95,109 +95,100 @@
             <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Pemeriksaan</h3>
 
+                @php
+                    $tekananDarah = $data['tekanan_darah'] ?? '';
+                    $partsTekananDarah = strpos($tekananDarah, '/') !== false ? explode('/', $tekananDarah) : ['', ''];
+                    $defaultSistole = trim($partsTekananDarah[0] ?? '');
+                    $defaultDiastole = trim($partsTekananDarah[1] ?? '');
+                @endphp
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label for="tekanan_darah" class="block text-sm font-medium text-gray-700 mb-2">
-                            Tekanan Darah (Sistol/Diastol)
+                        <label for="sistole" class="block text-sm font-medium text-gray-700 mb-2">
+                            Sistole (mmHg)
                         </label>
-                        <input type="text" name="tekanan_darah" id="tekanan_darah"
-                               value="{{ $data['tekanan_darah'] ?? '' }}" placeholder="120/80"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('tekanan_darah') border-red-500 @enderror">
-                        @error('tekanan_darah')
+                        <input type="number" name="sistole" id="sistole"
+                               value="{{ old('sistole', $defaultSistole) }}" min="50" max="260"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('sistole') border-red-500 @enderror">
+                        @error('sistole')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="status_tekanan_darah" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status Tekanan Darah
+                        <label for="diastole" class="block text-sm font-medium text-gray-700 mb-2">
+                            Diastole (mmHg)
                         </label>
-                        <select name="status_tekanan_darah" id="status_tekanan_darah"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('status_tekanan_darah') border-red-500 @enderror">
-                            <option value="">-- Pilih Status --</option>
-                            <option value="Normal" {{ ($data['status_tekanan_darah'] ?? null) === 'Normal' ? 'selected' : '' }}>Normal</option>
-                            <option value="Tinggi" {{ ($data['status_tekanan_darah'] ?? null) === 'Tinggi' ? 'selected' : '' }}>Tinggi</option>
-                            <option value="Rendah" {{ ($data['status_tekanan_darah'] ?? null) === 'Rendah' ? 'selected' : '' }}>Rendah</option>
-                        </select>
-                        @error('status_tekanan_darah')
+                        <input type="number" name="diastole" id="diastole"
+                               value="{{ old('diastole', $defaultDiastole) }}" min="30" max="180"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('diastole') border-red-500 @enderror">
+                        @error('diastole')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
-            </div>
-
-            <!-- TB Screening -->
-            <div class="border-t pt-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Skrining TBC</h3>
-                <p class="text-sm text-gray-600 mb-4">Jika 2 gejala terpenuhi maka dirujuk ke</p>
-
-                <div class="space-y-3">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="tb_skrining_batuk" id="tb_skrining_batuk" value="1"
-                               {{ ($data['tb_skrining_batuk'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
-                        <label for="tb_skrining_batuk" class="ml-2 text-sm text-gray-700">
-                            Batuk terus menerus (Ya/Tidak)
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="tb_skrining_demam" id="tb_skrining_demam" value="1"
-                               {{ ($data['tb_skrining_demam'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
-                        <label for="tb_skrining_demam" class="ml-2 text-sm text-gray-700">
-                            Demam (Ya/Tidak)
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="tb_skrining_bb_turun" id="tb_skrining_bb_turun" value="1"
-                               {{ ($data['tb_skrining_bb_turun'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
-                        <label for="tb_skrining_bb_turun" class="ml-2 text-sm text-gray-700">
-                            BB turun (Ya/Tidak)
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="tb_skrining_kontak" id="tb_skrining_kontak" value="1"
-                               {{ ($data['tb_skrining_kontak'] ?? false) ? 'checked' : '' }}
-                               class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
-                        <label for="tb_skrining_kontak" class="ml-2 text-sm text-gray-700">
-                            Kontak TBC (Ya/Tidak)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <label for="tb_skrining_hasil" class="block text-sm font-medium text-gray-700 mb-2">
-                        Hasil Skrining TBC
+                <div>
+                    <label for="status_tekanan_darah_display" class="block text-sm font-medium text-gray-700 mb-2">
+                        Status Tekanan Darah (Otomatis)
                     </label>
-                    <select name="tb_skrining_hasil" id="tb_skrining_hasil"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('tb_skrining_hasil') border-red-500 @enderror">
-                        <option value="">-- Pilih Hasil --</option>
-                        <option value="Ya" {{ ($data['tb_skrining_hasil'] ?? null) === 'Ya' ? 'selected' : '' }}>Ya (Curiga TBC)</option>
-                        <option value="Tidak" {{ ($data['tb_skrining_hasil'] ?? null) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        <option value="Dirujuk" {{ ($data['tb_skrining_hasil'] ?? null) === 'Dirujuk' ? 'selected' : '' }}>Dirujuk</option>
-                    </select>
-                    @error('tb_skrining_hasil')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="status_tekanan_darah_display"
+                           value="{{ $data['status_tekanan_darah'] ?? '-' }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
+                           readonly>
                 </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
-                <a href="{{ route('pemeriksaan-ibu-hamil.create') }}" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-ibu-hamil.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
-                <a href="{{ route('pemeriksaan-ibu-hamil.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id ?? request('pemeriksaan_id')]) }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-ibu-hamil.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id ?? request('pemeriksaan_id')]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Kembali ke Tahap 1
                 </a>
-                <button type="submit" class="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
-                    Simpan Tahap 2
+                @endif
+                <button type="submit" class="px-6 py-2 text-white bg-purple-600 hover:bg-purple-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Lanjutkan ke Tahap 3
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sistoleInput = document.getElementById('sistole');
+        const diastoleInput = document.getElementById('diastole');
+        const statusDisplay = document.getElementById('status_tekanan_darah_display');
+
+        function updateStatusTekananDarah() {
+            const sistole = parseInt(sistoleInput.value, 10);
+            const diastole = parseInt(diastoleInput.value, 10);
+
+            if (isNaN(sistole) || isNaN(diastole)) {
+                statusDisplay.value = '-';
+                return;
+            }
+
+            if (sistole >= 140 || diastole >= 90) {
+                statusDisplay.value = 'Tinggi';
+                return;
+            }
+
+            if (sistole < 90 || diastole < 60) {
+                statusDisplay.value = 'Rendah';
+                return;
+            }
+
+            statusDisplay.value = 'Normal';
+        }
+
+        if (sistoleInput) sistoleInput.addEventListener('input', updateStatusTekananDarah);
+        if (diastoleInput) diastoleInput.addEventListener('input', updateStatusTekananDarah);
+
+        updateStatusTekananDarah();
+    });
+</script>
+@endpush
 @endsection

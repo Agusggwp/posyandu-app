@@ -288,13 +288,13 @@ class PemeriksaanNifasController extends Controller
                 'sistole' => 'nullable|integer|min:0|max:300',
                 'diastole' => 'nullable|integer|min:0|max:300',
                 'tekanan_darah_status' => 'nullable|in:Rendah,Normal,Tinggi',
+            ],
+            3 => $baseRules + [
                 'batuk' => 'nullable|boolean',
                 'demam' => 'nullable|boolean',
                 'bb_turun' => 'nullable|boolean',
                 'kontak_tbc' => 'nullable|boolean',
                 'status_tbc' => 'nullable|in:Ya,Tidak,Dirujuk',
-            ],
-            3 => $baseRules + [
                 'vitamin_a' => 'nullable|boolean',
                 'menyusui' => 'nullable|boolean',
                 'kb' => 'nullable|in:Pil,Kondom,Suntik,IUD,Implan,Lain-lain',

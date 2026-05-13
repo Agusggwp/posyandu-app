@@ -11,7 +11,7 @@
             <span>Tahap 4</span>
         </nav>
     </div>
-
+                        <p class="text-gray-600">Status LILA:</p>
     <!-- Progress Bar -->
     <div class="mb-6">
         <div class="flex gap-2 mb-2">
@@ -95,7 +95,7 @@
                                 <span class="font-medium">{{ $data['lila'] ?? '-' }} cm</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600">Status Gizi:</span>
+                                <span class="text-gray-600">Status LILA:</span>
                                 <span class="font-medium">{{ $data['status_gizi'] ?? '-' }}</span>
                             </div>
                         </div>
@@ -113,10 +113,6 @@
                                 <span class="text-gray-600">Status TD:</span>
                                 <span class="font-medium">{{ $data['tekanan_darah_status'] ?? '-' }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Skrining TBC:</span>
-                                <span class="font-medium">{{ $data['status_tbc'] ?? '-' }}</span>
-                            </div>
                         </div>
                     </div>
 
@@ -132,10 +128,14 @@
                                 <span class="text-gray-600">Menyusui:</span>
                                 <span class="font-medium">{{ $data['menyusui'] ? '✓ Ya' : '-' }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">KB:</span>
-                                <span class="font-medium">{{ $data['kb'] ?? '-' }}</span>
-                            </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">KB:</span>
+                                    <span class="font-medium">{{ $data['kb'] ?? '-' }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Skrining TBC:</span>
+                                    <span class="font-medium">{{ $data['status_tbc'] ?? '-' }}</span>
+                                </div>
                         </div>
                     </div>
 
@@ -193,18 +193,18 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="flex gap-3 pt-6 border-t">
-                @if($pemeriksaan)
-                <a href="{{ route('pemeriksaan-nifas.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition">
-                    ← Kembali
-                </a>
-                @endif
-                <button type="submit" class="px-6 py-2 text-white bg-orange-600 hover:bg-orange-700 rounded-lg font-medium transition">
-                    ✓ Selesaikan Pemeriksaan
-                </button>
-                <a href="{{ route('pemeriksaan-nifas.create') }}" class="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-medium transition">
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-nifas.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-nifas.stage', ['stage' => 3, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 3
+                </a>
+                @endif
+                <button type="submit" class="px-6 py-2 text-white bg-rose-600 hover:bg-rose-700 font-semibold rounded-xl transition w-full sm:w-auto">
+                    Selesaikan Pemeriksaan
+                </button>
             </div>
         </form>
     </div>

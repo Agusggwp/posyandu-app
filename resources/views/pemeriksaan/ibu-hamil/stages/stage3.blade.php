@@ -69,24 +69,56 @@
 
             <!-- Summary dari Tahap 1 & 2 -->
             @if($data)
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <h3 class="text-sm font-semibold text-blue-900 mb-3">Data dari Tahap Sebelumnya</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                    <div>
-                        <p class="text-blue-700 font-medium">Usia Kehamilan</p>
-                        <p class="text-blue-900">{{ $data['usia_kehamilan'] ?? '-' }} minggu</p>
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+                <h3 class="text-sm font-semibold text-purple-900 mb-4">Data dari Tahap Sebelumnya</h3>
+                
+                <!-- Tahap 1 -->
+                <div class="mb-3 pb-3 border-b border-purple-300">
+                    <p class="text-xs font-semibold text-purple-700 mb-2">TAHAP 1: Penimbangan & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                        <div>
+                            <p class="text-purple-700 font-medium">Usia Kehamilan</p>
+                            <p class="text-purple-900">{{ $data['usia_kehamilan'] ?? '-' }} minggu</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Berat Badan</p>
+                            <p class="text-purple-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">LILA</p>
+                            <p class="text-purple-900">{{ $data['lingkar_lengan'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Status BB</p>
+                            <p class="text-purple-900">{{ $data['status_bb'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Status LILA</p>
+                            <p class="text-purple-900">{{ $data['status_lila'] ?? '-' }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-blue-700 font-medium">Berat Badan</p>
-                        <p class="text-blue-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
-                    </div>
-                    <div>
-                        <p class="text-blue-700 font-medium">Tekanan Darah</p>
-                        <p class="text-blue-900">{{ $data['tekanan_darah'] ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-blue-700 font-medium">Status TD</p>
-                        <p class="text-blue-900">{{ $data['status_tekanan_darah'] ?? '-' }}</p>
+                </div>
+
+                <!-- Tahap 2 -->
+                <div>
+                    <p class="text-xs font-semibold text-purple-700 mb-2">TAHAP 2: Pemeriksaan Tekanan Darah</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-purple-700 font-medium">Tekanan Darah</p>
+                            <p class="text-purple-900">{{ $data['tekanan_darah'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Status TD</p>
+                            <p class="text-purple-900">{{ $data['status_tekanan_darah'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Sistole</p>
+                            <p class="text-purple-900">{{ $data['sistole'] ?? '-' }} mmHg</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Diastole</p>
+                            <p class="text-purple-900">{{ $data['diastole'] ?? '-' }} mmHg</p>
+                        </div>
                     </div>
                 </div>
             </div>

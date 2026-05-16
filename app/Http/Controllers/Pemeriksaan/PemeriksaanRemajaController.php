@@ -187,7 +187,8 @@ class PemeriksaanRemajaController extends Controller
     public function show(PemeriksaanRemaja $pemeriksaan_remaja)
     {
         $pemeriksaan_remaja->load('remaja');
-        return view('pemeriksaan.remaja.show', ['pemeriksaanRemaja' => $pemeriksaan_remaja]);
+        $pemeriksaan = $pemeriksaan_remaja;
+        return view('pemeriksaan.remaja.show', compact('pemeriksaan'));
     }
 
     public function edit(PemeriksaanRemaja $pemeriksaan_remaja)

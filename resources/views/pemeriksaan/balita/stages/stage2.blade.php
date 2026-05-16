@@ -72,7 +72,7 @@
             @if($data)
             <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-6">
                 <h3 class="text-sm font-semibold text-teal-900 mb-3">Data dari Tahap 1</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
                     <div>
                         <p class="text-teal-700 font-medium">Berat Badan</p>
                         <p class="text-teal-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
@@ -89,6 +89,10 @@
                         <p class="text-teal-700 font-medium">Lingkar Kepala</p>
                         <p class="text-teal-900">{{ $data['lingkar_kepala'] ?? '-' }} cm</p>
                     </div>
+                    <div>
+                        <p class="text-teal-700 font-medium">LILA</p>
+                        <p class="text-teal-900">{{ $data['lingkar_lengan'] ?? '-' }} cm</p>
+                    </div>
                 </div>
             </div>
             @endif
@@ -96,7 +100,7 @@
             <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Status Gizi & Pengukuran</h3>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
                         <label for="status_bb_u_display" class="block text-sm font-medium text-gray-700 mb-2">
                             Status BB/U (Otomatis)
@@ -128,15 +132,13 @@
                     </div>
 
                     <div>
-                        <label for="lingkar_lengan" class="block text-sm font-medium text-gray-700 mb-2">
-                            LILA / Lingkar Lengan Atas (cm)
+                        <label for="status_lila_display" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status LILA (Otomatis)
                         </label>
-                        <input type="number" name="lingkar_lengan" id="lingkar_lengan"
-                               value="{{ $data['lingkar_lengan'] ?? '' }}" step="0.1"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('lingkar_lengan') border-red-500 @enderror">
-                        @error('lingkar_lengan')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                        <input type="text" id="status_lila_display"
+                               value="{{ $data['status_lila'] ?? '-' }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
+                               readonly>
                     </div>
                 </div>
             </div>

@@ -71,23 +71,55 @@
             <!-- Summary dari Tahap 1 & 2 -->
             @if($data)
             <div class="bg-sky-50 border border-sky-200 rounded-lg p-4 mb-6">
-                <h3 class="text-sm font-semibold text-sky-900 mb-3">Data dari Tahap Sebelumnya</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                    <div>
-                        <p class="text-sky-700 font-medium">Berat Badan</p>
-                        <p class="text-sky-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                <h3 class="text-sm font-semibold text-sky-900 mb-4">Data dari Tahap Sebelumnya</h3>
+                
+                <!-- Tahap 1: Penimbangan & Pengukuran -->
+                <div class="mb-3 pb-3 border-b border-sky-300">
+                    <p class="text-xs font-semibold text-sky-700 mb-2">TAHAP 1: Penimbangan & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                        <div>
+                            <p class="text-sky-700 font-medium">Berat Badan</p>
+                            <p class="text-sky-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                        </div>
+                        <div>
+                            <p class="text-sky-700 font-medium">Status BB</p>
+                            <p class="text-sky-900">{{ $data['naik_tidak_naik'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sky-700 font-medium">Tinggi Badan</p>
+                            <p class="text-sky-900">{{ $data['panjang_badan'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-sky-700 font-medium">Lingkar Kepala</p>
+                            <p class="text-sky-900">{{ $data['lingkar_kepala'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-sky-700 font-medium">LILA</p>
+                            <p class="text-sky-900">{{ $data['lingkar_lengan'] ?? '-' }} cm</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-sky-700 font-medium">Tinggi Badan</p>
-                        <p class="text-sky-900">{{ $data['panjang_badan'] ?? '-' }} cm</p>
-                    </div>
-                    <div>
-                        <p class="text-sky-700 font-medium">Status Gizi</p>
-                        <p class="text-sky-900">{{ $data['status_bb_u'] ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sky-700 font-medium">Status LILA</p>
-                        <p class="text-sky-900">{{ $data['status_lila'] ?? '-' }}</p>
+                </div>
+
+                <!-- Tahap 2: Status Gizi -->
+                <div>
+                    <p class="text-xs font-semibold text-sky-700 mb-2">TAHAP 2: Status Gizi & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-sky-700 font-medium">Status BB/U</p>
+                            <p class="text-sky-900">{{ $data['status_bb_u'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sky-700 font-medium">Status PB/U</p>
+                            <p class="text-sky-900">{{ $data['status_pb_u'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sky-700 font-medium">Status BB/PB</p>
+                            <p class="text-sky-900">{{ $data['status_bb_pb'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sky-700 font-medium">Status LILA</p>
+                            <p class="text-sky-900">{{ $data['status_lila'] ?? '-' }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -185,6 +217,19 @@
                         <label for="imunisasi" class="ml-2 text-sm text-gray-700">
                             Imunisasi lengkap
                         </label>
+                    </div>
+
+                    <div class="ml-6">
+                        <label for="jenis_imunisasi" class="block text-sm font-medium text-gray-700 mb-2">
+                            Jenis Imunisasi
+                        </label>
+                        <input type="text" name="jenis_imunisasi" id="jenis_imunisasi"
+                               value="{{ $data['jenis_imunisasi'] ?? '' }}"
+                               placeholder="Contoh: BCG, Polio, DPT, Hepatitis B, Campak"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent @error('jenis_imunisasi') border-red-500 @enderror">
+                        @error('jenis_imunisasi')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="flex items-center">

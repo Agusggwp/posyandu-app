@@ -31,14 +31,16 @@ class PemeriksaanLansiaController extends Controller
     {
         $pemeriksaan_id = $request->query('pemeriksaan_id');
         $lansias = Lansia::orderBy('nama')->get();
+        $data = [];
         
         if ($pemeriksaan_id) {
             $pemeriksaan = PemeriksaanLansia::findOrFail($pemeriksaan_id);
+            $data = $pemeriksaan->toArray();
         } else {
             $pemeriksaan = null;
         }
 
-        return view("pemeriksaan.lansia.stages.stage-{$stage}", compact('stage', 'lansias', 'pemeriksaan'));
+        return view("pemeriksaan.lansia.stages.stage-{$stage}", compact('stage', 'lansias', 'pemeriksaan', 'data'));
     }
 
     public function store(Request $request)

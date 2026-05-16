@@ -60,6 +60,31 @@
                 </div>
             @endif
 
+            <!-- Summary dari Tahap 1 -->
+            @if($data)
+            <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-4 mb-6">
+                <h3 class="text-sm font-semibold text-cyan-900 mb-3">Data dari Tahap 1</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    <div>
+                        <p class="text-cyan-700 font-medium">Berat Badan</p>
+                        <p class="text-cyan-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-700 font-medium">Tinggi Badan</p>
+                        <p class="text-cyan-900">{{ $data['tinggi_badan'] ?? '-' }} cm</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-700 font-medium">Status IMT</p>
+                        <p class="text-cyan-900">{{ $data['imt_status'] ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-700 font-medium">Lingkar Perut</p>
+                        <p class="text-cyan-900">{{ $data['lingkar_perut'] ?? '-' }} cm</p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Pemeriksaan Tekanan Darah & Gula Darah</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

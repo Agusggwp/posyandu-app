@@ -110,6 +110,17 @@
                         </div>
                         <input type="hidden" name="status_bb" id="status_bb" value="{{ $data['status_bb'] ?? '' }}">
                     </div>
+
+                    <div>
+                        <label for="status_lila_display" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status LILA (Otomatis)
+                        </label>
+                        <input type="text" id="status_lila_display"
+                               value="{{ $data['status_lila'] ?? '-' }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
+                               readonly>
+                        <input type="hidden" name="status_lila" id="status_lila" value="{{ $data['status_lila'] ?? '' }}">
+                    </div>
                 </div>
 
                 <div class="mt-6 col-span-full">
@@ -149,8 +160,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         const ibuSelect = document.getElementById('ibu_hamil_identitas_id');
         const beratInput = document.getElementById('berat_badan');
+        const lilaInput = document.getElementById('lingkar_lengan');
         const statusDisplay = document.getElementById('status_bb_display');
         const statusInput = document.getElementById('status_bb');
+        const statusLilaDisplay = document.getElementById('status_lila_display');
+        const statusLilaInput = document.getElementById('status_lila');
 
         const previousWeights = @json($previousWeights ?? []);
 
@@ -166,6 +180,21 @@
             if (summary) summary.textContent = message || '';
             if (previousWeight) previousWeight.textContent = previous || '';
             if (noteText) noteText.textContent = note || '';
+        }
+
+        function calculateStatusLila(lila) {
+            const lilaValue = parseFloat(lila);
+            if (isNaN(lilaValue)) {
+                return '-';
+            }
+            return lilaValue < 23.5 ? 'Kurang' : 'Baik';
+        }
+
+        function updateLilaStatus() {
+            const lilaValue = lilaInput.value;
+            const status = calculateStatusLila(lilaValue);
+            statusLilaDisplay.value = status;
+            statusLilaInput.value = status;
         }
 
         function updateStatus() {
@@ -215,8 +244,12 @@
         if (beratInput) {
             beratInput.addEventListener('input', updateStatus);
         }
+        if (lilaInput) {
+            lilaInput.addEventListener('input', updateLilaStatus);
+        }
 
         updateStatus();
+        updateLilaStatus();
     });
 </script>
 @endpush

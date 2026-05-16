@@ -5,7 +5,7 @@
     <div class="bg-white rounded-lg shadow-lg border border-rose-200 p-4 sm:p-6">
         <h2 class="text-2xl font-bold text-rose-800 mb-6">Detail Pemeriksaan Nifas</h2>
         @php
-            $data = $pemeriksaanNifas->getAttributes();
+            $data = $pemeriksaan->getAttributes();
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
@@ -50,7 +50,7 @@
         </div>
 
         <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a href="{{ route('pemeriksaan-nifas.edit', $pemeriksaanNifas->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center">Edit</a>
+            <a href="{{ route('pemeriksaan-nifas.edit', $pemeriksaan->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center">Edit</a>
             <a href="{{ route('pemeriksaan-nifas.index') }}" class="bg-rose-700 hover:bg-rose-800 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center">Kembali</a>
         </div>
     </div>

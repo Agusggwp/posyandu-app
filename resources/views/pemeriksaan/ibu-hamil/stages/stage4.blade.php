@@ -69,75 +69,80 @@
 
             <!-- Summary dari Semua Tahap -->
             @if($data)
-            <div class="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">📋 Ringkasan Data Pemeriksaan</h3>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Tahap 1 -->
-                    <div class="border-l-4 border-purple-500 pl-4">
-                        <h4 class="font-semibold text-purple-900 mb-3">Tahap 1: Penimbangan & Pengukuran</h4>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Usia Kehamilan:</span>
-                                <span class="font-medium">{{ $data['usia_kehamilan'] ?? '-' }} minggu</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Berat Badan:</span>
-                                <span class="font-medium">{{ $data['berat_badan'] ?? '-' }} kg</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">LILA:</span>
-                                <span class="font-medium">{{ $data['lingkar_lengan'] ?? '-' }} cm</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Status BB:</span>
-                                <span class="font-medium">{{ $data['status_bb'] ?? '-' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Status LILA:</span>
-                                <span class="font-medium">{{ $data['status_lila'] ?? '-' }}</span>
-                            </div>
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+                <h3 class="text-sm font-semibold text-purple-900 mb-4">Ringkasan Data Pemeriksaan</h3>
+                
+                <!-- Tahap 1 -->
+                <div class="mb-3 pb-3 border-b border-purple-300">
+                    <p class="text-xs font-semibold text-purple-700 mb-2">TAHAP 1: Penimbangan & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                        <div>
+                            <p class="text-purple-700 font-medium">Usia Kehamilan</p>
+                            <p class="text-purple-900">{{ $data['usia_kehamilan'] ?? '-' }} minggu</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Berat Badan</p>
+                            <p class="text-purple-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">LILA</p>
+                            <p class="text-purple-900">{{ $data['lingkar_lengan'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Status BB</p>
+                            <p class="text-purple-900">{{ $data['status_bb'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Status LILA</p>
+                            <p class="text-purple-900">{{ $data['status_lila'] ?? '-' }}</p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Tahap 2 -->
-                    <div class="border-l-4 border-blue-500 pl-4">
-                        <h4 class="font-semibold text-blue-900 mb-3">Tahap 2: Pemeriksaan</h4>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Tekanan Darah:</span>
-                                <span class="font-medium">{{ $data['tekanan_darah'] ?? '-' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Status TD:</span>
-                                <span class="font-medium">{{ $data['status_tekanan_darah'] ?? '-' }}</span>
-                            </div>
+                <!-- Tahap 2 -->
+                <div class="mb-3 pb-3 border-b border-purple-300">
+                    <p class="text-xs font-semibold text-purple-700 mb-2">TAHAP 2: Pemeriksaan Tekanan Darah</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-purple-700 font-medium">Tekanan Darah</p>
+                            <p class="text-purple-900">{{ $data['tekanan_darah'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Status TD</p>
+                            <p class="text-purple-900">{{ $data['status_tekanan_darah'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Sistole</p>
+                            <p class="text-purple-900">{{ $data['sistole'] ?? '-' }} mmHg</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Diastole</p>
+                            <p class="text-purple-900">{{ $data['diastole'] ?? '-' }} mmHg</p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Tahap 3 -->
-                    <div class="border-l-4 border-green-500 pl-4">
-                        <h4 class="font-semibold text-green-900 mb-3">Tahap 3: Pelayanan Kesehatan</h4>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Tablet Tambah Darah:</span>
-                                <span class="font-medium">{{ $data['tablet_tambah_darah'] ? '✓ Ya' : '-' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">PMT Bumil:</span>
-                                <span class="font-medium">{{ $data['pmt_bumil'] ? '✓ Ya' : '-' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Kelas Ibu Hamil:</span>
-                                <span class="font-medium">{{ $data['kelas_ibu_hamil'] ? '✓ Ya' : '-' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Skrining TBC:</span>
-                                <span class="font-medium">{{ $data['tb_skrining_hasil'] ?? '-' }}</span>
-                            </div>
+                <!-- Tahap 3 -->
+                <div>
+                    <p class="text-xs font-semibold text-purple-700 mb-2">TAHAP 3: Skrining TBC & Pelayanan Kesehatan</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-purple-700 font-medium">Tablet Tambah Darah</p>
+                            <p class="text-purple-900">{{ $data['tablet_tambah_darah'] ? 'Ya' : 'Tidak' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">PMT Bumil</p>
+                            <p class="text-purple-900">{{ $data['pmt_bumil'] ? 'Ya' : 'Tidak' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Kelas Ibu Hamil</p>
+                            <p class="text-purple-900">{{ $data['kelas_ibu_hamil'] ? 'Ya' : 'Tidak' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-700 font-medium">Skrining TBC</p>
+                            <p class="text-purple-900">{{ $data['tb_skrining_hasil'] ?? '-' }}</p>
                         </div>
                     </div>
-
                 </div>
             </div>
             @endif

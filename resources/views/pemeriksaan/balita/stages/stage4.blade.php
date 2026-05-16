@@ -71,23 +71,78 @@
             <!-- Summary dari Semua Tahap -->
             @if($data)
             <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
-                <h3 class="text-sm font-semibold text-amber-900 mb-3">Ringkasan Data Pemeriksaan</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                    <div>
-                        <p class="text-amber-700 font-medium">Berat Badan</p>
-                        <p class="text-amber-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                <h3 class="text-sm font-semibold text-amber-900 mb-4">Ringkasan Data Pemeriksaan</h3>
+                
+                <!-- Tahap 1: Penimbangan & Pengukuran -->
+                <div class="mb-4 pb-4 border-b border-amber-300">
+                    <p class="text-xs font-semibold text-amber-700 mb-2">TAHAP 1: Penimbangan & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                        <div>
+                            <p class="text-amber-700 font-medium">Berat Badan</p>
+                            <p class="text-amber-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Status BB</p>
+                            <p class="text-amber-900">{{ $data['naik_tidak_naik'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Tinggi Badan</p>
+                            <p class="text-amber-900">{{ $data['panjang_badan'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Lingkar Kepala</p>
+                            <p class="text-amber-900">{{ $data['lingkar_kepala'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">LILA</p>
+                            <p class="text-amber-900">{{ $data['lingkar_lengan'] ?? '-' }} cm</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-amber-700 font-medium">Status Gizi</p>
-                        <p class="text-amber-900">{{ $data['status_bb_u'] ?? '-' }}</p>
+                </div>
+
+                <!-- Tahap 2: Status Gizi -->
+                <div class="mb-4 pb-4 border-b border-amber-300">
+                    <p class="text-xs font-semibold text-amber-700 mb-2">TAHAP 2: Status Gizi & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-amber-700 font-medium">Status BB/U</p>
+                            <p class="text-amber-900">{{ $data['status_bb_u'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Status PB/U</p>
+                            <p class="text-amber-900">{{ $data['status_pb_u'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Status BB/PB</p>
+                            <p class="text-amber-900">{{ $data['status_bb_pb'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Status LILA</p>
+                            <p class="text-amber-900">{{ $data['status_lila'] ?? '-' }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-amber-700 font-medium">Status Perkembangan</p>
-                        <p class="text-amber-900">{{ $data['perkembangan'] ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-amber-700 font-medium">Status LILA</p>
-                        <p class="text-amber-900">{{ $data['status_lila'] ?? '-' }}</p>
+                </div>
+
+                <!-- Tahap 3: Skrining, Perkembangan & Intervensi -->
+                <div>
+                    <p class="text-xs font-semibold text-amber-700 mb-2">TAHAP 3: Skrining, Perkembangan & Intervensi</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-amber-700 font-medium">Perkembangan</p>
+                            <p class="text-amber-900">{{ $data['perkembangan'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Imunisasi</p>
+                            <p class="text-amber-900">{{ $data['imunisasi'] ? 'Ya' : 'Tidak' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Jenis Imunisasi</p>
+                            <p class="text-amber-900 truncate" title="{{ $data['jenis_imunisasi'] ?? '-' }}">{{ $data['jenis_imunisasi'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-amber-700 font-medium">Vitamin A</p>
+                            <p class="text-amber-900">{{ $data['vitamin_a'] ? 'Ya' : 'Tidak' }}</p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -162,12 +162,13 @@ class PemeriksaanBalitaController extends Controller
                 'berat_badan' => 'required|numeric|min:0|max:50',
                 'panjang_badan' => 'required|numeric|min:0|max:150',
                 'lingkar_kepala' => 'nullable|numeric|min:0|max:100',
+                'lingkar_lengan' => 'nullable|numeric|min:0|max:50',
+                'status_lila' => 'nullable|string',
             ]),
             2 => array_merge($baseRules, [
                 'status_bb_u' => 'nullable|string',
                 'status_pb_u' => 'nullable|string',
                 'status_bb_pb' => 'nullable|string',
-                'lingkar_lengan' => 'nullable|numeric|min:0|max:50',
             ]),
             3 => array_merge($baseRules, [
                 'batuk' => 'nullable|boolean',
@@ -178,6 +179,7 @@ class PemeriksaanBalitaController extends Controller
                 'asi_eksklusif' => 'nullable|boolean',
                 'mpasi' => 'nullable|boolean',
                 'imunisasi' => 'nullable|boolean',
+                'jenis_imunisasi' => 'nullable|string',
                 'vitamin_a' => 'nullable|boolean',
                 'obat_cacing' => 'nullable|boolean',
                 'mt_pangan' => 'nullable|boolean',
@@ -194,7 +196,8 @@ class PemeriksaanBalitaController extends Controller
     public function show(PemeriksaanBalita $pemeriksaanBalita)
     {
         $pemeriksaanBalita->load('balita');
-        return view('pemeriksaan.balita.show', compact('pemeriksaanBalita'));
+        $pemeriksaan = $pemeriksaanBalita;
+        return view('pemeriksaan.balita.show', compact('pemeriksaan'));
     }
 
     public function edit(PemeriksaanBalita $pemeriksaanBalita)
@@ -225,6 +228,7 @@ class PemeriksaanBalitaController extends Controller
             'asi_eksklusif' => 'nullable|string',
             'mpasi' => 'nullable|string',
             'imunisasi' => 'nullable|string',
+            'jenis_imunisasi' => 'nullable|string',
             'vitamin_a' => 'nullable|string',
             'obat_cacing' => 'nullable|string',
             'mt_pangan' => 'nullable|string',
@@ -280,6 +284,9 @@ class PemeriksaanBalitaController extends Controller
         // Calculate status_bb_pb (Weight-for-Height)
         $statusBbPb = $this->calculateWeightForHeight($pemeriksaan->berat_badan, $pemeriksaan->panjang_badan);
 
+        // Calculate status_lila (LILA status)
+        $statusLila = $this->calculateLilaStatus($pemeriksaan->lingkar_lengan);
+
         // Compare against previous pemeriksaan berat badan
         $previous = PemeriksaanBalita::where('balita_identitas_id', $pemeriksaan->balita_identitas_id)
             ->where('id', '!=', $pemeriksaan->id)
@@ -304,6 +311,7 @@ class PemeriksaanBalitaController extends Controller
             'status_bb_u' => $statusBbU,
             'status_pb_u' => $statusPbU,
             'status_bb_pb' => $statusBbPb,
+            'status_lila' => $statusLila,
             'naik_tidak_naik' => $weightTrend,
             'umur' => $ageInMonths,
         ]);
@@ -363,5 +371,13 @@ class PemeriksaanBalitaController extends Controller
         if ($bmi < 15) return 'Kurang';
         if ($bmi > 25) return 'Lebih';
         return 'Normal';
+    }
+
+    private function calculateLilaStatus(?float $lila): string
+    {
+        if (!$lila) {
+            return '-';
+        }
+        return $lila < 23.5 ? 'Kurang' : 'Baik';
     }
 }

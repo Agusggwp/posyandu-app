@@ -206,7 +206,8 @@ class PemeriksaanNifasController extends Controller
     public function show(PemeriksaanNifas $pemeriksaan_nifas)
     {
         $pemeriksaan_nifas->load('nifas');
-        return view('pemeriksaan.nifas.show', ['pemeriksaanNifas' => $pemeriksaan_nifas]);
+        $pemeriksaan = $pemeriksaan_nifas;
+        return view('pemeriksaan.nifas.show', compact('pemeriksaan'));
     }
 
     public function edit(PemeriksaanNifas $pemeriksaan_nifas)

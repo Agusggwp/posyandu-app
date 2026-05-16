@@ -57,6 +57,35 @@
                 </div>
             @endif
 
+            <!-- Summary dari Tahap 1 -->
+            @if($data)
+            <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-4 mb-6">
+                <h3 class="text-sm font-semibold text-cyan-900 mb-3">Data dari Tahap 1</h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                    <div>
+                        <p class="text-cyan-700 font-medium">Berat Badan</p>
+                        <p class="text-cyan-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-700 font-medium">Tinggi Badan</p>
+                        <p class="text-cyan-900">{{ $data['tinggi_badan'] ?? '-' }} cm</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-700 font-medium">Lingkar Perut</p>
+                        <p class="text-cyan-900">{{ $data['lingkar_perut'] ?? '-' }} cm</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-700 font-medium">IMT</p>
+                        <p class="text-cyan-900">{{ $data['imt'] ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-700 font-medium">Status BB</p>
+                        <p class="text-cyan-900">{{ $data['status_berat_badan'] ?? '-' }}</p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Tekanan Darah -->
             <div class="mb-8">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -90,15 +119,10 @@
 
                 <div class="mt-4">
                     <label for="tekanan_darah_status" class="block text-sm font-medium text-gray-700 mb-2">Status Tekanan Darah</label>
-                    <select name="tekanan_darah_status" id="tekanan_darah_status"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('tekanan_darah_status') border-red-500 @enderror">
-                        <option value="">-- Pilih Status --</option>
-                        <option value="Normal" {{ old('tekanan_darah_status', $pemeriksaan->tekanan_darah_status ?? '') == 'Normal' ? 'selected' : '' }}>Normal (&lt;120/&lt;80)</option>
-                        <option value="Elevated" {{ old('tekanan_darah_status', $pemeriksaan->tekanan_darah_status ?? '') == 'Elevated' ? 'selected' : '' }}>Elevated (120-129/&lt;80)</option>
-                        <option value="Stage 1 Hypertension" {{ old('tekanan_darah_status', $pemeriksaan->tekanan_darah_status ?? '') == 'Stage 1 Hypertension' ? 'selected' : '' }}>Stage 1 Hypertension (130-139/80-89)</option>
-                        <option value="Stage 2 Hypertension" {{ old('tekanan_darah_status', $pemeriksaan->tekanan_darah_status ?? '') == 'Stage 2 Hypertension' ? 'selected' : '' }}>Stage 2 Hypertension (≥140/≥90)</option>
-                        <option value="Hypotension" {{ old('tekanan_darah_status', $pemeriksaan->tekanan_darah_status ?? '') == 'Hypotension' ? 'selected' : '' }}>Hypotension (&lt;90/&lt;60)</option>
-                    </select>
+                    <input type="text" id="tekanan_darah_status" name="tekanan_darah_status"
+                           value="{{ old('tekanan_darah_status', $pemeriksaan->tekanan_darah_status ?? '') }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('tekanan_darah_status') border-red-500 @enderror"
+                           readonly>
                     @error('tekanan_darah_status')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -125,23 +149,53 @@
                 </div>
             </div>
 
+            @push('scripts')
+            <script>
+                const sistoloInput = document.getElementById('sistole');
+                const diastoloInput = document.getElementById('diastole');
+                const tekananDarahStatusInput = document.getElementById('tekanan_darah_status');
+
+                function calculateTekananDarahStatus() {
+                    const sistole = parseFloat(sistoloInput.value) || 0;
+                    const diastole = parseFloat(diastoloInput.value) || 0;
+                    
+                    let status = '';
+                    
+                    if (sistole === 0 && diastole === 0) {
+                        status = '';
+                    } else if (sistole < 90 && diastole < 60) {
+                        status = 'Hypotension';
+                    } else if (sistole < 120 && diastole < 80) {
+                        status = 'Normal';
+                    } else if (sistole >= 120 && sistole <= 129 && diastole < 80) {
+                        status = 'Elevated';
+                    } else if (sistole >= 130 && sistole <= 139 && diastole >= 80 && diastole <= 89) {
+                        status = 'Stage 1 Hypertension';
+                    } else if (sistole >= 140 || diastole >= 90) {
+                        status = 'Stage 2 Hypertension';
+                    }
+                    
+                    tekananDarahStatusInput.value = status;
+                }
+
+                if (sistoloInput) sistoloInput.addEventListener('input', calculateTekananDarahStatus);
+                if (diastoloInput) diastoloInput.addEventListener('input', calculateTekananDarahStatus);
+            </script>
+            @endpush
+
             <!-- Tombol Aksi -->
-            <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
-                <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl transition">
-                    <i class="fas fa-arrow-right mr-2"></i>
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-lansia.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Batal
+                </a>
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-lansia.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 1
+                </a>
+                @endif
+                <button type="submit" class="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-xl transition w-full sm:w-auto">
                     Lanjutkan ke Tahap 3
                 </button>
-                @if($pemeriksaan)
-                    <a href="{{ route('pemeriksaan-lansia.stage', ['stage' => 1, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Kembali
-                    </a>
-                @else
-                    <a href="{{ route('pemeriksaan-lansia.index') }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Kembali
-                    </a>
-                @endif
             </div>
         </form>
     </div>

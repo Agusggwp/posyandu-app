@@ -57,6 +57,63 @@
                 </div>
             @endif
 
+            <!-- Summary dari Tahap 1 & 2 -->
+            @if($data)
+            <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-6">
+                <h3 class="text-sm font-semibold text-teal-900 mb-4">Data dari Tahap Sebelumnya</h3>
+                
+                <!-- Tahap 1 -->
+                <div class="mb-3 pb-3 border-b border-teal-300">
+                    <p class="text-xs font-semibold text-teal-700 mb-2">TAHAP 1: Pengukuran Antropometri</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                        <div>
+                            <p class="text-teal-700 font-medium">Berat Badan</p>
+                            <p class="text-teal-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                        </div>
+                        <div>
+                            <p class="text-teal-700 font-medium">Tinggi Badan</p>
+                            <p class="text-teal-900">{{ $data['tinggi_badan'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-teal-700 font-medium">Lingkar Perut</p>
+                            <p class="text-teal-900">{{ $data['lingkar_perut'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-teal-700 font-medium">IMT</p>
+                            <p class="text-teal-900">{{ $data['imt'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-teal-700 font-medium">Status BB</p>
+                            <p class="text-teal-900">{{ $data['status_berat_badan'] ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 2 -->
+                <div>
+                    <p class="text-xs font-semibold text-teal-700 mb-2">TAHAP 2: Pemeriksaan Tekanan Darah, Gula Darah, Kolesterol</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-teal-700 font-medium">Tekanan Darah</p>
+                            <p class="text-teal-900">{{ $data['sistole'] ?? '-' }}/{{ $data['diastole'] ?? '-' }} mmHg</p>
+                        </div>
+                        <div>
+                            <p class="text-teal-700 font-medium">Status TD</p>
+                            <p class="text-teal-900">{{ $data['tekanan_darah_status'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-teal-700 font-medium">Gula Darah</p>
+                            <p class="text-teal-900">{{ $data['gula_darah'] ?? '-' }} mg/dL</p>
+                        </div>
+                        <div>
+                            <p class="text-teal-700 font-medium">Kolesterol</p>
+                            <p class="text-teal-900">{{ $data['kolesterol'] ?? '-' }} mg/dL</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Pemeriksaan Mata -->
             <div class="mb-8">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -142,22 +199,18 @@
             </div>
 
             <!-- Tombol Aksi -->
-            <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
-                <button type="submit" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition">
-                    <i class="fas fa-arrow-right mr-2"></i>
+            <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                <a href="{{ route('pemeriksaan-lansia.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Batal
+                </a>
+                @if($pemeriksaan)
+                <a href="{{ route('pemeriksaan-lansia.stage', ['stage' => 2, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                    Kembali ke Tahap 2
+                </a>
+                @endif
+                <button type="submit" class="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl transition w-full sm:w-auto">
                     Lanjutkan ke Tahap 4
                 </button>
-                @if($pemeriksaan)
-                    <a href="{{ route('pemeriksaan-lansia.stage', ['stage' => 2, 'pemeriksaan_id' => $pemeriksaan->id]) }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Kembali
-                    </a>
-                @else
-                    <a href="{{ route('pemeriksaan-lansia.index') }}" class="px-6 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Kembali
-                    </a>
-                @endif
             </div>
         </form>
     </div>

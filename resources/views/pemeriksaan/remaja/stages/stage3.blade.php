@@ -69,59 +69,97 @@
                 </div>
             @endif
 
+            <!-- Summary dari Tahap 1 & 2 -->
+            @if($data)
+            <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-4 mb-6">
+                <h3 class="text-sm font-semibold text-cyan-900 mb-4">Data dari Tahap Sebelumnya</h3>
+                
+                <!-- Tahap 1 -->
+                <div class="mb-3 pb-3 border-b border-cyan-300">
+                    <p class="text-xs font-semibold text-cyan-700 mb-2">TAHAP 1: Penimbangan & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-cyan-700 font-medium">Berat Badan</p>
+                            <p class="text-cyan-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Tinggi Badan</p>
+                            <p class="text-cyan-900">{{ $data['tinggi_badan'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Status IMT</p>
+                            <p class="text-cyan-900">{{ $data['imt_status'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Lingkar Perut</p>
+                            <p class="text-cyan-900">{{ $data['lingkar_perut'] ?? '-' }} cm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 2 -->
+                <div>
+                    <p class="text-xs font-semibold text-cyan-700 mb-2">TAHAP 2: Pemeriksaan Tekanan Darah, Gula Darah, Hemoglobin</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-cyan-700 font-medium">Tekanan Darah</p>
+                            <p class="text-cyan-900">{{ $data['sistole'] ?? '-' }}/{{ $data['diastole'] ?? '-' }} mmHg</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Status TD</p>
+                            <p class="text-cyan-900">{{ $data['tekanan_darah_status'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Gula Darah</p>
+                            <p class="text-cyan-900">{{ $data['gula_darah'] ?? '-' }} mg/dL</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Anemia</p>
+                            <p class="text-cyan-900">{{ $data['anemia'] ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Skrining TBC</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="batuk" class="block text-sm font-medium text-gray-700 mb-2">Batuk terus menerus</label>
-                        <select name="batuk" id="batuk"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('batuk') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('batuk', $data['batuk'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('batuk', $data['batuk'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('batuk')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+
+                <div class="space-y-3">
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="batuk" id="batuk" value="Ya"
+                               {{ old('batuk', $data['batuk'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="batuk" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Batuk terus menerus
+                        </label>
                     </div>
 
-                    <div>
-                        <label for="demam" class="block text-sm font-medium text-gray-700 mb-2">Demam kurang 2 minggu</label>
-                        <select name="demam" id="demam"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('demam') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('demam', $data['demam'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('demam', $data['demam'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('demam')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="demam" id="demam" value="Ya"
+                               {{ old('demam', $data['demam'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="demam" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Demam kurang 2 minggu
+                        </label>
                     </div>
 
-                    <div>
-                        <label for="bb_turun" class="block text-sm font-medium text-gray-700 mb-2">BB tidak naik atau turun 2 bulan berturut-turut</label>
-                        <select name="bb_turun" id="bb_turun"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('bb_turun') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('bb_turun', $data['bb_turun'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('bb_turun', $data['bb_turun'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('bb_turun')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="bb_turun" id="bb_turun" value="Ya"
+                               {{ old('bb_turun', $data['bb_turun'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="bb_turun" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            BB tidak naik atau turun 2 bulan berturut-turut
+                        </label>
                     </div>
 
-                    <div>
-                        <label for="kontak_tbc" class="block text-sm font-medium text-gray-700 mb-2">Kontak erat pasien TBC</label>
-                        <select name="kontak_tbc" id="kontak_tbc"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('kontak_tbc') border-red-500 @enderror">
-                            <option value="">-- Pilih --</option>
-                            <option value="Ya" {{ old('kontak_tbc', $data['kontak_tbc'] ?? '') === 'Ya' ? 'selected' : '' }}>Ya</option>
-                            <option value="Tidak" {{ old('kontak_tbc', $data['kontak_tbc'] ?? '') === 'Tidak' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @error('kontak_tbc')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="kontak_tbc" id="kontak_tbc" value="Ya"
+                               {{ old('kontak_tbc', $data['kontak_tbc'] ?? '') === 'Ya' ? 'checked' : '' }}
+                               class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-2 focus:ring-cyan-500">
+                        <label for="kontak_tbc" class="ml-3 text-sm text-gray-700 font-medium cursor-pointer flex-1">
+                            Kontak erat pasien TBC
+                        </label>
                     </div>
                 </div>
             </div>

@@ -69,6 +69,82 @@
                 </div>
             @endif
 
+            <!-- Summary dari Semua Tahap -->
+            @if($data)
+            <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-4 mb-6">
+                <h3 class="text-sm font-semibold text-cyan-900 mb-4">Ringkasan Data Pemeriksaan</h3>
+                
+                <!-- Tahap 1 -->
+                <div class="mb-3 pb-3 border-b border-cyan-300">
+                    <p class="text-xs font-semibold text-cyan-700 mb-2">TAHAP 1: Penimbangan & Pengukuran</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-cyan-700 font-medium">Berat Badan</p>
+                            <p class="text-cyan-900">{{ $data['berat_badan'] ?? '-' }} kg</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Tinggi Badan</p>
+                            <p class="text-cyan-900">{{ $data['tinggi_badan'] ?? '-' }} cm</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Status IMT</p>
+                            <p class="text-cyan-900">{{ $data['imt_status'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Lingkar Perut</p>
+                            <p class="text-cyan-900">{{ $data['lingkar_perut'] ?? '-' }} cm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 2 -->
+                <div class="mb-3 pb-3 border-b border-cyan-300">
+                    <p class="text-xs font-semibold text-cyan-700 mb-2">TAHAP 2: Pemeriksaan Tekanan Darah, Gula Darah, Hemoglobin</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-cyan-700 font-medium">Tekanan Darah</p>
+                            <p class="text-cyan-900">{{ $data['sistole'] ?? '-' }}/{{ $data['diastole'] ?? '-' }} mmHg</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Status TD</p>
+                            <p class="text-cyan-900">{{ $data['tekanan_darah_status'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Gula Darah</p>
+                            <p class="text-cyan-900">{{ $data['gula_darah'] ?? '-' }} mg/dL</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Anemia</p>
+                            <p class="text-cyan-900">{{ $data['anemia'] ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 3 -->
+                <div>
+                    <p class="text-xs font-semibold text-cyan-700 mb-2">TAHAP 3: Skrining TBC & Pemeriksaan Kesehatan</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                            <p class="text-cyan-700 font-medium">Batuk</p>
+                            <p class="text-cyan-900">{{ $data['batuk'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Kesehatan Mata</p>
+                            <p class="text-cyan-900">{{ $data['kesehatan_mata'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Kesehatan Gigi</p>
+                            <p class="text-cyan-900">{{ $data['kesehatan_gigi'] ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-cyan-700 font-medium">Imunisasi</p>
+                            <p class="text-cyan-900">{{ $data['imunisasi_status'] ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Edukasi & Rujukan</h3>
                 <div class="grid grid-cols-1 gap-6">
@@ -82,9 +158,18 @@
 
                     <div>
                         <label for="rujukan" class="block text-sm font-medium text-gray-700 mb-2">Rujukan</label>
-                        <input type="text" name="rujukan" id="rujukan"
-                               value="{{ old('rujukan', $data['rujukan'] ?? '') }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('rujukan') border-red-500 @enderror">
+                        <select name="rujukan" id="rujukan"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('rujukan') border-red-500 @enderror">
+                            <option value="">-- Pilih Rujukan --</option>
+                            <option value="Tidak Ada" {{ old('rujukan', $data['rujukan'] ?? '') === 'Tidak Ada' ? 'selected' : '' }}>Tidak Ada</option>
+                            <option value="Puskesmas" {{ old('rujukan', $data['rujukan'] ?? '') === 'Puskesmas' ? 'selected' : '' }}>Puskesmas</option>
+                            <option value="Rumah Sakit" {{ old('rujukan', $data['rujukan'] ?? '') === 'Rumah Sakit' ? 'selected' : '' }}>Rumah Sakit</option>
+                            <option value="Klinik Khusus" {{ old('rujukan', $data['rujukan'] ?? '') === 'Klinik Khusus' ? 'selected' : '' }}>Klinik Khusus</option>
+                            <option value="Dokter Gigi" {{ old('rujukan', $data['rujukan'] ?? '') === 'Dokter Gigi' ? 'selected' : '' }}>Dokter Gigi</option>
+                            <option value="Dokter Mata" {{ old('rujukan', $data['rujukan'] ?? '') === 'Dokter Mata' ? 'selected' : '' }}>Dokter Mata</option>
+                            <option value="Psikolog" {{ old('rujukan', $data['rujukan'] ?? '') === 'Psikolog' ? 'selected' : '' }}>Psikolog</option>
+                            <option value="Lainnya" {{ old('rujukan', $data['rujukan'] ?? '') === 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
                         @error('rujukan')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror

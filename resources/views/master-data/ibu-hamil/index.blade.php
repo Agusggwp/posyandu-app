@@ -26,34 +26,34 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="hidden md:block overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
+        <div class="overflow-x-auto">
+            <table class="min-w-[980px] md:min-w-full divide-y divide-gray-200">
                 <thead class="bg-gradient-to-r from-violet-500 to-purple-600 text-white">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NIK</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama Suami</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Hamil Ke</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">HPL</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Keluarga</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
+                        <th class="px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
+                        <th class="px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NIK</th>
+                        <th class="px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama</th>
+                        <th class="hidden lg:table-cell px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama Suami</th>
+                        <th class="px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Hamil Ke</th>
+                        <th class="hidden sm:table-cell px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">HPL</th>
+                        <th class="hidden xl:table-cell px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Keluarga</th>
+                        <th class="px-4 md:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($ibuHamils as $index => $ibuHamil)
                     <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamils->firstItem() + $index }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->nik }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $ibuHamil->nama }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->nama_suami }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamils->firstItem() + $index }}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->nik }}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $ibuHamil->nama }}</td>
+                        <td class="hidden lg:table-cell px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->nama_suami }}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm">
                             <span class="px-2 py-1 text-xs font-semibold text-purple-800 bg-purple-100 rounded-full">Ke-{{ $ibuHamil->hamil_ke }}</span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->hpl ? $ibuHamil->hpl->format('d/m/Y') : '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->keluarga->nama_kepala_keluarga ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex items-center space-x-2">
+                        <td class="hidden sm:table-cell px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->hpl ? $ibuHamil->hpl->format('d/m/Y') : '-' }}</td>
+                        <td class="hidden xl:table-cell px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ibuHamil->keluarga->nama_kepala_keluarga ?? '-' }}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <a href="{{ route('ibu-hamil.show', $ibuHamil->id) }}" class="inline-flex items-center px-3 py-1.5 bg-violet-100 hover:bg-violet-200 text-violet-700 rounded-lg text-xs font-semibold transition-all duration-200">
                                     <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
                                     Detail
@@ -80,48 +80,11 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">Tidak ada data ibu hamil</td>
+                        <td colspan="8" class="px-4 md:px-6 py-4 text-center text-gray-500">Tidak ada data ibu hamil</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
-        </div>
-
-        <div class="md:hidden p-4 space-y-4 bg-gray-50">
-            @forelse($ibuHamils as $index => $ibuHamil)
-                <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-                    <div class="flex justify-between items-start gap-3">
-                        <div>
-                            <p class="text-xs text-gray-500">No. {{ $ibuHamils->firstItem() + $index }}</p>
-                            <h3 class="text-base font-semibold text-gray-900 break-words">{{ $ibuHamil->nama }}</h3>
-                            <p class="text-sm text-gray-600 mt-1 break-words">NIK: {{ $ibuHamil->nik }}</p>
-                        </div>
-                        <span class="px-2 py-1 text-xs font-semibold text-purple-800 bg-purple-100 rounded-full">Ke-{{ $ibuHamil->hamil_ke }}</span>
-                    </div>
-
-                    <div class="mt-3 space-y-1 text-sm text-gray-700">
-                        <p><span class="font-medium">Nama Suami:</span> {{ $ibuHamil->nama_suami }}</p>
-                        <p><span class="font-medium">HPL:</span> {{ $ibuHamil->hpl ? $ibuHamil->hpl->format('d/m/Y') : '-' }}</p>
-                        <p class="break-words"><span class="font-medium">Keluarga:</span> {{ $ibuHamil->keluarga->nama_kepala_keluarga ?? '-' }}</p>
-                    </div>
-
-                    <div class="mt-4 grid grid-cols-2 gap-2">
-                        <a href="{{ route('ibu-hamil.show', $ibuHamil->id) }}" class="inline-flex items-center justify-center px-3 py-2 bg-violet-100 hover:bg-violet-200 text-violet-700 rounded-lg text-xs font-semibold transition-all duration-200">Detail</a>
-                        @can('manage_ibu_hamil')
-                        <a href="{{ route('ibu-hamil.edit', $ibuHamil->id) }}" class="inline-flex items-center justify-center px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg text-xs font-semibold transition-all duration-200">Edit</a>
-                        @endcan
-                        @can('delete_data')
-                        <form action="{{ route('ibu-hamil.destroy', $ibuHamil->id) }}" method="POST" class="col-span-2" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="w-full inline-flex items-center justify-center px-3 py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-lg text-xs font-semibold transition-all duration-200">Hapus</button>
-                        </form>
-                        @endcan
-                    </div>
-                </div>
-            @empty
-                <div class="bg-white border border-gray-200 rounded-xl p-6 text-center text-gray-500">Tidak ada data ibu hamil</div>
-            @endforelse
         </div>
 
         <div class="px-6 py-4 bg-gray-50">

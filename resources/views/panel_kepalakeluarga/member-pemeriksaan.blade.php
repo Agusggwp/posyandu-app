@@ -154,7 +154,27 @@
                             Data periksa belum ada.
                         </div>
                     @else
-                        <div class="mt-4 overflow-x-auto rounded-lg border border-gray-200">
+                        <div class="mt-4 space-y-3 md:hidden">
+                            @foreach($riwayatPemeriksaan as $idx => $row)
+                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div>
+                                            <p class="text-xs font-semibold uppercase text-gray-500">Tanggal</p>
+                                            <p class="text-sm font-semibold text-gray-900">
+                                                {{ !empty($row['tanggal']) ? \Illuminate\Support\Carbon::parse($row['tanggal'])->format('d M Y H:i') : '-' }}
+                                            </p>
+                                        </div>
+                                        <span class="rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700">#{{ $idx + 1 }}</span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p class="text-xs font-semibold uppercase text-gray-500">Catatan Ringkas</p>
+                                        <p class="mt-1 text-sm text-gray-700">{{ $row['catatan'] ?: '-' }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="mt-4 hidden overflow-x-auto rounded-lg border border-gray-200 md:block">
                             <table class="min-w-full border-collapse">
                                 <thead class="bg-gray-50 text-gray-600">
                                     <tr>

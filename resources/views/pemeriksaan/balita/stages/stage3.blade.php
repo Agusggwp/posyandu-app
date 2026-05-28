@@ -263,7 +263,7 @@
 
             <!-- Form Actions -->
             <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-                <a href="{{ route('pemeriksaan-balita.create') }}" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
+                <a href="{{ route('pemeriksaan-balita.create') }}#riwayat-belum-selesai" class="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition w-full sm:w-auto text-center">
                     Batal
                 </a>
                 @if($pemeriksaan)

@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+    <div id="riwayat-belum-selesai" class="mt-8 bg-white rounded-lg shadow-lg p-6">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-800">
                 <i class="fas fa-clipboard-list text-teal-600 mr-2"></i>

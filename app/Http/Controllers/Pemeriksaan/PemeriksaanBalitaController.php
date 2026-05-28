@@ -54,10 +54,14 @@ class PemeriksaanBalitaController extends Controller
                 ->get()
                 ->unique('balita_identitas_id')
                 ->mapWithKeys(function ($item) {
+                    $previousDate = $item->tanggal_kunjungan
+                        ? \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('Y-m-d')
+                        : '-';
+
                     return [
                         $item->balita_identitas_id => [
                             'berat_badan' => $item->berat_badan,
-                            'tanggal_kunjungan' => optional($item->tanggal_kunjungan)->format('Y-m-d') ?? '-',
+                            'tanggal_kunjungan' => $previousDate,
                         ],
                     ];
                 })
@@ -147,7 +151,18 @@ class PemeriksaanBalitaController extends Controller
             $this->calculateStatuses($pemeriksaan);
         }
 
-        return redirect()->route('pemeriksaan-balita.create')->with('success', "Tahap {$stage} berhasil disimpan.");
+        if ($stage < 4) {
+            return redirect()
+                ->route('pemeriksaan-balita.stage', [
+                    'stage' => $stage + 1,
+                    'pemeriksaan_id' => $pemeriksaan->id,
+                ])
+                ->with('success', "Tahap {$stage} berhasil disimpan.");
+        }
+
+        return redirect()
+            ->route('pemeriksaan-balita.show', $pemeriksaan->id)
+            ->with('success', 'Pemeriksaan balita berhasil diselesaikan');
     }
 
     private function stageRules(int $stage): array

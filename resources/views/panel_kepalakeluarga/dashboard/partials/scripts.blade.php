@@ -63,8 +63,21 @@
         document.getElementById('member-glucose').textContent = data.glucose;
         document.getElementById('member-checkup-date').textContent = data.checkupDate;
         const checkupTable = document.getElementById('member-checkup-table');
+        const checkupMobile = document.getElementById('member-checkup-mobile');
+        const mobileTemplate = document.getElementById('member-checkup-mobile-template');
         const memberCheckups = (checkupHistory[memberName] || []).flatMap(monthData => monthData.checkups || []);
         checkupTable.innerHTML = memberCheckups.length ? memberCheckups.slice(0, 10).map(checkup => `<tr><td class="px-4 py-3 text-gray-700">${checkup.date}</td><td class="px-4 py-3 text-gray-700">Pemeriksaan Kesehatan</td><td class="px-4 py-3"><span class="${checkup.status === 'Sehat' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'} px-2 py-1 rounded text-xs">${checkup.status}</span></td><td class="px-4 py-3 text-gray-600">TD: ${checkup.bp}, BB: ${checkup.weight}, GDS: ${checkup.glucose}</td></tr>`).join('') : '<tr><td colspan="4" class="px-4 py-3 text-gray-500 text-center">Belum ada data pemeriksaan.</td></tr>';
+        if (checkupMobile && mobileTemplate) {
+            checkupMobile.innerHTML = memberCheckups.length ? memberCheckups.slice(0, 10).map(checkup => {
+                const node = mobileTemplate.content.cloneNode(true);
+                const statusClass = checkup.status === 'Sehat' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+                node.querySelector('.member-checkup-date-mobile').textContent = checkup.date;
+                node.querySelector('.member-checkup-status-mobile').textContent = checkup.status;
+                node.querySelector('.member-checkup-status-mobile').className = `member-checkup-status-mobile rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass}`;
+                node.querySelector('.member-checkup-note-mobile').textContent = `TD: ${checkup.bp}, BB: ${checkup.weight}, GDS: ${checkup.glucose}`;
+                return node.firstElementChild.outerHTML;
+            }).join('') : '<div class="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-4 text-center text-sm text-gray-500">Belum ada data pemeriksaan.</div>';
+        }
         document.getElementById('member-detail-modal').classList.remove('hidden');
         document.getElementById('member-detail-modal').classList.add('flex');
         setTimeout(() => createWeightChart(data.weightHistory, data.dateLabels), 100);

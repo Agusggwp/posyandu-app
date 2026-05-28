@@ -33,7 +33,26 @@
             </div>
             <div>
                 <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-history text-orange-500"></i>Riwayat Pemeriksaan</h3>
-                <div class="overflow-x-auto">
+                <div class="space-y-3 md:hidden">
+                    <template id="member-checkup-mobile-template">
+                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <p class="text-xs font-semibold uppercase text-gray-500">Tanggal</p>
+                                    <p class="member-checkup-date-mobile text-sm font-semibold text-gray-900"></p>
+                                </div>
+                                <span class="member-checkup-status-mobile rounded-full px-2.5 py-1 text-xs font-semibold"></span>
+                            </div>
+                            <div class="mt-3 grid grid-cols-1 gap-2 text-sm text-gray-700">
+                                <p><span class="font-semibold text-gray-500">Jenis:</span> Pemeriksaan Kesehatan</p>
+                                <p><span class="font-semibold text-gray-500">Catatan:</span> <span class="member-checkup-note-mobile"></span></p>
+                            </div>
+                        </div>
+                    </template>
+                    <div id="member-checkup-mobile" class="space-y-3"></div>
+                </div>
+
+                <div class="hidden overflow-x-auto md:block">
                     <table class="w-full text-sm">
                         <thead class="bg-gray-100"><tr><th class="px-4 py-2 text-left text-gray-700 font-semibold">Tanggal</th><th class="px-4 py-2 text-left text-gray-700 font-semibold">Jenis Pemeriksaan</th><th class="px-4 py-2 text-left text-gray-700 font-semibold">Hasil</th><th class="px-4 py-2 text-left text-gray-700 font-semibold">Catatan</th></tr></thead>
                         <tbody id="member-checkup-table" class="divide-y divide-gray-200"></tbody>

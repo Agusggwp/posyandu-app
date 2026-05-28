@@ -91,7 +91,6 @@
 
             <div class="border-t pt-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Skrining TBC</h3>
-                <p class="text-sm text-gray-600 mb-4">Jika 2 gejala terpenuhi maka dirujuk ke Puskesmas</p>
 
                 <div class="space-y-3 mb-6">
                     <div class="flex items-center">

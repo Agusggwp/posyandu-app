@@ -11,9 +11,18 @@ use Illuminate\Http\Request;
 
 class PemeriksaanNifasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pemeriksaans = PemeriksaanNifas::with('nifas')->latest()->paginate(10);
+        $query = PemeriksaanNifas::with('nifas');
+        
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->whereHas('nifas', function ($q) use ($search) {
+                $q->where('nama_ibu', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $pemeriksaans = $query->latest()->paginate(10);
         return view('pemeriksaan.nifas.index', compact('pemeriksaans'));
     }
 

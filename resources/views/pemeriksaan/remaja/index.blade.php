@@ -10,6 +10,19 @@
         <a href="{{ route('pemeriksaan-remaja.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-sky-700 to-cyan-900 hover:from-sky-800 hover:to-cyan-950 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">+ Tambah Pemeriksaan</a>
     </div>
 
+    <!-- Search Bar -->
+    <form method="GET" action="{{ route('pemeriksaan-remaja.index') }}" class="mb-6">
+        <div class="flex gap-2 flex-col sm:flex-row">
+            <div class="flex-1">
+                <input type="text" name="search" placeholder="Cari nama remaja..." value="{{ request('search') }}" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-700 focus:border-transparent">
+            </div>
+            <button type="submit" class="bg-gradient-to-r from-sky-700 to-cyan-900 hover:from-sky-800 hover:to-cyan-950 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">Cari</button>
+            @if(request('search'))
+            <a href="{{ route('pemeriksaan-remaja.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-center">Hapus Filter</a>
+            @endif
+        </div>
+    </form>
+
     <div class="bg-white rounded-lg shadow-lg overflow-hidden hidden md:block">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">

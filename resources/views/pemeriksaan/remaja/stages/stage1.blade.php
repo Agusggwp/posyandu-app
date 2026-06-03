@@ -26,6 +26,15 @@
             @csrf
             <input type="hidden" name="pemeriksaan_id" value="{{ old('pemeriksaan_id', $data['id'] ?? '') }}">
 
+            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <label for="search_remaja" class="block text-sm font-medium text-gray-700 mb-2">
+                    Cari Remaja
+                </label>
+                <input type="text" id="search_remaja" placeholder="Ketik nama atau NIK remaja..." 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent mb-3">
+                <p class="text-xs text-gray-500">Total: <span id="total_remaja">{{ count($remajas) }}</span> remaja</p>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                     <label for="remaja_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">
@@ -140,6 +149,39 @@
 
 @push('scripts')
 <script>
+    // Search functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search_remaja');
+        const selectDropdown = document.getElementById('remaja_identitas_id');
+        const totalCount = document.getElementById('total_remaja');
+
+        if (searchInput && selectDropdown) {
+            const allOptions = Array.from(selectDropdown.options).map(opt => ({
+                value: opt.value,
+                text: opt.text,
+                element: opt
+            }));
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                let visibleCount = 0;
+
+                allOptions.forEach(opt => {
+                    if (opt.value === '') {
+                        opt.element.style.display = '';
+                        return;
+                    }
+
+                    const isMatch = opt.text.toLowerCase().includes(searchTerm);
+                    opt.element.style.display = isMatch ? '' : 'none';
+                    if (isMatch) visibleCount++;
+                });
+
+                totalCount.textContent = visibleCount;
+            });
+        }
+    });
+
     function calculateImtStatus() {
         const weightInput = document.getElementById('berat_badan');
         const heightInput = document.getElementById('tinggi_badan');

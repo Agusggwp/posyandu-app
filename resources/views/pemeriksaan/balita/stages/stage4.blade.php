@@ -35,6 +35,15 @@
                     <p class="text-sm text-green-900 font-medium">Melanjutkan pemeriksaan untuk {{ $pemeriksaan->balita->nama_bayi ?? '-' }}. Data balita dan tanggal kunjungan sudah dikunci dari tahap sebelumnya.</p>
                 </div>
             @else
+                <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <label for="search_balita" class="block text-sm font-medium text-gray-700 mb-2">
+                        Cari Balita
+                    </label>
+                    <input type="text" id="search_balita" placeholder="Ketik nama atau NIK balita..." 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent mb-3">
+                    <p class="text-xs text-gray-500">Total: <span id="total_balita">{{ count($balitas) }}</span> balita</p>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label for="balita_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">
@@ -216,4 +225,40 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search_balita');
+        const selectDropdown = document.getElementById('balita_identitas_id');
+        const totalCount = document.getElementById('total_balita');
+
+        if (searchInput && selectDropdown) {
+            const allOptions = Array.from(selectDropdown.options).map(opt => ({
+                value: opt.value,
+                text: opt.text,
+                element: opt
+            }));
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                let visibleCount = 0;
+
+                allOptions.forEach(opt => {
+                    if (opt.value === '') {
+                        opt.element.style.display = '';
+                        return;
+                    }
+
+                    const isMatch = opt.text.toLowerCase().includes(searchTerm);
+                    opt.element.style.display = isMatch ? '' : 'none';
+                    if (isMatch) visibleCount++;
+                });
+
+                totalCount.textContent = visibleCount;
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

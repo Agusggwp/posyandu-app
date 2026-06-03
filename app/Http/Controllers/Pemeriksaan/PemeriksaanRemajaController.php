@@ -10,9 +10,18 @@ use Illuminate\Http\Request;
 
 class PemeriksaanRemajaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pemeriksaans = PemeriksaanRemaja::with('remaja')->latest()->paginate(10);
+        $query = PemeriksaanRemaja::with('remaja');
+        
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->whereHas('remaja', function ($q) use ($search) {
+                $q->where('nama_anak', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $pemeriksaans = $query->latest()->paginate(10);
         return view('pemeriksaan.remaja.index', compact('pemeriksaans'));
     }
 

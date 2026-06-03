@@ -10,9 +10,18 @@ use Illuminate\Http\Request;
 
 class PemeriksaanIbuHamilController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pemeriksaans = PemeriksaanIbuHamil::with('ibuHamil')->orderByDesc('tanggal_kunjungan')->paginate(10);
+        $query = PemeriksaanIbuHamil::with('ibuHamil');
+        
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->whereHas('ibuHamil', function ($q) use ($search) {
+                $q->where('nama_ibu', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $pemeriksaans = $query->orderByDesc('tanggal_kunjungan')->paginate(10);
         return view('pemeriksaan.ibu-hamil.index', compact('pemeriksaans'));
     }
 

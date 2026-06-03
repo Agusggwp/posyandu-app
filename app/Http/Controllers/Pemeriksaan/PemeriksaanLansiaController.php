@@ -10,9 +10,18 @@ use Illuminate\Http\Request;
 
 class PemeriksaanLansiaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pemeriksaans = PemeriksaanLansia::with('lansia')->orderByDesc('waktu_kunjungan')->paginate(10);
+        $query = PemeriksaanLansia::with('lansia');
+        
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->whereHas('lansia', function ($q) use ($search) {
+                $q->where('nama', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $pemeriksaans = $query->orderByDesc('waktu_kunjungan')->paginate(10);
         return view('pemeriksaan.lansia.index', compact('pemeriksaans'));
     }
 

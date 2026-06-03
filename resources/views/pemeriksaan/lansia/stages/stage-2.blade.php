@@ -31,6 +31,15 @@
             @if($pemeriksaan)
                 <input type="hidden" name="pemeriksaan_id" value="{{ $pemeriksaan->id }}">
             @else
+                <div class="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <label for="search_lansia" class="block text-sm font-medium text-gray-700 mb-2">
+                        Cari Lansia
+                    </label>
+                    <input type="text" id="search_lansia" placeholder="Ketik nama atau NIK lansia..." 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent mb-3">
+                    <p class="text-xs text-gray-500">Total: <span id="total_lansia">{{ count($lansias) }}</span> lansia</p>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label for="dewasa_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Lansia <span class="text-red-500">*</span></label>
@@ -200,4 +209,40 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search_lansia');
+        const selectDropdown = document.getElementById('lansia_identitas_id');
+        const totalCount = document.getElementById('total_lansia');
+
+        if (searchInput && selectDropdown) {
+            const allOptions = Array.from(selectDropdown.options).map(opt => ({
+                value: opt.value,
+                text: opt.text,
+                element: opt
+            }));
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                let visibleCount = 0;
+
+                allOptions.forEach(opt => {
+                    if (opt.value === '') {
+                        opt.element.style.display = '';
+                        return;
+                    }
+
+                    const isMatch = opt.text.toLowerCase().includes(searchTerm);
+                    opt.element.style.display = isMatch ? '' : 'none';
+                    if (isMatch) visibleCount++;
+                });
+
+                totalCount.textContent = visibleCount;
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

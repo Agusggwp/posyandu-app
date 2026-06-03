@@ -11,9 +11,18 @@ use Illuminate\Http\Request;
 
 class PemeriksaanBalitaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pemeriksaans = PemeriksaanBalita::with('balita')->orderByDesc('tanggal_kunjungan')->paginate(10);
+        $query = PemeriksaanBalita::with('balita');
+        
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->whereHas('balita', function ($q) use ($search) {
+                $q->where('nama_bayi', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $pemeriksaans = $query->orderByDesc('tanggal_kunjungan')->paginate(10);
         return view('pemeriksaan.balita.index', compact('pemeriksaans'));
     }
 

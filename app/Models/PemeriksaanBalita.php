@@ -12,6 +12,7 @@ class PemeriksaanBalita extends Model
         'balita_identitas_id',
         'tahap_terakhir',
         'tanggal_kunjungan',
+        'tanggal_pemeriksaan',
         'umur',
         'waktu_kunjungan',
         'berat_badan',
@@ -41,6 +42,8 @@ class PemeriksaanBalita extends Model
     ];
 
     protected $casts = [
+        'tanggal_kunjungan' => 'date',
+        'tanggal_pemeriksaan' => 'date',
         'waktu_kunjungan' => 'datetime',
         'batuk' => 'boolean',
         'demam' => 'boolean',

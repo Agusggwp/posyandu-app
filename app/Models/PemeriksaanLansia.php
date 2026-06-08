@@ -11,6 +11,8 @@ class PemeriksaanLansia extends Model
     protected $fillable = [
         'dewasa_identitas_id',
         'waktu_kunjungan',
+        'tanggal_kunjungan',
+        'tanggal_pemeriksaan',
         'berat_badan',
         'tinggi_badan',
         'imt',
@@ -43,7 +45,13 @@ class PemeriksaanLansia extends Model
     ];
 
     protected $casts = [
+        'tanggal_kunjungan' => 'date',
+        'tanggal_pemeriksaan' => 'date',
         'waktu_kunjungan' => 'datetime',
+        'batuk' => 'boolean',
+        'demam' => 'boolean',
+        'bb_turun' => 'boolean',
+        'kontak_tbc' => 'boolean',
         'napas_berat' => 'boolean',
         'dahak' => 'boolean',
         'batuk' => 'boolean',

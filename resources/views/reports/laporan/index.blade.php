@@ -8,7 +8,7 @@
     </div>
 
     <!-- Cards Laporan -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Laporan Balita -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-emerald-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div class="bg-gradient-to-r from-emerald-500 to-teal-600 p-6">
@@ -74,9 +74,50 @@
                 </a>
             </div>
         </div>
-    </div>
 
-    <!-- Informasi -->
+        <!-- Laporan Nifas -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-rose-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-gradient-to-r from-rose-500 to-pink-600 p-6">
+                <div class="flex items-center justify-center w-16 h-16 bg-white/20 rounded-xl mb-4">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">Laporan Nifas</h3>
+            </div>
+            <div class="p-6">
+                <p class="text-slate-600 mb-6 text-sm leading-relaxed">Laporan pemeriksaan ibu nifas meliputi tahap pemulihan, asupan gizi, dan tekanan darah</p>
+                <a href="{{ route('laporan.nifas') }}" class="inline-flex items-center justify-center w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                    </svg>
+                    Lihat Laporan
+                </a>
+            </div>
+        </div>
+
+        <!-- Laporan Remaja -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-indigo-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-gradient-to-r from-indigo-500 to-blue-600 p-6">
+                <div class="flex items-center justify-center w-16 h-16 bg-white/20 rounded-xl mb-4">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">Laporan Remaja</h3>
+            </div>
+            <div class="p-6">
+                <p class="text-slate-600 mb-6 text-sm leading-relaxed">Laporan pemeriksaan remaja mencakup antropometri, tekanan darah, hemoglobin, dan status gizi</p>
+                <a href="{{ route('laporan.remaja') }}" class="inline-flex items-center justify-center w-full bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                    </svg>
+                    Lihat Laporan
+                </a>
+            </div>
+        </div>
     <div class="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
         <div class="flex items-center mb-6">
             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-4">

@@ -7,9 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Balita;
 use App\Models\IbuHamil;
 use App\Models\Lansia;
+use App\Models\Nifas;
+use App\Models\Remaja;
 use App\Models\PemeriksaanBalita;
 use App\Models\PemeriksaanIbuHamil;
 use App\Models\PemeriksaanLansia;
+use App\Models\PemeriksaanNifas;
+use App\Models\PemeriksaanRemaja;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -24,10 +28,10 @@ class LaporanController extends Controller
         $bulan = $request->input('bulan', date('m'));
         $tahun = $request->input('tahun', date('Y'));
         
-        $pemeriksaans = PemeriksaanBalita::with('balita', 'petugas')
-            ->whereMonth('tanggal_pemeriksaan', $bulan)
-            ->whereYear('tanggal_pemeriksaan', $tahun)
-            ->orderBy('tanggal_pemeriksaan', 'desc')
+        $pemeriksaans = PemeriksaanBalita::with('balita')
+            ->whereMonth('tanggal_kunjungan', $bulan)
+            ->whereYear('tanggal_kunjungan', $tahun)
+            ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
             
         $statistik = [
@@ -45,10 +49,10 @@ class LaporanController extends Controller
         $bulan = $request->input('bulan', date('m'));
         $tahun = $request->input('tahun', date('Y'));
         
-        $pemeriksaans = PemeriksaanIbuHamil::with('ibuHamil', 'petugas')
-            ->whereMonth('tanggal_pemeriksaan', $bulan)
-            ->whereYear('tanggal_pemeriksaan', $tahun)
-            ->orderBy('tanggal_pemeriksaan', 'desc')
+        $pemeriksaans = PemeriksaanIbuHamil::with('ibuHamil')
+            ->whereMonth('tanggal_kunjungan', $bulan)
+            ->whereYear('tanggal_kunjungan', $tahun)
+            ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
         
         return view('reports.laporan.ibu-hamil', compact('pemeriksaans', 'bulan', 'tahun'));
@@ -59,13 +63,41 @@ class LaporanController extends Controller
         $bulan = $request->input('bulan', date('m'));
         $tahun = $request->input('tahun', date('Y'));
         
-        $pemeriksaans = PemeriksaanLansia::with('lansia', 'petugas')
-            ->whereMonth('tanggal_pemeriksaan', $bulan)
-            ->whereYear('tanggal_pemeriksaan', $tahun)
-            ->orderBy('tanggal_pemeriksaan', 'desc')
+        $pemeriksaans = PemeriksaanLansia::with('lansia')
+            ->whereMonth('tanggal_kunjungan', $bulan)
+            ->whereYear('tanggal_kunjungan', $tahun)
+            ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
         
         return view('reports.laporan.lansia', compact('pemeriksaans', 'bulan', 'tahun'));
+    }
+
+    public function nifas(Request $request)
+    {
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
+        
+        $pemeriksaans = PemeriksaanNifas::with('nifas')
+            ->whereMonth('tanggal_kunjungan', $bulan)
+            ->whereYear('tanggal_kunjungan', $tahun)
+            ->orderBy('tanggal_kunjungan', 'desc')
+            ->get();
+        
+        return view('reports.laporan.nifas', compact('pemeriksaans', 'bulan', 'tahun'));
+    }
+
+    public function remaja(Request $request)
+    {
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
+        
+        $pemeriksaans = PemeriksaanRemaja::with('remaja')
+            ->whereMonth('tanggal_kunjungan', $bulan)
+            ->whereYear('tanggal_kunjungan', $tahun)
+            ->orderBy('tanggal_kunjungan', 'desc')
+            ->get();
+        
+        return view('reports.laporan.remaja', compact('pemeriksaans', 'bulan', 'tahun'));
     }
 
     public function exportExcel($type)

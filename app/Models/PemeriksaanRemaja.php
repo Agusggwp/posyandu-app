@@ -11,6 +11,7 @@ class PemeriksaanRemaja extends Model
     protected $fillable = [
         'remaja_identitas_id',
         'waktu_kunjungan',
+        'tanggal_kunjungan',
         'tahap_terakhir',
         'berat_badan',
         'tinggi_badan',
@@ -36,6 +37,16 @@ class PemeriksaanRemaja extends Model
         'masalah_keamanan',
         'edukasi',
         'rujukan',
+    ];
+
+    protected $casts = [
+        'waktu_kunjungan' => 'datetime',
+        'tanggal_kunjungan' => 'date',
+        'batuk' => 'boolean',
+        'demam' => 'boolean',
+        'bb_turun' => 'boolean',
+        'kontak_tbc' => 'boolean',
+        'anemia' => 'boolean',
     ];
 
     public function remaja()

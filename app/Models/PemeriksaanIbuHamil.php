@@ -12,6 +12,7 @@ class PemeriksaanIbuHamil extends Model
         'ibu_hamil_identitas_id',
         'tinggi_badan',
         'berat_badan',
+        'tanggal_pemeriksaan',
         'lingkar_lengan',
         'usia_kehamilan',
         'status_bb',
@@ -40,6 +41,7 @@ class PemeriksaanIbuHamil extends Model
 
     protected $casts = [
         'tanggal_kunjungan' => 'date',
+        'tanggal_pemeriksaan' => 'date',
     ];
 
     public function ibuHamil()

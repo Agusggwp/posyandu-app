@@ -176,6 +176,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/laporan/balita', [LaporanController::class, 'balita'])->name('laporan.balita');
         Route::get('/laporan/ibu-hamil', [LaporanController::class, 'ibuHamil'])->name('laporan.ibu-hamil');
         Route::get('/laporan/lansia', [LaporanController::class, 'lansia'])->name('laporan.lansia');
+        Route::get('/laporan/nifas', [LaporanController::class, 'nifas'])->name('laporan.nifas');
+        Route::get('/laporan/remaja', [LaporanController::class, 'remaja'])->name('laporan.remaja');
     });
     
     // Export - Hanya Admin

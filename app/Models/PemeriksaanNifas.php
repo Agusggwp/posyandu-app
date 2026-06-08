@@ -33,6 +33,11 @@ class PemeriksaanNifas extends Model
         'rujukan',
     ];
 
+    protected $casts = [
+        'tanggal_kunjungan' => 'date',
+        'waktu_kunjungan' => 'datetime',
+    ];
+
     public function nifas()
     {
         return $this->belongsTo(Nifas::class, 'nifas_identitas_id');

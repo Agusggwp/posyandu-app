@@ -346,6 +346,23 @@
                 margin-top: 6px;
             }
         }
+
+        @media print {
+            .sidebar, .topbar, .menu-toggle, .sidebar-overlay {
+                display: none !important;
+            }
+            .app-layout {
+                display: block !important;
+            }
+            .main-panel {
+                grid-column: 1 !important;
+                display: block !important;
+            }
+            .main-content {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+        }
     </style>
 </head>
 <body class="font-sans antialiased">

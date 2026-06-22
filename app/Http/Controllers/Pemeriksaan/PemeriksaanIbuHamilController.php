@@ -106,18 +106,16 @@ class PemeriksaanIbuHamilController extends Controller
             if ($previous) {
                 if ($validated['berat_badan'] > $previous->berat_badan) {
                     $validated['status_bb'] = 'Naik';
-                } elseif ($validated['berat_badan'] < $previous->berat_badan) {
-                    $validated['status_bb'] = 'Turun';
                 } else {
-                    $validated['status_bb'] = 'Tetap';
+                    $validated['status_bb'] = 'Tidak';
                 }
-            } elseif (!empty($validated['berat_badan'])) {
-                $validated['status_bb'] = 'Pertama';
+            } else {
+                $validated['status_bb'] = null;
             }
 
             // Calculate status_lila
             if (isset($validated['lingkar_lengan'])) {
-                $validated['status_lila'] = $validated['lingkar_lengan'] < 23.5 ? 'Kurang' : 'Baik';
+                $validated['status_lila'] = $validated['lingkar_lengan'] < 23.5 ? 'Merah' : 'Hijau';
             }
         }
 
@@ -339,7 +337,7 @@ class PemeriksaanIbuHamilController extends Controller
                 'usia_kehamilan' => 'nullable|integer|min:0|max:60',
                 'berat_badan' => 'nullable|numeric|min:0',
                 'lingkar_lengan' => 'nullable|numeric|min:0',
-                'status_bb' => 'nullable|in:Naik,Turun,Tetap,Pertama',
+                'status_bb' => 'nullable|string',
                 'status_lila' => 'nullable|string',
             ],
             2 => $baseRules + [

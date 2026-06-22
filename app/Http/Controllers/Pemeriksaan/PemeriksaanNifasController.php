@@ -289,7 +289,7 @@ class PemeriksaanNifasController extends Controller
         return match ($stage) {
             1 => $baseRules + [
                 'berat_badan' => 'nullable|numeric|min:0',
-                'naik_turun' => 'nullable|in:Naik,Turun,Tetap',
+                'naik_turun' => 'nullable|string',
                 'tinggi_badan' => 'nullable|numeric|min:0',
                 'lila' => 'nullable|numeric|min:0|max:100',
                 'status_gizi' => 'nullable|in:Hijau,Kuning,Merah',

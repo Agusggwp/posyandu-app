@@ -7,7 +7,7 @@
             <h2 class="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Laporan Pemeriksaan Balita</h2>
             <p class="text-slate-600 mt-2">Filter dan analisis data pemeriksaan balita</p>
         </div>
-        <a href="{{ route('laporan.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <a href="{{ route('laporan.index') }}" class="no-print bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
             ← Kembali
         </a>
     </div>
@@ -47,8 +47,8 @@
     </div>
 
     <!-- Statistik Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl shadow-lg p-6 text-white">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6 print-cards">
+        <div class="bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-semibold">Total Pemeriksaan</h3>
                 <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -62,7 +62,7 @@
             <p class="text-indigo-100 text-sm mt-1">Pemeriksaan bulan ini</p>
         </div>
 
-        <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-semibold">Gizi Normal</h3>
                 <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -75,7 +75,7 @@
             <p class="text-emerald-100 text-sm mt-1">Balita sehat</p>
         </div>
 
-        <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-semibold">Gizi Kurang</h3>
                 <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -88,7 +88,7 @@
             <p class="text-amber-100 text-sm mt-1">Perlu perhatian</p>
         </div>
 
-        <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-semibold">Stunting</h3>
                 <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -115,7 +115,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Tanggal</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Nama Balita</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">BB (kg)</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">TB (cm)</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">PB (cm)</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">LK (cm)</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Imunisasi</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Vitamin</th>
@@ -129,7 +129,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->tanggal_kunjungan->format('d/m/Y') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ $p->balita->nama ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->berat_badan }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->tinggi_badan }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->panjang_badan ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->lingkar_kepala ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->imunisasi ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->vitamin_a ?? '-' }}</td>
@@ -160,13 +160,89 @@
     </div>
 </div>
 
+    <!-- Tanda Tangan Cetak -->
+    <div class="hidden print:block mt-16 right-0 w-64 text-center float-right">
+        <p class="mb-20">Mengetahui,</p>
+        <p class="font-bold border-b border-black pb-1 mb-1">Ketua Posyandu</p>
+        <p>NIP. .........................</p>
+    </div>
+</div>
+
 <style>
     @media print {
-        .no-print, nav, footer, button, a[href*="kembali"] {
+        @page { margin: 1.5cm; size: landscape; }
+        body { 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+            background: white !important;
+        }
+        .print-cards {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 1rem !important;
+            margin-bottom: 2rem !important;
+        }
+        .print-cards > div {
+            flex: 1 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        .no-print, nav, footer, form, button, a[href*="kembali"] {
             display: none !important;
         }
         .max-w-7xl {
             max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+        .card-print {
+            border: 1px solid #e2e8f0 !important;
+            color: black !important;
+            background: white !important;
+            box-shadow: none !important;
+        }
+        .card-print p, .card-print h3 {
+            color: black !important;
+        }
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin-bottom: 2rem !important;
+        }
+        th, td {
+            border: 1px solid #cbd5e1 !important;
+            padding: 8px !important;
+        }
+        th {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+            font-weight: bold !important;
+        }
+        h2 {
+            text-align: center;
+            font-size: 24pt !important;
+            margin-bottom: 5px !important;
+            background: none !important;
+            -webkit-text-fill-color: black !important;
+            color: black !important;
+        }
+        h2 + p {
+            text-align: center;
+            margin-bottom: 20px !important;
+        }
+        .bg-gradient-to-r {
+            background: none !important;
+            color: black !important;
+        }
+        .shadow-lg {
+            box-shadow: none !important;
+        }
+        .rounded-2xl {
+            border-radius: 0 !important;
+        }
+        .print\:block {
+            display: block !important;
         }
     }
 </style>

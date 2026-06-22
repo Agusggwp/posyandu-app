@@ -54,8 +54,15 @@ class LaporanController extends Controller
             ->whereYear('tanggal_kunjungan', $tahun)
             ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
+            
+        $statistik = [
+            'total' => $pemeriksaans->count(),
+            'bb_naik' => $pemeriksaans->where('status_bb', 'Naik')->count(),
+            'td_normal' => $pemeriksaans->where('status_tekanan_darah', 'Normal')->count(),
+            'td_tinggi' => $pemeriksaans->where('status_tekanan_darah', 'Tinggi')->count(),
+        ];
         
-        return view('reports.laporan.ibu-hamil', compact('pemeriksaans', 'bulan', 'tahun'));
+        return view('reports.laporan.ibu-hamil', compact('pemeriksaans', 'statistik', 'bulan', 'tahun'));
     }
 
     public function lansia(Request $request)
@@ -64,12 +71,17 @@ class LaporanController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         
         $pemeriksaans = PemeriksaanLansia::with('lansia')
-            ->whereMonth('tanggal_kunjungan', $bulan)
-            ->whereYear('tanggal_kunjungan', $tahun)
-            ->orderBy('tanggal_kunjungan', 'desc')
+            ->whereMonth('waktu_kunjungan', $bulan)
+            ->whereYear('waktu_kunjungan', $tahun)
+            ->orderBy('waktu_kunjungan', 'desc')
             ->get();
+            
+        $statistik = [
+            'total' => $pemeriksaans->count(),
+            'gula_normal' => $pemeriksaans->where('gula_darah', '<', 200)->count(), // Example standard logic or we can just count totals. Let's just pass basic stats if no strict status is there.
+        ];
         
-        return view('reports.laporan.lansia', compact('pemeriksaans', 'bulan', 'tahun'));
+        return view('reports.laporan.lansia', compact('pemeriksaans', 'statistik', 'bulan', 'tahun'));
     }
 
     public function nifas(Request $request)
@@ -82,8 +94,15 @@ class LaporanController extends Controller
             ->whereYear('tanggal_kunjungan', $tahun)
             ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
+            
+        $statistik = [
+            'total' => $pemeriksaans->count(),
+            'gizi_baik' => $pemeriksaans->where('status_gizi', 'Hijau')->count(),
+            'gizi_kurang' => $pemeriksaans->whereIn('status_gizi', ['Kuning', 'Merah'])->count(),
+            'td_normal' => $pemeriksaans->where('tekanan_darah_status', 'Normal')->count(),
+        ];
         
-        return view('reports.laporan.nifas', compact('pemeriksaans', 'bulan', 'tahun'));
+        return view('reports.laporan.nifas', compact('pemeriksaans', 'statistik', 'bulan', 'tahun'));
     }
 
     public function remaja(Request $request)
@@ -92,12 +111,19 @@ class LaporanController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         
         $pemeriksaans = PemeriksaanRemaja::with('remaja')
-            ->whereMonth('tanggal_kunjungan', $bulan)
-            ->whereYear('tanggal_kunjungan', $tahun)
-            ->orderBy('tanggal_kunjungan', 'desc')
+            ->whereMonth('waktu_kunjungan', $bulan)
+            ->whereYear('waktu_kunjungan', $tahun)
+            ->orderBy('waktu_kunjungan', 'desc')
             ->get();
+            
+        $statistik = [
+            'total' => $pemeriksaans->count(),
+            'imt_normal' => $pemeriksaans->where('imt_status', 'Normal')->count(),
+            'imt_kurus' => $pemeriksaans->where('imt_status', 'Kurus')->count(),
+            'imt_gemuk' => $pemeriksaans->whereIn('imt_status', ['Gemuk', 'Obesitas'])->count(),
+        ];
         
-        return view('reports.laporan.remaja', compact('pemeriksaans', 'bulan', 'tahun'));
+        return view('reports.laporan.remaja', compact('pemeriksaans', 'statistik', 'bulan', 'tahun'));
     }
 
     public function exportExcel($type)

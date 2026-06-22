@@ -119,13 +119,7 @@ class PemeriksaanLansiaController extends Controller
             $pemeriksaan = PemeriksaanLansia::create($validated);
         }
 
-        if ($stage < 4) {
-            $nextStage = $stage + 1;
-            return redirect()->route('pemeriksaan-lansia.stage', ['stage' => $nextStage, 'pemeriksaan_id' => $pemeriksaan->id])
-                ->with('success', "Tahap {$stage} berhasil disimpan. Lanjutkan ke tahap {$nextStage}.");
-        }
-
-        return redirect()->route('pemeriksaan-lansia.index')->with('success', 'Data pemeriksaan berhasil ditambahkan');
+        return redirect()->route('pemeriksaan-lansia.create')->with('success', "Tahap {$stage} berhasil disimpan.");
     }
 
     public function show(PemeriksaanLansia $pemeriksaanLansia)

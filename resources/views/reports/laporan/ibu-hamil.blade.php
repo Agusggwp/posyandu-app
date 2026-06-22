@@ -14,7 +14,7 @@
         </div>
 
         <a href="{{ route('laporan.index') }}"
-           class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md">
+           class="no-print bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md">
             ← Kembali
         </a>
     </div>
@@ -82,29 +82,38 @@
     {{-- Statistik --}}
     @if($pemeriksaans->count() > 0)
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <!-- Statistik Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6 print-cards">
 
-        <div class="bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <p class="text-sm opacity-80">Total Pemeriksaan</p>
             <h3 class="text-4xl font-bold mt-2">
-                {{ $pemeriksaans->count() }}
+                {{ $statistik['total'] ?? 0 }}
             </h3>
         </div>
 
-        <div class="bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl shadow-lg p-6 text-white">
-            <p class="text-sm opacity-80">Rata-rata Usia Kehamilan</p>
+        <div class="bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl shadow-lg p-6 text-white card-print">
+            <p class="text-sm opacity-80">BB Naik</p>
             <h3 class="text-4xl font-bold mt-2">
-                {{ number_format($pemeriksaans->avg('usia_kehamilan'),1) }}
+                {{ $statistik['bb_naik'] ?? 0 }}
             </h3>
-            <p class="text-sm">Minggu</p>
+            <p class="text-sm mt-1">Status Berat Badan</p>
         </div>
 
-        <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white">
-            <p class="text-sm opacity-80">Rata-rata Berat Badan</p>
+        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 text-white card-print">
+            <p class="text-sm opacity-80">Tekanan Darah Normal</p>
             <h3 class="text-4xl font-bold mt-2">
-                {{ number_format($pemeriksaans->avg('berat_badan'),1) }}
+                {{ $statistik['td_normal'] ?? 0 }}
             </h3>
-            <p class="text-sm">Kg</p>
+            <p class="text-sm mt-1">Sehat</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-2xl shadow-lg p-6 text-white card-print">
+            <p class="text-sm opacity-80">Tekanan Darah Tinggi</p>
+            <h3 class="text-4xl font-bold mt-2">
+                {{ $statistik['td_tinggi'] ?? 0 }}
+            </h3>
+            <p class="text-sm mt-1">Perhatian</p>
         </div>
 
     </div>
@@ -199,9 +208,13 @@
                                 <span class="px-3 py-1 text-xs font-semibold text-emerald-800 bg-emerald-100 rounded-full">
                                     Naik
                                 </span>
+                            @elseif($p->status_bb == 'Tidak')
+                                <span class="px-3 py-1 text-xs font-semibold text-rose-800 bg-rose-100 rounded-full">
+                                    Tidak Naik
+                                </span>
                             @else
-                                <span class="px-3 py-1 text-xs font-semibold text-amber-800 bg-amber-100 rounded-full">
-                                    {{ $p->status_bb ?? '-' }}
+                                <span class="px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">
+                                    Pertama
                                 </span>
                             @endif
                         </td>
@@ -226,28 +239,90 @@
         </div>
     </div>
 
+    <!-- Tanda Tangan Cetak -->
+    <div class="hidden print:block mt-16 right-0 w-64 text-center float-right">
+        <p class="mb-20">Mengetahui,</p>
+        <p class="font-bold border-b border-black pb-1 mb-1">Ketua Posyandu</p>
+        <p>NIP. .........................</p>
+    </div>
+
 </div>
 
 <style>
 @media print {
-
-    .no-print {
-        display: none !important;
-    }
-
-    body {
+    @page { margin: 1.5cm; size: landscape; }
+    body { 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
         background: white !important;
     }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
+    .print-cards {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1rem !important;
+        margin-bottom: 2rem !important;
     }
-
-    th,
-    td {
-        border: 1px solid #ddd;
-        padding: 8px;
+    .print-cards > div {
+        flex: 1 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    .no-print, nav, footer, form, button, a[href*="kembali"] {
+        display: none !important;
+    }
+    .max-w-7xl {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+    .card-print {
+        border: 1px solid #e2e8f0 !important;
+        color: black !important;
+        background: white !important;
+        box-shadow: none !important;
+    }
+    .card-print p, .card-print h3 {
+        color: black !important;
+    }
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-bottom: 2rem !important;
+    }
+    th, td {
+        border: 1px solid #cbd5e1 !important;
+        padding: 8px !important;
+    }
+    th {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+        font-weight: bold !important;
+    }
+    h2 {
+        text-align: center;
+        font-size: 24pt !important;
+        margin-bottom: 5px !important;
+        background: none !important;
+        -webkit-text-fill-color: black !important;
+        color: black !important;
+    }
+    h2 + p {
+        text-align: center;
+        margin-bottom: 20px !important;
+    }
+    .bg-gradient-to-r {
+        background: none !important;
+        color: black !important;
+    }
+    .shadow-lg {
+        box-shadow: none !important;
+    }
+    .rounded-2xl {
+        border-radius: 0 !important;
+    }
+    .print\:block {
+        display: block !important;
     }
 }
 </style>

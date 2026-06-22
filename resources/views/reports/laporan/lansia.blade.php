@@ -7,7 +7,7 @@
             <h2 class="text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Laporan Pemeriksaan Lansia</h2>
             <p class="text-slate-600 mt-2">Filter dan analisis data pemeriksaan lansia</p>
         </div>
-        <a href="{{ route('laporan.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <a href="{{ route('laporan.index') }}" class="no-print bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
             ← Kembali
         </a>
     </div>
@@ -47,45 +47,29 @@
     </div>
 
     <!-- Statistik Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 print-cards">
+        <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-semibold">Total Pemeriksaan</h3>
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
             </div>
-            <p class="text-4xl font-bold">{{ $pemeriksaans->count() }}</p>
-            <p class="text-amber-100 text-sm mt-1">Pemeriksaan bulan ini</p>
+            <p class="text-4xl font-bold">{{ $statistik['total'] ?? 0 }}</p>
+            <p class="text-amber-100 text-sm mt-1">Bulan ini</p>
         </div>
 
-        <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-lg font-semibold">Rata-rata Berat Badan</h3>
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
+                <h3 class="text-lg font-semibold">Rata-rata Gula Darah</h3>
             </div>
-            <p class="text-4xl font-bold">{{ $pemeriksaans->count() > 0 ? number_format($pemeriksaans->avg('berat_badan'), 1) : '0' }}</p>
-            <p class="text-orange-100 text-sm mt-1">Kg</p>
+            <p class="text-4xl font-bold">{{ $pemeriksaans->count() > 0 ? number_format($pemeriksaans->avg('gula_darah'), 1) : '0' }}</p>
+            <p class="text-orange-100 text-sm mt-1">mg/dL</p>
         </div>
 
-        <div class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-lg font-semibold">Rata-rata IMT</h3>
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
+                <h3 class="text-lg font-semibold">Gula Darah Normal</h3>
             </div>
-            <p class="text-4xl font-bold">{{ $pemeriksaans->count() > 0 ? number_format($pemeriksaans->avg('imt'), 1) : '0' }}</p>
-            <p class="text-red-100 text-sm mt-1">Kg/m²</p>
+            <p class="text-4xl font-bold">{{ $statistik['gula_normal'] ?? 0 }}</p>
+            <p class="text-red-100 text-sm mt-1">Lansia Sehat</p>
         </div>
     </div>
 
@@ -117,7 +101,7 @@
                     @forelse($pemeriksaans as $index => $pemeriksaan)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tanggal_kunjungan->format('d/m/Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->waktu_kunjungan->format('d/m/Y') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $pemeriksaan->lansia->nama ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->berat_badan ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tinggi_badan ?? '-' }}</td>
@@ -133,35 +117,92 @@
             </table>
         </div>
 
-        @if($pemeriksaans->count() > 0)
-        <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
-            <h4 class="font-semibold text-yellow-800 mb-2">Statistik</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <p class="text-sm text-gray-600">Total Pemeriksaan</p>
-                    <p class="text-2xl font-bold text-yellow-600">{{ $pemeriksaans->count() }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600">Rata-rata Gula Darah</p>
-                    <p class="text-2xl font-bold text-yellow-600">{{ number_format($pemeriksaans->avg('gula_darah'), 1) }} mg/dL</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600">Rata-rata Kolesterol</p>
-                    <p class="text-2xl font-bold text-yellow-600">{{ number_format($pemeriksaans->avg('kolesterol'), 1) }} mg/dL</p>
-                </div>
-            </div>
-        </div>
-        @endif
+    </div>
+    </div>
+
+    <!-- Tanda Tangan Cetak -->
+    <div class="hidden print:block mt-16 right-0 w-64 text-center float-right">
+        <p class="mb-20">Mengetahui,</p>
+        <p class="font-bold border-b border-black pb-1 mb-1">Ketua Posyandu</p>
+        <p>NIP. .........................</p>
     </div>
 </div>
 
 <style>
     @media print {
-        .no-print, nav, footer, button, a[href*="kembali"] {
+        @page { margin: 1.5cm; size: landscape; }
+        body { 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+            background: white !important;
+        }
+        .print-cards {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 1rem !important;
+            margin-bottom: 2rem !important;
+        }
+        .print-cards > div {
+            flex: 1 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        .no-print, nav, footer, form, button, a[href*="kembali"] {
             display: none !important;
         }
         .max-w-7xl {
             max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+        .card-print {
+            border: 1px solid #e2e8f0 !important;
+            color: black !important;
+            background: white !important;
+            box-shadow: none !important;
+        }
+        .card-print p, .card-print h3 {
+            color: black !important;
+        }
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin-bottom: 2rem !important;
+        }
+        th, td {
+            border: 1px solid #cbd5e1 !important;
+            padding: 8px !important;
+        }
+        th {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+            font-weight: bold !important;
+        }
+        h2 {
+            text-align: center;
+            font-size: 24pt !important;
+            margin-bottom: 5px !important;
+            background: none !important;
+            -webkit-text-fill-color: black !important;
+            color: black !important;
+        }
+        h2 + p {
+            text-align: center;
+            margin-bottom: 20px !important;
+        }
+        .bg-gradient-to-r {
+            background: none !important;
+            color: black !important;
+        }
+        .shadow-lg {
+            box-shadow: none !important;
+        }
+        .rounded-2xl, .rounded-lg {
+            border-radius: 0 !important;
+        }
+        .print\:block {
+            display: block !important;
         }
     }
 </style>

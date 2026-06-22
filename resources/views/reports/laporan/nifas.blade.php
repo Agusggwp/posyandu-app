@@ -7,7 +7,7 @@
             <h2 class="text-4xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">Laporan Pemeriksaan Nifas</h2>
             <p class="text-slate-600 mt-2">Filter dan analisis data pemeriksaan ibu nifas</p>
         </div>
-        <a href="{{ route('laporan.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <a href="{{ route('laporan.index') }}" class="no-print bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
             ← Kembali
         </a>
     </div>
@@ -47,45 +47,37 @@
     </div>
 
     <!-- Statistik Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl shadow-lg p-6 text-white">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6 print-cards">
+        <div class="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-semibold">Total Pemeriksaan</h3>
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
             </div>
-            <p class="text-4xl font-bold">{{ $pemeriksaans->count() }}</p>
-            <p class="text-rose-100 text-sm mt-1">Pemeriksaan bulan ini</p>
+            <p class="text-4xl font-bold">{{ $statistik['total'] ?? 0 }}</p>
+            <p class="text-rose-100 text-sm mt-1">Bulan ini</p>
         </div>
 
-        <div class="bg-gradient-to-br from-pink-500 to-fuchsia-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-lg font-semibold">Rata-rata Berat Badan</h3>
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
+                <h3 class="text-lg font-semibold">Gizi Baik</h3>
             </div>
-            <p class="text-4xl font-bold">{{ $pemeriksaans->count() > 0 ? number_format($pemeriksaans->avg('berat_badan'), 1) : '0' }}</p>
-            <p class="text-pink-100 text-sm mt-1">Kg</p>
+            <p class="text-4xl font-bold">{{ $statistik['gizi_baik'] ?? 0 }}</p>
+            <p class="text-emerald-100 text-sm mt-1">Sehat</p>
         </div>
 
-        <div class="bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white card-print">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-lg font-semibold">Rata-rata LILA</h3>
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
+                <h3 class="text-lg font-semibold">Gizi Kurang</h3>
             </div>
-            <p class="text-4xl font-bold">{{ $pemeriksaans->count() > 0 ? number_format($pemeriksaans->avg('lila'), 1) : '0' }}</p>
-            <p class="text-fuchsia-100 text-sm mt-1">Cm</p>
+            <p class="text-4xl font-bold">{{ $statistik['gizi_kurang'] ?? 0 }}</p>
+            <p class="text-amber-100 text-sm mt-1">Perhatian</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 text-white card-print">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-lg font-semibold">TD Normal</h3>
+            </div>
+            <p class="text-4xl font-bold">{{ $statistik['td_normal'] ?? 0 }}</p>
+            <p class="text-blue-100 text-sm mt-1">Tekanan Darah</p>
         </div>
     </div>
 
@@ -101,7 +93,6 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">No</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Tanggal</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Nama Ibu</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Tahap</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Berat Badan</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">LILA</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Tekanan Darah</th>
@@ -113,30 +104,25 @@
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $index + 1 }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->tanggal_kunjungan->format('d/m/Y') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ $p->nifas->nama ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
-                            @if($p->tahap_terakhir)
-                                <span class="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded">Tahap {{ $p->tahap_terakhir }}</span>
-                            @else
-                                <span>-</span>
-                            @endif
-                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ $p->nifas->nama_ibu ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->berat_badan ?? '-' }} kg</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->lila ?? '-' }} cm</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->sistole ? $p->sistole . '/' . $p->diastole : '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            @if($p->status_gizi == 'normal')
-                                <span class="px-3 py-1 text-xs font-semibold text-emerald-800 bg-emerald-100 rounded-full">Normal</span>
-                            @elseif($p->status_gizi == 'kurang')
-                                <span class="px-3 py-1 text-xs font-semibold text-amber-800 bg-amber-100 rounded-full">Kurang</span>
+                            @if($p->status_gizi == 'Hijau')
+                                <span class="px-3 py-1 text-xs font-semibold text-emerald-800 bg-emerald-100 rounded-full">Sehat (Hijau)</span>
+                            @elseif($p->status_gizi == 'Kuning')
+                                <span class="px-3 py-1 text-xs font-semibold text-amber-800 bg-amber-100 rounded-full">Kurang (Kuning)</span>
+                            @elseif($p->status_gizi == 'Merah')
+                                <span class="px-3 py-1 text-xs font-semibold text-rose-800 bg-rose-100 rounded-full">Malnutrisi (Merah)</span>
                             @else
-                                <span class="px-3 py-1 text-xs font-semibold text-rose-800 bg-rose-100 rounded-full">{{ $p->status_gizi ?? '-' }}</span>
+                                <span class="px-3 py-1 text-xs font-semibold text-slate-800 bg-slate-100 rounded-full">-</span>
                             @endif
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="px-6 py-8 text-center text-slate-500">
+                        <td colspan="7" class="px-6 py-8 text-center text-slate-500">
                             <svg class="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
@@ -149,15 +135,89 @@
             </table>
         </div>
     </div>
+    <!-- Tanda Tangan Cetak -->
+    <div class="hidden print:block mt-16 right-0 w-64 text-center float-right">
+        <p class="mb-20">Mengetahui,</p>
+        <p class="font-bold border-b border-black pb-1 mb-1">Ketua Posyandu</p>
+        <p>NIP. .........................</p>
+    </div>
 </div>
 
 <style>
     @media print {
-        .no-print, nav, footer, button, a[href*="kembali"] {
+        @page { margin: 1.5cm; size: landscape; }
+        body { 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+            background: white !important;
+        }
+        .print-cards {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 1rem !important;
+            margin-bottom: 2rem !important;
+        }
+        .print-cards > div {
+            flex: 1 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        .no-print, nav, footer, form, button, a[href*="kembali"] {
             display: none !important;
         }
         .max-w-7xl {
             max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+        .card-print {
+            border: 1px solid #e2e8f0 !important;
+            color: black !important;
+            background: white !important;
+            box-shadow: none !important;
+        }
+        .card-print p, .card-print h3 {
+            color: black !important;
+        }
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin-bottom: 2rem !important;
+        }
+        th, td {
+            border: 1px solid #cbd5e1 !important;
+            padding: 8px !important;
+        }
+        th {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+            font-weight: bold !important;
+        }
+        h2 {
+            text-align: center;
+            font-size: 24pt !important;
+            margin-bottom: 5px !important;
+            background: none !important;
+            -webkit-text-fill-color: black !important;
+            color: black !important;
+        }
+        h2 + p {
+            text-align: center;
+            margin-bottom: 20px !important;
+        }
+        .bg-gradient-to-r {
+            background: none !important;
+            color: black !important;
+        }
+        .shadow-lg {
+            box-shadow: none !important;
+        }
+        .rounded-2xl {
+            border-radius: 0 !important;
+        }
+        .print\:block {
+            display: block !important;
         }
     }
 </style>

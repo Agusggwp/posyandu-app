@@ -55,4 +55,18 @@ class PemeriksaanBalita extends Model
     {
         return $this->belongsTo(Balita::class, 'balita_identitas_id');
     }
+
+    public function getStatusGiziAttribute()
+    {
+        if (in_array($this->status_pb_u, ['SP', 'P'])) {
+            return 'stunting';
+        }
+        if ($this->status_bb_pb == 'K' || $this->status_bb_u == 'SK') {
+            return 'kurang';
+        }
+        if ($this->status_bb_pb == 'B' || $this->status_bb_u == 'N' || $this->status_pb_u == 'N') {
+            return 'normal';
+        }
+        return 'stunting';
+    }
 }

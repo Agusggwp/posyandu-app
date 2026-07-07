@@ -81,6 +81,35 @@ class AdminSettingsController extends Controller
             'kk_news_link_label' => Setting::getSetting('kk_news_link_label', 'Baca informasi lengkap'),
             'kk_news_link_url' => Setting::getSetting('kk_news_link_url', ''),
             'kk_news_published_at' => Setting::getSetting('kk_news_published_at', now()->format('Y-m-d')),
+            
+            // Landing Page schedules config
+            'sched_balita_title' => Setting::getSetting('sched_balita_title', 'Posyandu Balita & Imunisasi'),
+            'sched_balita_desc' => Setting::getSetting('sched_balita_desc', 'Pemeriksaan tumbuh kembang anak, penimbangan berat badan, imunisasi dasar lengkap, pemberian vitamin A, dan konsultasi gizi balita.'),
+            'sched_balita_day' => Setting::getSetting('sched_balita_day', 'Senin Pertama & Kedua'),
+            'sched_balita_time' => Setting::getSetting('sched_balita_time', '08:00 - 12:00 WIB'),
+            
+            'sched_bumil_title' => Setting::getSetting('sched_bumil_title', 'Posyandu Ibu Hamil & Menyusui'),
+            'sched_bumil_desc' => Setting::getSetting('sched_bumil_desc', 'Pemeriksaan kehamilan rutin, pengukuran tekanan darah, pemberian tablet tambah darah (Fe), imunisasi TT, dan kelas ibu menyusui.'),
+            'sched_bumil_day' => Setting::getSetting('sched_bumil_day', 'Setiap Rabu Kedua'),
+            'sched_bumil_time' => Setting::getSetting('sched_bumil_time', '09:00 - 12:00 WIB'),
+            
+            'sched_lansia_title' => Setting::getSetting('sched_lansia_title', 'Posyandu Lansia & Remaja'),
+            'sched_lansia_desc' => Setting::getSetting('sched_lansia_desc', 'Pemeriksaan tensi darah, kadar gula darah, kolesterol, asam urat, aktivitas senam lansia, serta konseling kesehatan remaja.'),
+            'sched_lansia_day' => Setting::getSetting('sched_lansia_day', 'Setiap Jumat Ketiga'),
+            'sched_lansia_time' => Setting::getSetting('sched_lansia_time', '08:00 - 11:30 WIB'),
+            
+            // Landing Page health tips config
+            'edu_balita_title' => Setting::getSetting('edu_balita_title', 'Imunisasi Dasar Lengkap'),
+            'edu_balita_desc' => Setting::getSetting('edu_balita_desc', 'Pastikan balita mendapatkan imunisasi BCG, DPT, Polio, Campak, dan Hepatitis B untuk kekebalan tubuh.'),
+            
+            'edu_bumil_title' => Setting::getSetting('edu_bumil_title', 'Asupan Asam Folat & Fe'),
+            'edu_bumil_desc' => Setting::getSetting('edu_bumil_desc', 'Konsumsi makanan bergizi tinggi zat besi, serta tablet Fe secara teratur guna mencegah anemia saat kehamilan.'),
+            
+            'edu_lansia_title' => Setting::getSetting('edu_lansia_title', 'Aktivitas Fisik Ringan'),
+            'edu_lansia_desc' => Setting::getSetting('edu_lansia_desc', 'Sempatkan olahraga ringan seperti jalan kaki 15-30 menit setiap hari untuk menjaga kelenturan sendi dan otot.'),
+            
+            'edu_umum_title' => Setting::getSetting('edu_umum_title', 'Pola Hidup Bersih & Sehat'),
+            'edu_umum_desc' => Setting::getSetting('edu_umum_desc', 'Biasakan mencuci tangan dengan sabun, mengonsumsi air matang, dan membersihkan lingkungan rumah secara teratur.'),
         ];
 
         return view('admin.settings', compact('settings'));
@@ -154,6 +183,32 @@ class AdminSettingsController extends Controller
             'kk_news_link_label' => 'sometimes|nullable|string|max:120',
             'kk_news_link_url' => 'sometimes|nullable|url|max:255',
             'kk_news_published_at' => 'sometimes|nullable|date',
+            
+            // Landing Page schedules validation
+            'sched_balita_title' => 'sometimes|nullable|string|max:150',
+            'sched_balita_desc' => 'sometimes|nullable|string|max:500',
+            'sched_balita_day' => 'sometimes|nullable|string|max:100',
+            'sched_balita_time' => 'sometimes|nullable|string|max:100',
+            
+            'sched_bumil_title' => 'sometimes|nullable|string|max:150',
+            'sched_bumil_desc' => 'sometimes|nullable|string|max:500',
+            'sched_bumil_day' => 'sometimes|nullable|string|max:100',
+            'sched_bumil_time' => 'sometimes|nullable|string|max:100',
+            
+            'sched_lansia_title' => 'sometimes|nullable|string|max:150',
+            'sched_lansia_desc' => 'sometimes|nullable|string|max:500',
+            'sched_lansia_day' => 'sometimes|nullable|string|max:100',
+            'sched_lansia_time' => 'sometimes|nullable|string|max:100',
+            
+            // Landing Page health tips validation
+            'edu_balita_title' => 'sometimes|nullable|string|max:120',
+            'edu_balita_desc' => 'sometimes|nullable|string|max:500',
+            'edu_bumil_title' => 'sometimes|nullable|string|max:120',
+            'edu_bumil_desc' => 'sometimes|nullable|string|max:500',
+            'edu_lansia_title' => 'sometimes|nullable|string|max:120',
+            'edu_lansia_desc' => 'sometimes|nullable|string|max:500',
+            'edu_umum_title' => 'sometimes|nullable|string|max:120',
+            'edu_umum_desc' => 'sometimes|nullable|string|max:500',
         ]);
 
         foreach ($validated as $key => $value) {

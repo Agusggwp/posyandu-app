@@ -28,10 +28,12 @@
     }
 
     function updateActiveSectionButton(sectionName, triggerButton = null) {
-        document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('active'); btn.style.backgroundColor = 'transparent'; btn.style.boxShadow = 'none'; });
-        const activeButton = triggerButton || Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`showSection('${sectionName}'`));
+        document.querySelectorAll('.nav-btn').forEach(btn => { 
+            btn.classList.remove('active-section-btn'); 
+        });
+        const activeButton = triggerButton || document.querySelector(`[data-section-btn="${sectionName}"]`);
         if (activeButton) {
-            activeButton.classList.add('active');
+            activeButton.classList.add('active-section-btn');
         }
     }
 

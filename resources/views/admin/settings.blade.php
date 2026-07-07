@@ -1,45 +1,133 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-3 sm:px-4">
+<style>
+    /* Styling for Accordion headers acting as Static Card Headers in Tabs */
+    #settingsAccordion .bg-white > form > button[data-accordion-toggle] {
+        pointer-events: none !important;
+        cursor: default !important;
+        background-color: #f8fafc !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        padding: 1.25rem 1.5rem !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        text-align: left;
+    }
+    #settingsAccordion .bg-white > form > button[data-accordion-toggle] svg[data-accordion-icon] {
+        display: none !important; /* Hide toggle arrow icon */
+    }
+    #settingsAccordion .bg-white > form > div[id^="panel-"] {
+        display: block !important;
+        padding-top: 1.5rem !important;
+    }
+    
+    /* Responsive navbar styling for horizontal scroll on mobile */
+    @media (max-width: 1023px) {
+        nav[aria-label="Settings navigation"] {
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        nav[aria-label="Settings navigation"] button {
+            border-left-width: 0px !important;
+            border-bottom-width: 4px !important;
+            border-bottom-color: transparent;
+            border-radius: 0px !important;
+        }
+        nav[aria-label="Settings navigation"] button.active-tab {
+            border-bottom-color: #4f46e5 !important;
+            background-color: #f5f3ff !important;
+            color: #4338ca !important;
+        }
+    }
+</style>
+
+<div class="max-w-6xl mx-auto px-3 sm:px-4">
     <!-- Header -->
-    <div class="mb-4 sm:mb-6">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Pengaturan Sistem</h2>
-        <p class="text-gray-600 mt-1">Konfigurasi dan pengaturan aplikasi Posyandu</p>
+    <div class="mb-6 sm:mb-8">
+        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Pengaturan Sistem</h2>
+        <p class="text-gray-500 mt-1.5 text-sm sm:text-base">Konfigurasi dan kustomisasi platform Posyandu Digital Anda</p>
     </div>
 
-    <!-- Success Message -->
-    @if (session('success'))
-    <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg">
-        <div class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-            </svg>
-            <span class="text-green-800">{{ session('success') }}</span>
+    <!-- Success Message removed here because layouts.app already handles it globally -->
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Sidebar Navigation (Left Column) -->
+        <nav class="lg:col-span-4 bg-white rounded-3xl border border-indigo-50/80 p-4 shadow-sm flex flex-col gap-1 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal flex-row lg:flex-col" aria-label="Settings navigation">
+            <button type="button" data-tab-toggle="tab-general" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-gears text-indigo-500 w-5 text-center text-base"></i>
+                <span>Umum & Sistem</span>
+            </button>
+            <button type="button" data-tab-toggle="tab-main-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-chart-line text-indigo-500 w-5 text-center text-base"></i>
+                <span>Dashboard Kader</span>
+            </button>
+            <button type="button" data-tab-toggle="tab-admin-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-user-shield text-indigo-500 w-5 text-center text-base"></i>
+                <span>Dashboard Admin</span>
+            </button>
+            <button type="button" data-tab-toggle="tab-center-info" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-hospital-user text-indigo-500 w-5 text-center text-base"></i>
+                <span>Informasi Posyandu</span>
+            </button>
+            <button type="button" data-tab-toggle="tab-admin-login" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-right-to-bracket text-indigo-500 w-5 text-center text-base"></i>
+                <span>Login Petugas</span>
+            </button>
+            <button type="button" data-tab-toggle="tab-kk-login" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-user-lock text-indigo-500 w-5 text-center text-base"></i>
+                <span>Portal Keluarga</span>
+            </button>
+            <button type="button" data-tab-toggle="tab-kk-news" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-newspaper text-indigo-500 w-5 text-center text-base"></i>
+                <span>Berita Keluarga</span>
+            </button>
+            <button type="button" data-tab-toggle="tab-landing-page" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
+                <i class="fa-solid fa-house text-indigo-500 w-5 text-center text-base"></i>
+                <span>Landing Page</span>
+            </button>
+        </nav>
+
+        <!-- Setting Panel Contents (Right Column) -->
+        <div class="lg:col-span-8 space-y-4" id="settingsAccordion">
+            <div id="tab-general" class="tab-panel hidden">
+                @include('admin.settings.partials.general-system')
+            </div>
+            <div id="tab-main-dashboard" class="tab-panel hidden">
+                @include('admin.settings.partials.main-dashboard')
+            </div>
+            <div id="tab-admin-dashboard" class="tab-panel hidden">
+                @include('admin.settings.partials.admin-dashboard')
+            </div>
+            <div id="tab-center-info" class="tab-panel hidden">
+                @include('admin.settings.partials.center-info')
+            </div>
+            <div id="tab-admin-login" class="tab-panel hidden">
+                @include('admin.settings.partials.admin-login')
+            </div>
+            <div id="tab-kk-login" class="tab-panel hidden">
+                @include('admin.settings.partials.kk-login')
+            </div>
+            <div id="tab-kk-news" class="tab-panel hidden">
+                @include('admin.settings.partials.kk-news')
+            </div>
+            <div id="tab-landing-page" class="tab-panel hidden">
+                @include('admin.settings.partials.landing-page')
+            </div>
         </div>
-    </div>
-    @endif
-
-    <!-- Settings Forms -->
-    <div class="space-y-3" id="settingsAccordion">
-        @include('admin.settings.partials.general-system')
-        @include('admin.settings.partials.main-dashboard')
-        @include('admin.settings.partials.admin-dashboard')
-        @include('admin.settings.partials.center-info')
-        @include('admin.settings.partials.admin-login')
-        @include('admin.settings.partials.kk-login')
-        @include('admin.settings.partials.kk-news')
     </div>
 
     <!-- Information Box -->
-    <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
-        <div class="flex gap-3">
-            <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zm-11-1a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/>
-            </svg>
+    <div class="mt-8 p-5 bg-blue-50/50 border border-blue-100 rounded-3xl shadow-sm">
+        <div class="flex gap-4">
+            <div class="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                <i class="fa-solid fa-circle-info text-base"></i>
+            </div>
             <div>
-                <p class="text-sm font-semibold text-blue-800">Catatan</p>
-                <p class="text-sm text-blue-700 mt-1">Pengaturan ini akan diterapkan di seluruh aplikasi. Pastikan semua data sudah benar sebelum menyimpan.</p>
+                <p class="text-sm font-bold text-blue-900">Petunjuk Penggunaan</p>
+                <p class="text-xs sm:text-sm text-blue-700 mt-1 leading-relaxed">Pengaturan yang disimpan akan segera memengaruhi seluruh sistem dan landing page. Harap isi data dengan lengkap dan teliti sebelum menekan tombol simpan.</p>
             </div>
         </div>
     </div>
@@ -47,57 +135,63 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const accordionButtons = document.querySelectorAll('[data-accordion-toggle]');
-    const toggleAccordion = function (panelId) {
-        accordionButtons.forEach(function (button) {
-            const targetId = button.getAttribute('data-accordion-toggle');
-            const panel = document.getElementById(targetId);
-            const icon = document.querySelector('[data-accordion-icon="' + targetId + '"]');
-            const isActive = targetId === panelId;
+    const tabs = document.querySelectorAll('[data-tab-toggle]');
+    const panels = document.querySelectorAll('.tab-panel');
 
-            if (!panel) {
-                return;
-            }
+    const switchTab = function (tabId) {
+        // Hide all panels
+        panels.forEach(function (panel) {
+            panel.classList.add('hidden');
+        });
+
+        // Show active panel
+        const activePanel = document.getElementById(tabId);
+        if (activePanel) {
+            activePanel.classList.remove('hidden');
+        }
+
+        // Update tab buttons style
+        tabs.forEach(function (tab) {
+            const targetId = tab.getAttribute('data-tab-toggle');
+            const isActive = targetId === tabId;
 
             if (isActive) {
-                const open = panel.classList.contains('hidden');
-                if (open) {
-                    panel.classList.remove('hidden');
-                    button.classList.add('bg-indigo-100');
-                    if (icon) {
-                        icon.classList.add('rotate-180');
-                    }
-                } else {
-                    panel.classList.add('hidden');
-                    button.classList.remove('bg-indigo-100');
-                    if (icon) {
-                        icon.classList.remove('rotate-180');
-                    }
+                // Active style (modern border-l-4 + bg-indigo-50/60 + text-indigo-700)
+                tab.classList.add('bg-indigo-50/60', 'text-indigo-700', 'border-indigo-600', 'active-tab');
+                tab.classList.remove('text-slate-600', 'hover:bg-slate-50', 'border-transparent');
+                const icon = tab.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('text-indigo-500');
+                    icon.classList.add('text-indigo-700');
                 }
-
-                return;
-            }
-
-            panel.classList.add('hidden');
-            button.classList.remove('bg-indigo-100');
-            if (icon) {
-                icon.classList.remove('rotate-180');
+            } else {
+                // Non-active style
+                tab.classList.remove('bg-indigo-50/60', 'text-indigo-700', 'border-indigo-600', 'active-tab');
+                tab.classList.add('text-slate-600', 'hover:bg-slate-50', 'border-transparent');
+                const icon = tab.querySelector('i');
+                if (icon) {
+                    icon.classList.add('text-indigo-500');
+                    icon.classList.remove('text-indigo-700');
+                }
             }
         });
+
+        // Save active tab in session storage
+        sessionStorage.setItem('active_settings_tab', tabId);
     };
 
-    accordionButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            const panelId = button.getAttribute('data-accordion-toggle');
-            toggleAccordion(panelId);
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            const tabId = tab.getAttribute('data-tab-toggle');
+            switchTab(tabId);
         });
     });
 
-    if (accordionButtons.length) {
-        const firstPanelId = accordionButtons[0].getAttribute('data-accordion-toggle');
-        toggleAccordion(firstPanelId);
-    }
+    // Load active tab from sessionStorage, default to first tab
+    const storedTab = sessionStorage.getItem('active_settings_tab') || 'tab-general';
+    switchTab(storedTab);
 
+    // Live preview sync logic
     const textKeys = [
         'system_app_name',
         'system_app_tagline',
@@ -129,7 +223,20 @@ document.addEventListener('DOMContentLoaded', function () {
         'kk_news_summary',
         'kk_news_content',
         'kk_news_published_at',
-        'kk_news_link_label'
+        'kk_news_link_label',
+        'sched_balita_title',
+        'sched_balita_day',
+        'sched_balita_time',
+        'sched_bumil_title',
+        'sched_bumil_day',
+        'sched_bumil_time',
+        'sched_lansia_title',
+        'sched_lansia_day',
+        'sched_lansia_time',
+        'edu_balita_title',
+        'edu_bumil_title',
+        'edu_lansia_title',
+        'edu_umum_title'
     ];
 
     textKeys.forEach(function (key) {

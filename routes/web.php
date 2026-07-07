@@ -23,18 +23,9 @@ use App\Http\Controllers\Admin\AdminSystemInfoController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\KepalaKeluargaAuthController;
+use App\Http\Controllers\PublicDashboardController;
 
-Route::get('/', function () {
-    if (Auth::guard('kepala_keluarga')->check()) {
-        return redirect()->route('kepala-keluarga.dashboard');
-    }
-
-    if (Auth::guard('web')->check()) {
-        return redirect()->route('dashboard');
-    }
-
-    return redirect()->route('login');
-});
+Route::get('/', [PublicDashboardController::class, 'index'])->name('public.dashboard');
 
 Route::prefix('kepala-keluarga')->name('kepala-keluarga.')->group(function () {
     Route::middleware('guest:kepala_keluarga')->group(function () {

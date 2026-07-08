@@ -214,9 +214,20 @@ class PemeriksaanNifasController extends Controller
 
     public function show(PemeriksaanNifas $pemeriksaan_nifas)
     {
-        $pemeriksaan_nifas->load('nifas');
+        $pemeriksaan_nifas->load(['nifas.keluarga']);
         $pemeriksaan = $pemeriksaan_nifas;
         return view('pemeriksaan.nifas.show', compact('pemeriksaan'));
+    }
+
+    public function print(PemeriksaanNifas $pemeriksaanNifas)
+    {
+        $pemeriksaanNifas->load(['nifas.keluarga']);
+        $history = PemeriksaanNifas::where('nifas_identitas_id', $pemeriksaanNifas->nifas_identitas_id)
+            ->where('tahap_terakhir', 4)
+            ->orderBy('tanggal_kunjungan', 'asc')
+            ->get();
+        $pemeriksaan = $pemeriksaanNifas;
+        return view('pemeriksaan.nifas.print', compact('pemeriksaan', 'history'));
     }
 
     public function edit(PemeriksaanNifas $pemeriksaan_nifas)

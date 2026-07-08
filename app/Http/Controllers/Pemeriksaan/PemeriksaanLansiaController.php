@@ -124,9 +124,20 @@ class PemeriksaanLansiaController extends Controller
 
     public function show(PemeriksaanLansia $pemeriksaanLansia)
     {
-        $pemeriksaanLansia->load('lansia');
+        $pemeriksaanLansia->load(['lansia.keluarga']);
         $pemeriksaan = $pemeriksaanLansia;
         return view('pemeriksaan.lansia.show', compact('pemeriksaan'));
+    }
+
+    public function print(PemeriksaanLansia $pemeriksaanLansia)
+    {
+        $pemeriksaanLansia->load(['lansia.keluarga']);
+        $history = PemeriksaanLansia::where('dewasa_identitas_id', $pemeriksaanLansia->dewasa_identitas_id)
+            ->where('tahap_terakhir', 4)
+            ->orderBy('tanggal_kunjungan', 'asc')
+            ->get();
+        $pemeriksaan = $pemeriksaanLansia;
+        return view('pemeriksaan.lansia.print', compact('pemeriksaan', 'history'));
     }
 
     public function edit(PemeriksaanLansia $pemeriksaanLansia)

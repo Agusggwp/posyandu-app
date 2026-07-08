@@ -249,9 +249,20 @@ class PemeriksaanIbuHamilController extends Controller
 
     public function show(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
     {
-        $pemeriksaanIbuHamil->load('ibuHamil');
+        $pemeriksaanIbuHamil->load(['ibuHamil.keluarga']);
         $pemeriksaan = $pemeriksaanIbuHamil;
         return view('pemeriksaan.ibu-hamil.show', compact('pemeriksaan'));
+    }
+
+    public function print(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
+    {
+        $pemeriksaanIbuHamil->load(['ibuHamil.keluarga']);
+        $history = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $pemeriksaanIbuHamil->ibu_hamil_identitas_id)
+            ->where('tahap_terakhir', 4)
+            ->orderBy('tanggal_kunjungan', 'asc')
+            ->get();
+        $pemeriksaan = $pemeriksaanIbuHamil;
+        return view('pemeriksaan.ibu-hamil.print', compact('pemeriksaan', 'history'));
     }
 
     public function edit(PemeriksaanIbuHamil $pemeriksaanIbuHamil)

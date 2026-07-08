@@ -273,7 +273,7 @@
             display: none;
             position: fixed;
             top: 14px;
-            right: 14px;
+            left: 14px;
             width: 44px;
             height: 44px;
             background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
@@ -322,7 +322,8 @@
             }
 
             .topbar {
-                padding-right: 64px;
+                padding-left: 64px;
+                padding-right: 16px;
             }
 
             .menu-toggle {
@@ -344,6 +345,12 @@
 
             .menu-section-title {
                 margin-top: 6px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .user-badge span:not(.avatar) {
+                display: none;
             }
         }
 
@@ -574,19 +581,37 @@
 
                     keluargaSelect.innerHTML = '';
 
+                    let firstMatchVal = null;
+                    let hasCurrentValueInMatches = false;
+
                     allOptions.forEach(function (opt) {
                         const isPlaceholder = opt.value === '';
                         const matches = opt.text.toLowerCase().includes(keyword);
-                        const keepCurrent = opt.value !== '' && opt.value === currentValue;
 
-                        if (isPlaceholder || matches || keepCurrent) {
+                        if (isPlaceholder || matches) {
                             const optionEl = document.createElement('option');
                             optionEl.value = opt.value;
                             optionEl.text = opt.text;
-                            optionEl.selected = opt.value === currentValue || (currentValue === '' && opt.selected);
+
+                            if (opt.value !== '' && opt.value === currentValue && matches) {
+                                hasCurrentValueInMatches = true;
+                            }
+
+                            if (matches && !isPlaceholder && firstMatchVal === null) {
+                                firstMatchVal = opt.value;
+                            }
+
                             keluargaSelect.appendChild(optionEl);
                         }
                     });
+
+                    if (keyword !== '') {
+                        if (!hasCurrentValueInMatches && firstMatchVal !== null) {
+                            keluargaSelect.value = firstMatchVal;
+                        }
+                    } else {
+                        keluargaSelect.value = currentValue;
+                    }
                 });
             });
         });

@@ -139,31 +139,14 @@
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    <div>
-                        <label for="status_lila_display" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status LILA (Otomatis)
-                        </label>
-                        <input type="text" id="status_lila_display"
-                               value="{{ $data['status_lila'] ?? '-' }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
-                               readonly>
-                        <input type="hidden" name="status_lila" id="status_lila" value="{{ $data['status_lila'] ?? '' }}">
-                    </div>
                 </div>
 
-                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="mt-6">
                     <div class="bg-slate-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
                         <div class="font-semibold text-gray-800 mb-2">Ringkasan Akumulasi Berat</div>
                         <p id="weight_trend" class="mb-2">Pilih balita dan masukkan berat badan untuk melihat perubahan.</p>
                         <p id="weight_delta" class="mb-1"></p>
                         <p id="weight_previous_date" class="text-sm text-gray-500"></p>
-                    </div>
-
-                    <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 text-sm text-teal-800">
-                        <div class="font-semibold text-teal-900 mb-2">Keterangan Status LILA</div>
-                        <p><span class="font-semibold">LILA < 23.5 cm:</span> Kurang (Malnutrisi)</p>
-                        <p><span class="font-semibold">LILA ≥ 23.5 cm:</span> Baik (Normal/Sehat)</p>
                     </div>
                 </div>
 
@@ -229,33 +212,15 @@
     document.addEventListener('DOMContentLoaded', function () {
         const balitaSelect = document.getElementById('balita_identitas_id');
         const beratInput = document.getElementById('berat_badan');
-        const lilaInput = document.getElementById('lingkar_lengan');
         const prevWeightBox = document.getElementById('previous_weight');
         const weightTrend = document.getElementById('weight_trend');
         const weightDelta = document.getElementById('weight_delta');
         const weightPreviousDate = document.getElementById('weight_previous_date');
-        const statusLilaDisplay = document.getElementById('status_lila_display');
-        const statusLilaInput = document.getElementById('status_lila');
 
         const previousWeights = @json($previousWeights ?? []);
 
         function formatKg(value) {
             return Number(value).toFixed(1).replace(/\.0$/, '') + ' kg';
-        }
-
-        function calculateStatusLila(lila) {
-            const lilaValue = parseFloat(lila);
-            if (isNaN(lilaValue)) {
-                return '-';
-            }
-            return lilaValue < 23.5 ? 'Kurang' : 'Baik';
-        }
-
-        function updateLilaStatus() {
-            const lilaValue = lilaInput.value;
-            const status = calculateStatusLila(lilaValue);
-            statusLilaDisplay.value = status;
-            statusLilaInput.value = status;
         }
 
         function updateAccumulation() {
@@ -303,12 +268,8 @@
         if (beratInput) {
             beratInput.addEventListener('input', updateAccumulation);
         }
-        if (lilaInput) {
-            lilaInput.addEventListener('input', updateLilaStatus);
-        }
 
         updateAccumulation();
-        updateLilaStatus();
     });
 </script>
 @endpush

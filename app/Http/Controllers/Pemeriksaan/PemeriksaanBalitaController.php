@@ -224,6 +224,16 @@ class PemeriksaanBalitaController extends Controller
         return view('pemeriksaan.balita.show', compact('pemeriksaan'));
     }
 
+    public function print(PemeriksaanBalita $pemeriksaanBalita)
+    {
+        $pemeriksaanBalita->load(['balita.keluarga', 'balita.pemeriksaans' => function($q) {
+            $q->orderBy('tanggal_kunjungan', 'asc');
+        }]);
+        $pemeriksaan = $pemeriksaanBalita;
+        $history = $pemeriksaan->balita->pemeriksaans ?? collect();
+        return view('pemeriksaan.balita.print', compact('pemeriksaan', 'history'));
+    }
+
     public function edit(PemeriksaanBalita $pemeriksaanBalita)
     {
         $balitas = Balita::orderBy('nama_bayi')->get();
@@ -262,6 +272,7 @@ class PemeriksaanBalitaController extends Controller
         ]);
 
         $pemeriksaanBalita->update($validated);
+        $this->calculateStatuses($pemeriksaanBalita);
         return redirect()->route('pemeriksaan-balita.index')->with('success', 'Data pemeriksaan berhasil diperbarui');
     }
 

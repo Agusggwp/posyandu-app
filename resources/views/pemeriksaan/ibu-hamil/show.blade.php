@@ -39,7 +39,19 @@
             @foreach($data as $column => $raw)
                 <div>
                     <label class="block text-sm font-medium text-gray-500 mb-1">{{ $label($column) }}</label>
-                    <p class="text-lg text-gray-900 break-words">{{ $value($column, $raw) }}</p>
+                    @if($column === 'rujukan')
+                        @if($raw && $raw !== 'Tidak')
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-semibold bg-rose-100 text-rose-800 border border-rose-200">
+                                ⚠️ Perlu Rujukan (ke: {{ $raw }})
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                ✓ Tidak Perlu Rujukan
+                            </span>
+                        @endif
+                    @else
+                        <p class="text-lg text-gray-900 break-words">{{ $value($column, $raw) }}</p>
+                    @endif
                 </div>
             @endforeach
         </div>
@@ -47,6 +59,9 @@
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
             <a href="{{ route('pemeriksaan-ibu-hamil.edit', $pemeriksaan->id) }}" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                 Edit
+            </a>
+            <a href="{{ route('pemeriksaan-ibu-hamil.print', $pemeriksaan->id) }}" target="_blank" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
+                🖨️ Cetak Laporan Perkembangan
             </a>
             <a href="{{ route('pemeriksaan-ibu-hamil.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
                 Kembali

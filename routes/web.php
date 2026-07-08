@@ -151,14 +151,19 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:view_data'])->group(function () {
         Route::get('pemeriksaan-balita', [PemeriksaanBalitaController::class, 'index'])->name('pemeriksaan-balita.index');
         Route::get('pemeriksaan-balita/{pemeriksaan_balita}', [PemeriksaanBalitaController::class, 'show'])->name('pemeriksaan-balita.show');
+        Route::get('pemeriksaan-balita/{pemeriksaan_balita}/print', [PemeriksaanBalitaController::class, 'print'])->name('pemeriksaan-balita.print');
         Route::get('pemeriksaan-ibu-hamil', [PemeriksaanIbuHamilController::class, 'index'])->name('pemeriksaan-ibu-hamil.index');
         Route::get('pemeriksaan-ibu-hamil/{pemeriksaan_ibu_hamil}', [PemeriksaanIbuHamilController::class, 'show'])->name('pemeriksaan-ibu-hamil.show');
+        Route::get('pemeriksaan-ibu-hamil/{pemeriksaan_ibu_hamil}/print', [PemeriksaanIbuHamilController::class, 'print'])->name('pemeriksaan-ibu-hamil.print');
         Route::get('pemeriksaan-lansia', [PemeriksaanLansiaController::class, 'index'])->name('pemeriksaan-lansia.index');
         Route::get('pemeriksaan-lansia/{pemeriksaan_lansia}', [PemeriksaanLansiaController::class, 'show'])->name('pemeriksaan-lansia.show');
+        Route::get('pemeriksaan-lansia/{pemeriksaan_lansia}/print', [PemeriksaanLansiaController::class, 'print'])->name('pemeriksaan-lansia.print');
         Route::get('pemeriksaan-nifas', [PemeriksaanNifasController::class, 'index'])->name('pemeriksaan-nifas.index');
         Route::get('pemeriksaan-nifas/{pemeriksaan_nifas}', [PemeriksaanNifasController::class, 'show'])->name('pemeriksaan-nifas.show');
+        Route::get('pemeriksaan-nifas/{pemeriksaan_nifas}/print', [PemeriksaanNifasController::class, 'print'])->name('pemeriksaan-nifas.print');
         Route::get('pemeriksaan-remaja', [PemeriksaanRemajaController::class, 'index'])->name('pemeriksaan-remaja.index');
         Route::get('pemeriksaan-remaja/{pemeriksaan_remaja}', [PemeriksaanRemajaController::class, 'show'])->name('pemeriksaan-remaja.show');
+        Route::get('pemeriksaan-remaja/{pemeriksaan_remaja}/print', [PemeriksaanRemajaController::class, 'print'])->name('pemeriksaan-remaja.print');
     });
     
     // Laporan Routes - Semua role bisa lihat

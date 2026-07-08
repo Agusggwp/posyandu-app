@@ -44,13 +44,28 @@
             @foreach($data as $column => $raw)
                 <div>
                     <span class="text-gray-500">{{ $label($column) }}:</span>
-                    <span class="font-semibold break-words">{{ $value($column, $raw) }}</span>
+                    @if($column === 'rujukan')
+                        @if($raw && $raw !== 'Tidak' && $raw !== 'Tidak Ada')
+                            <span class="inline-flex items-center px-3 py-1 rounded bg-rose-100 text-rose-800 border border-rose-200 text-xs font-semibold">
+                                ⚠️ Perlu Rujukan (ke: {{ $raw }})
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-3 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+                                ✓ Tidak Perlu Rujukan
+                            </span>
+                        @endif
+                    @else
+                        <span class="font-semibold break-words">{{ $value($column, $raw) }}</span>
+                    @endif
                 </div>
             @endforeach
         </div>
 
         <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
             <a href="{{ route('pemeriksaan-nifas.edit', $pemeriksaan->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center">Edit</a>
+            <a href="{{ route('pemeriksaan-nifas.print', $pemeriksaan->id) }}" target="_blank" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center shadow-md hover:shadow-lg transition-all duration-200">
+                🖨️ Cetak Laporan Perkembangan
+            </a>
             <a href="{{ route('pemeriksaan-nifas.index') }}" class="bg-rose-700 hover:bg-rose-800 text-white font-semibold py-2 px-6 rounded-xl w-full sm:w-auto text-center">Kembali</a>
         </div>
     </div>

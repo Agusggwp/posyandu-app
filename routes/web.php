@@ -71,26 +71,46 @@ Route::middleware(['auth'])->group(function () {
     
     // Master Data Routes - Kader dan Admin dapat menginput
     Route::middleware(['permission:manage_keluarga'])->group(function () {
+        Route::get('keluarga/export/excel', [KeluargaController::class, 'exportExcel'])->name('keluarga.export-excel');
+        Route::get('keluarga/import/template', [KeluargaController::class, 'importTemplate'])->name('keluarga.import-template');
+        Route::post('keluarga/import/excel', [KeluargaController::class, 'importExcel'])->name('keluarga.import-excel');
         Route::resource('keluarga', KeluargaController::class)->except(['destroy']);
     });
     
     Route::middleware(['permission:manage_balita'])->group(function () {
+        Route::get('balita/export/excel', [BalitaController::class, 'exportExcel'])->name('balita.export-excel');
+        Route::get('balita/import/template', [BalitaController::class, 'importTemplate'])->name('balita.import-template');
+        Route::post('balita/import/excel', [BalitaController::class, 'importExcel'])->name('balita.import-excel');
         Route::resource('balita', BalitaController::class)
             ->parameters(['balita' => 'balita'])
             ->except(['destroy']);
     });
     
     Route::middleware(['permission:manage_ibu_hamil'])->group(function () {
+        Route::get('ibu-hamil/export/excel', [IbuHamilController::class, 'exportExcel'])->name('ibu-hamil.export-excel');
+        Route::get('ibu-hamil/import/template', [IbuHamilController::class, 'importTemplate'])->name('ibu-hamil.import-template');
+        Route::post('ibu-hamil/import/excel', [IbuHamilController::class, 'importExcel'])->name('ibu-hamil.import-excel');
         Route::resource('ibu-hamil', IbuHamilController::class)->except(['destroy']);
+
+        Route::get('nifas/export/excel', [NifasController::class, 'exportExcel'])->name('nifas.export-excel');
+        Route::get('nifas/import/template', [NifasController::class, 'importTemplate'])->name('nifas.import-template');
+        Route::post('nifas/import/excel', [NifasController::class, 'importExcel'])->name('nifas.import-excel');
         Route::resource('nifas', NifasController::class)
             ->parameters(['nifas' => 'nifas'])
             ->except(['destroy']);
     });
     
     Route::middleware(['permission:manage_lansia'])->group(function () {
+        Route::get('lansia/export/excel', [LansiaController::class, 'exportExcel'])->name('lansia.export-excel');
+        Route::get('lansia/import/template', [LansiaController::class, 'importTemplate'])->name('lansia.import-template');
+        Route::post('lansia/import/excel', [LansiaController::class, 'importExcel'])->name('lansia.import-excel');
         Route::resource('lansia', LansiaController::class)
             ->parameters(['lansia' => 'lansia'])
             ->except(['destroy']);
+
+        Route::get('remaja/export/excel', [RemajaController::class, 'exportExcel'])->name('remaja.export-excel');
+        Route::get('remaja/import/template', [RemajaController::class, 'importTemplate'])->name('remaja.import-template');
+        Route::post('remaja/import/excel', [RemajaController::class, 'importExcel'])->name('remaja.import-excel');
         Route::resource('remaja', RemajaController::class)->except(['destroy']);
     });
     

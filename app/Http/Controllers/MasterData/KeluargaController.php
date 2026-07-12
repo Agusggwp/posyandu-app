@@ -120,4 +120,171 @@ class KeluargaController extends Controller
             ];
         }));
     }
+
+    public function exportExcel()
+    {
+        $keluargas = Keluarga::orderBy('no_kk', 'asc')->get();
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="data_kepala_keluarga_' . date('Ymd_His') . '.csv"',
+        ];
+
+        return response()->streamDownload(function() use ($keluargas) {
+            $handle = fopen('php://output', 'w');
+            // Write BOM for Excel UTF-8 compatibility
+            fwrite($handle, "\xEF\xBB\xBF");
+            
+            // Header
+            fputcsv($handle, ['No KK', 'No NIK', 'Nama Lengkap', 'Email', 'Alamat', 'No Telepon', 'Status']);
+
+            foreach ($keluargas as $keluarga) {
+                fputcsv($handle, [
+                    $keluarga->no_kk,
+                    $keluarga->no_nik,
+                    $keluarga->nama_lengkap,
+                    $keluarga->email,
+                    $keluarga->alamat,
+                    $keluarga->no_telepon,
+                    $keluarga->status
+                ]);
+            }
+            fclose($handle);
+        }, 'data_kepala_keluarga_' . date('Ymd_His') . '.csv', $headers);
+    }
+
+    public function importTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="template_import_keluarga.csv"',
+        ];
+
+        return response()->streamDownload(function() {
+            $handle = fopen('php://output', 'w');
+            fwrite($handle, "\xEF\xBB\xBF");
+            fputcsv($handle, ['No KK', 'No NIK', 'Nama Lengkap', 'Email', 'Alamat', 'No Telepon']);
+            fputcsv($handle, ['3201234567890123', '3201234567890124', 'John Doe', 'john.doe@example.com', 'Jl. Posyandu No. 1', '08123456789']);
+            fclose($handle);
+        }, 'template_import_keluarga.csv', $headers);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,txt'
+        ]);
+
+        $file = $request->file('file');
+        $path = $file->getRealPath();
+        
+        $handle = fopen($path, 'r');
+        if (!$handle) {
+            return back()->with('error', 'Gagal membuka file');
+        }
+
+        // Detect separator
+        $firstLine = fgets($handle);
+        $delimiter = ',';
+        if (strpos($firstLine, ';') !== false && strpos($firstLine, ',') === false) {
+            $delimiter = ';';
+        }
+        rewind($handle);
+
+        // Skip BOM if present
+        $bom = fread($handle, 3);
+        if ($bom !== "\xEF\xBB\xBF") {
+            rewind($handle);
+        }
+
+        $header = fgetcsv($handle, 1000, $delimiter);
+        if (!$header) {
+            fclose($handle);
+            return back()->with('error', 'File template kosong');
+        }
+
+        $header = array_map(function($h) {
+            return strtolower(trim(str_replace([' ', '.'], ['', ''], $h)));
+        }, $header);
+
+        $successCount = 0;
+        $rowNumber = 1;
+
+        \DB::beginTransaction();
+        try {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+                $rowNumber++;
+                // Skip empty rows
+                if (count(array_filter($row)) === 0) {
+                    continue;
+                }
+
+                if (count($row) < count($header)) {
+                    $row = array_pad($row, count($header), '');
+                } elseif (count($row) > count($header)) {
+                    $row = array_slice($row, 0, count($header));
+                }
+
+                $data = array_combine($header, $row);
+
+                // Map header variations to database fields
+                $mapped = [
+                    'no_kk' => $data['nokk'] ?? ($data['no_kk'] ?? ''),
+                    'no_nik' => $data['nonik'] ?? ($data['no_nik'] ?? ($data['nik'] ?? '')),
+                    'nama_lengkap' => $data['namalengkap'] ?? ($data['nama_lengkap'] ?? ($data['nama'] ?? '')),
+                    'email' => $data['email'] ?? '',
+                    'alamat' => $data['alamat'] ?? '',
+                    'no_telepon' => $data['notelepon'] ?? ($data['no_telepon'] ?? ($data['telepon'] ?? ($data['no_hp'] ?? ''))),
+                    'status' => 'approved',
+                ];
+
+                // Validate row
+                $validator = \Validator::make($mapped, [
+                    'no_kk' => 'required|string|max:16',
+                    'no_nik' => 'nullable|string|max:16',
+                    'nama_lengkap' => 'required|string|max:255',
+                    'email' => 'required|email|max:255',
+                    'alamat' => 'required|string',
+                ]);
+
+                if ($validator->fails()) {
+                    throw new \Exception("Baris {$rowNumber}: " . implode(', ', $validator->errors()->all()));
+                }
+
+                // Check uniqueness manually for clearer messages
+                $existingKK = Keluarga::where('no_kk', $mapped['no_kk'])->first();
+                if ($existingKK) {
+                    // Update existing
+                    $existingKK->update($mapped);
+                } else {
+                    // Create new
+                    // Check duplicate email
+                    if (Keluarga::where('email', $mapped['email'])->exists()) {
+                        throw new \Exception("Baris {$rowNumber}: Email '{$mapped['email']}' sudah terdaftar.");
+                    }
+                    if (!empty($mapped['no_nik']) && Keluarga::where('no_nik', $mapped['no_nik'])->exists()) {
+                        throw new \Exception("Baris {$rowNumber}: NIK '{$mapped['no_nik']}' sudah terdaftar.");
+                    }
+                    $mapped['password'] = Hash::make('12345678');
+                    $mapped['email_verified_at'] = now();
+                    Keluarga::create($mapped);
+                }
+
+                $successCount++;
+            }
+            \DB::commit();
+            fclose($handle);
+            if ($request->ajax()) {
+                session()->flash('success', "Berhasil mengimpor {$successCount} data kepala keluarga.");
+                return response()->json(['success' => true]);
+            }
+            return back()->with('success', "Berhasil mengimpor {$successCount} data kepala keluarga.");
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            fclose($handle);
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            }
+            return back()->with('error', 'Gagal mengimpor data. ' . $e->getMessage());
+        }
+    }
 }

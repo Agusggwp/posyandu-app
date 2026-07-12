@@ -33,17 +33,24 @@
             @else
                 <div class="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <label for="search_lansia" class="block text-sm font-medium text-gray-700 mb-2">
-                        Cari Lansia
+                        Cari Lansia <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" id="search_lansia" placeholder="Ketik nama atau NIK lansia..." 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-3">
-                    <p class="text-xs text-gray-500">Total: <span id="total_lansia">{{ count($lansias) }}</span> lansia</p>
+                    <div class="relative">
+                        <input type="text" id="search_lansia" placeholder="Ketik nama atau NIK lansia..." autocomplete="off"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-1 @error('dewasa_identitas_id') border-red-500 @enderror">
+                        <div id="suggestions_lansia" class="absolute z-50 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto hidden">
+                            <!-- suggestions will be populated here -->
+                        </div>
+                    </div>
+                    @error('dewasa_identitas_id')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                    <p class="text-xs text-gray-500 mt-2">Total: <span id="total_lansia">{{ count($lansias) }}</span> lansia</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label for="dewasa_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Lansia <span class="text-red-500">*</span></label>
-                        <select name="dewasa_identitas_id" id="dewasa_identitas_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('dewasa_identitas_id') border-red-500 @enderror" required>
+                    <div class="hidden">
+                        <select name="dewasa_identitas_id" id="dewasa_identitas_id" required>
                             <option value="">-- Pilih Lansia --</option>
                             @foreach($lansias as $lansia)
                                 <option value="{{ $lansia->id }}" {{ old('dewasa_identitas_id', $data['dewasa_identitas_id'] ?? '') == $lansia->id ? 'selected' : '' }}>
@@ -51,9 +58,6 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('dewasa_identitas_id')
-                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div>
@@ -198,37 +202,80 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search_lansia');
-        const selectDropdown = document.getElementById('lansia_identitas_id');
-        const totalCount = document.getElementById('total_lansia');
+    // Search autocomplete functionality
+    const searchInput = document.getElementById('search_lansia');
+    const selectDropdown = document.getElementById('dewasa_identitas_id');
+    const totalCount = document.getElementById('total_lansia');
+    const suggestionsBox = document.getElementById('suggestions_lansia');
 
-        if (searchInput && selectDropdown) {
-            const allOptions = Array.from(selectDropdown.options).map(opt => ({
+    if (searchInput && selectDropdown && suggestionsBox) {
+        const allOptions = Array.from(selectDropdown.options)
+            .filter(opt => opt.value !== '')
+            .map(opt => ({
                 value: opt.value,
-                text: opt.text,
-                element: opt
+                text: opt.text
             }));
 
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                let visibleCount = 0;
-
-                allOptions.forEach(opt => {
-                    if (opt.value === '') {
-                        opt.element.style.display = '';
-                        return;
-                    }
-
-                    const isMatch = opt.text.toLowerCase().includes(searchTerm);
-                    opt.element.style.display = isMatch ? '' : 'none';
-                    if (isMatch) visibleCount++;
-                });
-
-                totalCount.textContent = visibleCount;
-            });
+        // Sync on page load (e.g. for Laravel validation old() values)
+        if (selectDropdown.value) {
+            const selectedOpt = Array.from(selectDropdown.options).find(opt => opt.value === selectDropdown.value);
+            if (selectedOpt) {
+                searchInput.value = selectedOpt.text.trim();
+            }
         }
-    });
+
+        function renderSuggestions(searchTerm) {
+            suggestionsBox.innerHTML = '';
+            const term = searchTerm.toLowerCase().trim();
+            const filtered = allOptions.filter(opt => opt.text.toLowerCase().includes(term));
+            
+            if (totalCount) {
+                totalCount.textContent = filtered.length;
+            }
+
+            if (filtered.length === 0) {
+                const noResult = document.createElement('div');
+                noResult.className = 'px-4 py-2 text-gray-500 text-sm';
+                noResult.textContent = 'Tidak ditemukan';
+                suggestionsBox.appendChild(noResult);
+            } else {
+                filtered.forEach(opt => {
+                    const item = document.createElement('div');
+                    item.className = 'px-4 py-2 hover:bg-slate-100 cursor-pointer text-gray-700 text-sm border-b border-gray-100 last:border-0';
+                    item.textContent = opt.text;
+                    item.addEventListener('click', function() {
+                        selectDropdown.value = opt.value;
+                        selectDropdown.dispatchEvent(new Event('change'));
+                        searchInput.value = opt.text.trim();
+                        suggestionsBox.classList.add('hidden');
+                    });
+                    suggestionsBox.appendChild(item);
+                });
+            }
+            suggestionsBox.classList.remove('hidden');
+        }
+
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                selectDropdown.value = '';
+                selectDropdown.dispatchEvent(new Event('change'));
+                renderSuggestions('');
+            } else {
+                renderSuggestions(this.value);
+            }
+        });
+
+        searchInput.addEventListener('focus', function() {
+            renderSuggestions(this.value);
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.add('hidden');
+            }
+        });
+    }
 </script>
 @endpush
 @endsection

@@ -125,4 +125,205 @@ class NifasController extends Controller
             ];
         }));
     }
+
+    public function exportExcel()
+    {
+        $nifases = Nifas::with('keluarga')->orderBy('nama_ibu', 'asc')->get();
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="data_nifas_' . date('Ymd_His') . '.csv"',
+        ];
+
+        return response()->streamDownload(function() use ($nifases) {
+            $handle = fopen('php://output', 'w');
+            fwrite($handle, "\xEF\xBB\xBF");
+            
+            fputcsv($handle, [
+                'No KK', 'Nama Ibu', 'NIK', 'Tanggal Lahir', 'Umur', 'Nama Suami', 
+                'No HP', 'Tanggal Bersalin', 'Tempat Bersalin', 'Anak Ke', 'Tinggi Badan Ibu (cm)'
+            ]);
+
+            foreach ($nifases as $nifas) {
+                fputcsv($handle, [
+                    $nifas->keluarga->no_kk ?? '',
+                    $nifas->nama_ibu,
+                    $nifas->nik,
+                    $nifas->tanggal_lahir ? $nifas->tanggal_lahir->format('Y-m-d') : '',
+                    $nifas->umur,
+                    $nifas->nama_suami,
+                    $nifas->no_hp,
+                    $nifas->tanggal_bersalin ? $nifas->tanggal_bersalin->format('Y-m-d') : '',
+                    $nifas->tempat_bersalin,
+                    $nifas->anak_ke,
+                    $nifas->tinggi_badan_ibu
+                ]);
+            }
+            fclose($handle);
+        }, 'data_nifas_' . date('Ymd_His') . '.csv', $headers);
+    }
+
+    public function importTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="template_import_nifas.csv"',
+        ];
+
+        return response()->streamDownload(function() {
+            $handle = fopen('php://output', 'w');
+            fwrite($handle, "\xEF\xBB\xBF");
+            fputcsv($handle, [
+                'No KK', 'Nama Ibu', 'NIK', 'Tanggal Lahir', 'Umur', 'Nama Suami', 
+                'No HP', 'Tanggal Bersalin', 'Tempat Bersalin', 'Anak Ke', 'Tinggi Badan Ibu (cm)'
+            ]);
+            fputcsv($handle, [
+                '3201234567890123', 'Jane Doe Jr', '3201234567890128', '1996-03-12', '30', 'John Doe', 
+                '08123456789', '2026-06-01', 'Puskesmas', '1', '158.5'
+            ]);
+            fclose($handle);
+        }, 'template_import_nifas.csv', $headers);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,txt'
+        ]);
+
+        $file = $request->file('file');
+        $path = $file->getRealPath();
+        
+        $handle = fopen($path, 'r');
+        if (!$handle) {
+            return back()->with('error', 'Gagal membuka file');
+        }
+
+        $firstLine = fgets($handle);
+        $delimiter = ',';
+        if (strpos($firstLine, ';') !== false && strpos($firstLine, ',') === false) {
+            $delimiter = ';';
+        }
+        rewind($handle);
+
+        $bom = fread($handle, 3);
+        if ($bom !== "\xEF\xBB\xBF") {
+            rewind($handle);
+        }
+
+        $header = fgetcsv($handle, 1000, $delimiter);
+        if (!$header) {
+            fclose($handle);
+            return back()->with('error', 'File template kosong');
+        }
+
+        $header = array_map(function($h) {
+            return strtolower(trim(str_replace([' ', '.', '(', ')'], ['', '', '', ''], $h)));
+        }, $header);
+
+        $successCount = 0;
+        $rowNumber = 1;
+
+        \DB::beginTransaction();
+        try {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+                $rowNumber++;
+                if (count(array_filter($row)) === 0) {
+                    continue;
+                }
+
+                if (count($row) < count($header)) {
+                    $row = array_pad($row, count($header), '');
+                } elseif (count($row) > count($header)) {
+                    $row = array_slice($row, 0, count($header));
+                }
+
+                $data = array_combine($header, $row);
+
+                $mapped = [
+                    'no_kk' => $data['nokk'] ?? '',
+                    'nama_ibu' => $data['namaibu'] ?? ($data['nama'] ?? ''),
+                    'nik' => $data['nik'] ?? '',
+                    'tanggal_lahir' => $data['tanggallahir'] ?? '',
+                    'umur' => $data['umur'] ?? '',
+                    'nama_suami' => $data['namasuami'] ?? '',
+                    'no_hp' => $data['nohp'] ?? '',
+                    'tanggal_bersalin' => $data['tanggalbersalin'] ?? null,
+                    'tempat_bersalin' => $data['tempatbersalin'] ?? '',
+                    'anak_ke' => $data['anakke'] ?? null,
+                    'tinggi_badan_ibu' => $data['tinggibadanibucm'] ?? ($data['tinggibadanibu'] ?? null),
+                ];
+
+                // Validate row structure
+                $validator = \Validator::make($mapped, [
+                    'no_kk' => 'required|string',
+                    'nama_ibu' => 'required|string|max:255',
+                    'tanggal_lahir' => 'nullable|date_format:Y-m-d',
+                    'tanggal_bersalin' => 'nullable|date_format:Y-m-d',
+                    'anak_ke' => 'nullable|integer',
+                    'tinggi_badan_ibu' => 'nullable|numeric|min:0',
+                ]);
+
+                if ($validator->fails()) {
+                    throw new \Exception("Baris {$rowNumber}: " . implode(', ', $validator->errors()->all()));
+                }
+
+                // Check Keluarga
+                $keluarga = Keluarga::where('no_kk', $mapped['no_kk'])->first();
+                if (!$keluarga) {
+                    throw new \Exception("Baris {$rowNumber}: Nomor KK '{$mapped['no_kk']}' tidak terdaftar.");
+                }
+
+                $mapped['kepala_keluarga_id'] = $keluarga->id;
+
+                if (empty($mapped['umur']) && !empty($mapped['tanggal_lahir'])) {
+                    $mapped['umur'] = \Carbon\Carbon::parse($mapped['tanggal_lahir'])->age;
+                }
+
+                // Check uniqueness or update
+                $nifas = null;
+                if (!empty($mapped['nik'])) {
+                    $nifas = Nifas::where('nik', $mapped['nik'])->first();
+                }
+
+                if (!$nifas) {
+                    // Match by name and birthdate under the same family
+                    $nifas = Nifas::where('kepala_keluarga_id', $keluarga->id)
+                        ->where('nama_ibu', $mapped['nama_ibu'])
+                        ->first();
+                }
+
+                if ($nifas) {
+                    // Check duplicate NIK if NIK changes
+                    if (!empty($mapped['nik']) && $mapped['nik'] !== $nifas->nik) {
+                        if (Nifas::where('nik', $mapped['nik'])->exists()) {
+                            throw new \Exception("Baris {$rowNumber}: NIK '{$mapped['nik']}' sudah digunakan ibu nifas lain.");
+                        }
+                    }
+                    $nifas->update($mapped);
+                } else {
+                    // Create new
+                    if (!empty($mapped['nik']) && Nifas::where('nik', $mapped['nik'])->exists()) {
+                        throw new \Exception("Baris {$rowNumber}: NIK '{$mapped['nik']}' sudah terdaftar.");
+                    }
+                    Nifas::create($mapped);
+                }
+
+                $successCount++;
+            }
+            \DB::commit();
+            fclose($handle);
+            if ($request->ajax()) {
+                session()->flash('success', "Berhasil mengimpor {$successCount} data nifas.");
+                return response()->json(['success' => true]);
+            }
+            return back()->with('success', "Berhasil mengimpor {$successCount} data nifas.");
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            fclose($handle);
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            }
+            return back()->with('error', 'Gagal mengimpor data. ' . $e->getMessage());
+        }
+    }
 }

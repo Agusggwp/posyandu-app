@@ -7,9 +7,19 @@
             <h2 class="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">Data Ibu Hamil</h2>
             <p class="text-slate-600 mt-2">Manajemen data ibu hamil</p>
         </div>
-        <a href="{{ route('ibu-hamil.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-            + Tambah Ibu Hamil
-        </a>
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <a href="{{ route('ibu-hamil.export-excel') }}" class="w-full sm:w-auto text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Export Excel
+            </a>
+            <button onclick="toggleImportModal(true)" class="w-full sm:w-auto text-center bg-violet-600 hover:bg-violet-750 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                Import Excel
+            </button>
+            <a href="{{ route('ibu-hamil.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                + Tambah Ibu Hamil
+            </a>
+        </div>
     </div>
 
     <!-- Search Box -->
@@ -139,4 +149,157 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+</script>
+
+<!-- Import Excel Modal -->
+<div id="importModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="toggleImportModal(false)"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="{{ route('ibu-hamil.import-excel') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content-area bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="import-error-msg hidden bg-rose-50 border-l-4 border-rose-500 text-rose-700 p-4 mb-4 text-sm rounded-r-lg"></div>
+
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-violet-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-semibold text-gray-900" id="modal-title">
+                                Import Data Ibu Hamil
+                            </h3>
+                            <div class="mt-2 text-sm text-gray-500">
+                                <p class="mb-4">Silakan unggah file Excel/CSV data ibu hamil. Gunakan tombol di bawah ini untuk mengunduh template format data yang sesuai.</p>
+                                <a href="{{ route('ibu-hamil.import-template') }}" class="inline-flex items-center gap-1.5 text-indigo-650 hover:text-indigo-850 font-semibold mb-6">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Unduh Template Format CSV
+                                </a>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih File (.csv)</label>
+                                    <input type="file" name="file" accept=".csv" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress & Loading Indicator -->
+                <div class="progress-container hidden bg-white px-4 pt-5 pb-8 sm:p-6 text-center">
+                    <div class="flex justify-center mb-6">
+                        <div class="relative w-16 h-16">
+                            <div class="absolute inset-0 rounded-full border-4 border-violet-100"></div>
+                            <div class="absolute inset-0 rounded-full border-4 border-t-violet-600 border-r-violet-600 animate-spin"></div>
+                        </div>
+                    </div>
+                    <h4 class="text-base font-semibold text-gray-900 mb-2 progress-text">Mengunggah file...</h4>
+                    <p class="text-xs text-gray-500 mb-6">Harap tunggu, jangan menutup browser atau memuat ulang halaman.</p>
+                    
+                    <div class="w-full bg-gray-100 rounded-full h-3 relative overflow-hidden mb-2">
+                        <div class="progress-bar-fill bg-gradient-to-r from-violet-500 to-indigo-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <div class="text-sm font-bold text-violet-600 progress-percent">0%</div>
+                </div>
+
+                <div class="modal-footer bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                    <button type="submit" class="submit-btn w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-violet-600 text-base font-semibold text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Mulai Import
+                    </button>
+                    <button type="button" onclick="toggleImportModal(false)" class="cancel-btn mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleImportModal(show) {
+        const modal = document.getElementById('importModal');
+        if (show) {
+            modal.classList.remove('hidden');
+        } else {
+            modal.classList.add('hidden');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('#importModal form');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                
+                const formContent = form.querySelector('.modal-content-area');
+                const progressContainer = form.querySelector('.progress-container');
+                const footer = form.querySelector('.modal-footer');
+                const errorMsg = form.querySelector('.import-error-msg');
+                
+                const progressBar = progressContainer.querySelector('.progress-bar-fill');
+                const progressText = progressContainer.querySelector('.progress-text');
+                const progressPercent = progressContainer.querySelector('.progress-percent');
+                
+                errorMsg.classList.add('hidden');
+                errorMsg.textContent = '';
+                
+                formContent.classList.add('hidden');
+                progressContainer.classList.remove('hidden');
+                footer.classList.add('hidden');
+                
+                const formData = new FormData(form);
+                const xhr = new XMLHttpRequest();
+                
+                xhr.open('POST', form.action, true);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                
+                xhr.upload.addEventListener('progress', function (e) {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        progressBar.style.width = percent + '%';
+                        progressPercent.textContent = percent + '%';
+                        if (percent === 100) {
+                            progressText.textContent = 'Memproses data ke database...';
+                        } else {
+                            progressText.textContent = 'Mengunggah file...';
+                        }
+                    }
+                });
+                
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        window.location.reload();
+                    } else {
+                        let error = 'Terjadi kesalahan saat memproses data.';
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.message) {
+                                error = response.message;
+                            }
+                        } catch (err) {}
+                        
+                        errorMsg.textContent = error;
+                        errorMsg.classList.remove('hidden');
+                        
+                        formContent.classList.remove('hidden');
+                        progressContainer.classList.add('hidden');
+                        footer.classList.remove('hidden');
+                    }
+                };
+                
+                xhr.onerror = function () {
+                    errorMsg.textContent = 'Koneksi error, gagal mengunggah file.';
+                    errorMsg.classList.remove('hidden');
+                    
+                    formContent.classList.remove('hidden');
+                    progressContainer.classList.add('hidden');
+                    footer.classList.remove('hidden');
+                };
+                
+                xhr.send(formData);
+            });
+        }
+    });
 </script>

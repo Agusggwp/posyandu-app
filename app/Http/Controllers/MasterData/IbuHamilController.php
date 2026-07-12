@@ -133,4 +133,202 @@ class IbuHamilController extends Controller
             ];
         }));
     }
+
+    public function exportExcel()
+    {
+        $ibuHamils = IbuHamil::with('keluarga')->orderBy('nama_ibu', 'asc')->get();
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="data_ibu_hamil_' . date('Ymd_His') . '.csv"',
+        ];
+
+        return response()->streamDownload(function() use ($ibuHamils) {
+            $handle = fopen('php://output', 'w');
+            fwrite($handle, "\xEF\xBB\xBF");
+            
+            fputcsv($handle, [
+                'No KK', 'NIK', 'Nama Ibu', 'Tanggal Lahir', 'Umur', 
+                'Nama Suami', 'No HP', 'L Ibu Hamil', 'Kehamilan Ke', 'Jarak Anak Sebelumnya'
+            ]);
+
+            foreach ($ibuHamils as $ibuHamil) {
+                fputcsv($handle, [
+                    $ibuHamil->keluarga->no_kk ?? '',
+                    $ibuHamil->nik,
+                    $ibuHamil->nama_ibu,
+                    $ibuHamil->tanggal_lahir ? $ibuHamil->tanggal_lahir->format('Y-m-d') : '',
+                    $ibuHamil->umur,
+                    $ibuHamil->nama_suami,
+                    $ibuHamil->no_hp,
+                    $ibuHamil->l_ibu_hamil,
+                    $ibuHamil->kehamilan_ke,
+                    $ibuHamil->jarak_anak_sebelumnya
+                ]);
+            }
+            fclose($handle);
+        }, 'data_ibu_hamil_' . date('Ymd_His') . '.csv', $headers);
+    }
+
+    public function importTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="template_import_ibu_hamil.csv"',
+        ];
+
+        return response()->streamDownload(function() {
+            $handle = fopen('php://output', 'w');
+            fwrite($handle, "\xEF\xBB\xBF");
+            fputcsv($handle, [
+                'No KK', 'NIK', 'Nama Ibu', 'Tanggal Lahir', 'Umur', 
+                'Nama Suami', 'No HP', 'L Ibu Hamil', 'Kehamilan Ke', 'Jarak Anak Sebelumnya'
+            ]);
+            fputcsv($handle, [
+                '3201234567890123', '3201234567890126', 'Jane Doe', '1995-05-10', '31', 
+                'John Doe', '08123456789', '23.5', '2', '2 tahun'
+            ]);
+            fclose($handle);
+        }, 'template_import_ibu_hamil.csv', $headers);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,txt'
+        ]);
+
+        $file = $request->file('file');
+        $path = $file->getRealPath();
+        
+        $handle = fopen($path, 'r');
+        if (!$handle) {
+            return back()->with('error', 'Gagal membuka file');
+        }
+
+        $firstLine = fgets($handle);
+        $delimiter = ',';
+        if (strpos($firstLine, ';') !== false && strpos($firstLine, ',') === false) {
+            $delimiter = ';';
+        }
+        rewind($handle);
+
+        $bom = fread($handle, 3);
+        if ($bom !== "\xEF\xBB\xBF") {
+            rewind($handle);
+        }
+
+        $header = fgetcsv($handle, 1000, $delimiter);
+        if (!$header) {
+            fclose($handle);
+            return back()->with('error', 'File template kosong');
+        }
+
+        $header = array_map(function($h) {
+            return strtolower(trim(str_replace([' ', '.', '(', ')'], ['', '', '', ''], $h)));
+        }, $header);
+
+        $successCount = 0;
+        $rowNumber = 1;
+
+        \DB::beginTransaction();
+        try {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+                $rowNumber++;
+                if (count(array_filter($row)) === 0) {
+                    continue;
+                }
+
+                if (count($row) < count($header)) {
+                    $row = array_pad($row, count($header), '');
+                } elseif (count($row) > count($header)) {
+                    $row = array_slice($row, 0, count($header));
+                }
+
+                $data = array_combine($header, $row);
+
+                $mapped = [
+                    'no_kk' => $data['nokk'] ?? '',
+                    'nik' => $data['nik'] ?? '',
+                    'nama_ibu' => $data['namaibu'] ?? ($data['nama'] ?? ''),
+                    'tanggal_lahir' => $data['tanggallahir'] ?? '',
+                    'umur' => $data['umur'] ?? '',
+                    'nama_suami' => $data['namasuami'] ?? '',
+                    'no_hp' => $data['nohp'] ?? '',
+                    'l_ibu_hamil' => $data['libuhamil'] ?? null,
+                    'kehamilan_ke' => $data['kehamilanke'] ?? null,
+                    'jarak_anak_sebelumnya' => $data['jarakanaksebelumnya'] ?? '',
+                ];
+
+                // Validate row structure
+                $validator = \Validator::make($mapped, [
+                    'no_kk' => 'required|string',
+                    'nama_ibu' => 'required|string|max:255',
+                    'tanggal_lahir' => 'required|date_format:Y-m-d',
+                    'kehamilan_ke' => 'nullable|integer',
+                ]);
+
+                if ($validator->fails()) {
+                    throw new \Exception("Baris {$rowNumber}: " . implode(', ', $validator->errors()->all()));
+                }
+
+                // Check Keluarga
+                $keluarga = Keluarga::where('no_kk', $mapped['no_kk'])->first();
+                if (!$keluarga) {
+                    throw new \Exception("Baris {$rowNumber}: Nomor KK '{$mapped['no_kk']}' tidak terdaftar.");
+                }
+
+                $mapped['kepala_keluarga_id'] = $keluarga->id;
+
+                if (empty($mapped['umur'])) {
+                    $mapped['umur'] = \Carbon\Carbon::parse($mapped['tanggal_lahir'])->age;
+                }
+
+                // Check uniqueness or update
+                $ibuHamil = null;
+                if (!empty($mapped['nik'])) {
+                    $ibuHamil = IbuHamil::where('nik', $mapped['nik'])->first();
+                }
+
+                if (!$ibuHamil) {
+                    // Match by name and birthdate under the same family
+                    $ibuHamil = IbuHamil::where('kepala_keluarga_id', $keluarga->id)
+                        ->where('nama_ibu', $mapped['nama_ibu'])
+                        ->where('tanggal_lahir', $mapped['tanggal_lahir'])
+                        ->first();
+                }
+
+                if ($ibuHamil) {
+                    // Check duplicate NIK if NIK changes
+                    if (!empty($mapped['nik']) && $mapped['nik'] !== $ibuHamil->nik) {
+                        if (IbuHamil::where('nik', $mapped['nik'])->exists()) {
+                            throw new \Exception("Baris {$rowNumber}: NIK '{$mapped['nik']}' sudah digunakan ibu hamil lain.");
+                        }
+                    }
+                    $ibuHamil->update($mapped);
+                } else {
+                    // Create new
+                    if (!empty($mapped['nik']) && IbuHamil::where('nik', $mapped['nik'])->exists()) {
+                        throw new \Exception("Baris {$rowNumber}: NIK '{$mapped['nik']}' sudah terdaftar.");
+                    }
+                    IbuHamil::create($mapped);
+                }
+
+                $successCount++;
+            }
+            \DB::commit();
+            fclose($handle);
+            if ($request->ajax()) {
+                session()->flash('success', "Berhasil mengimpor {$successCount} data ibu hamil.");
+                return response()->json(['success' => true]);
+            }
+            return back()->with('success', "Berhasil mengimpor {$successCount} data ibu hamil.");
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            fclose($handle);
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            }
+            return back()->with('error', 'Gagal mengimpor data. ' . $e->getMessage());
+        }
+    }
 }

@@ -101,13 +101,29 @@ class KepalaKeluargaAuthController extends Controller
         $autoApprove = Setting::getSetting('kk_auto_approve', 'inactive') === 'active';
 
         $validated = $request->validate([
-            'no_kk' => ['required', 'string', 'max:255', 'unique:kepala_keluarga,no_kk'],
-            'nama_lengkap' => ['required', 'string', 'max:255'],
+            'no_kk' => ['required', 'string', 'size:16', 'regex:/^[0-9]{16}$/', 'unique:kepala_keluarga,no_kk'],
+            'nama_lengkap' => ['required', 'string', 'max:30', 'regex:/^[a-zA-Z\s]+$/'],
             'email' => ['required', 'email', 'max:255', 'unique:kepala_keluarga,email'],
-            'no_nik' => ['nullable', 'string', 'max:16', 'unique:kepala_keluarga,no_nik'],
+            'no_nik' => ['nullable', 'string', 'size:16', 'regex:/^[0-9]{16}$/', 'unique:kepala_keluarga,no_nik'],
             'alamat' => ['required', 'string'],
-            'no_telepon' => ['nullable', 'string', 'max:20'],
+            'no_telepon' => ['nullable', 'string', 'between:11,13', 'regex:/^[0-9]{11,13}$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'no_kk.required' => 'Nomor KK wajib diisi.',
+            'no_kk.size' => 'Nomor KK harus berisi tepat 16 digit.',
+            'no_kk.regex' => 'Nomor KK hanya boleh berisi angka.',
+            'no_kk.unique' => 'Nomor KK sudah terdaftar.',
+            
+            'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
+            'nama_lengkap.max' => 'Nama lengkap tidak boleh lebih dari 30 karakter.',
+            'nama_lengkap.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
+            
+            'no_nik.size' => 'NIK harus berisi tepat 16 digit.',
+            'no_nik.regex' => 'NIK hanya boleh berisi angka.',
+            'no_nik.unique' => 'NIK sudah terdaftar.',
+            
+            'no_telepon.between' => 'Nomor telepon harus terdiri dari 11 sampai 13 digit.',
+            'no_telepon.regex' => 'Nomor telepon hanya boleh berisi angka.',
         ]);
 
         $keluarga = Keluarga::create([

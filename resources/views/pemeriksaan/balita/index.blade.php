@@ -45,7 +45,7 @@
                     @forelse($pemeriksaans as $index => $pemeriksaan)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaans->firstItem() + $index }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->umur ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->umur ? $pemeriksaan->umur . ' Bulan' : '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($pemeriksaan->waktu_kunjungan)->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $pemeriksaan->balita->nama ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->berat_badan }} kg</td>
@@ -100,7 +100,7 @@
                         <h3 class="font-semibold text-slate-900">{{ $pemeriksaan->balita->nama ?? '-' }}</h3>
                         <p class="text-xs text-slate-500 mt-1">{{ optional($pemeriksaan->waktu_kunjungan)->format('d/m/Y') ?? '-' }}</p>
                     </div>
-                    <span class="text-xs font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">Umur: {{ $pemeriksaan->umur ?? '-' }}</span>
+                    <span class="text-xs font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">Umur: {{ $pemeriksaan->umur ? $pemeriksaan->umur . ' Bulan' : '-' }}</span>
                 </div>
 
                 <div class="mt-3 grid grid-cols-2 gap-2 text-sm">

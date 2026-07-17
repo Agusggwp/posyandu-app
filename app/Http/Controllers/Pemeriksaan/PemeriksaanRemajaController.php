@@ -200,14 +200,14 @@ class PemeriksaanRemajaController extends Controller
         return view('pemeriksaan.remaja.show', compact('pemeriksaan'));
     }
 
-    public function print(PemeriksaanRemaja $pemeriksaanRemaja)
+    public function print(PemeriksaanRemaja $pemeriksaan_remaja)
     {
-        $pemeriksaanRemaja->load(['remaja.keluarga']);
-        $history = PemeriksaanRemaja::where('remaja_identitas_id', $pemeriksaanRemaja->remaja_identitas_id)
+        $pemeriksaan_remaja->load(['remaja.keluarga']);
+        $history = PemeriksaanRemaja::where('remaja_identitas_id', $pemeriksaan_remaja->remaja_identitas_id)
             ->where('tahap_terakhir', 4)
             ->orderBy('tanggal_kunjungan', 'asc')
             ->get();
-        $pemeriksaan = $pemeriksaanRemaja;
+        $pemeriksaan = $pemeriksaan_remaja;
         return view('pemeriksaan.remaja.print', compact('pemeriksaan', 'history'));
     }
 

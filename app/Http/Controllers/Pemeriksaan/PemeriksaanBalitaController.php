@@ -217,35 +217,36 @@ class PemeriksaanBalitaController extends Controller
         };
     }
 
-    public function show(PemeriksaanBalita $pemeriksaanBalita)
+    public function show(PemeriksaanBalita $pemeriksaan_balita)
     {
-        $pemeriksaanBalita->load('balita');
-        $pemeriksaan = $pemeriksaanBalita;
+        $pemeriksaan_balita->load('balita');
+        $pemeriksaan = $pemeriksaan_balita;
         return view('pemeriksaan.balita.show', compact('pemeriksaan'));
     }
 
-    public function print(PemeriksaanBalita $pemeriksaanBalita)
+    public function print(PemeriksaanBalita $pemeriksaan_balita)
     {
-        $pemeriksaanBalita->load(['balita.keluarga', 'balita.pemeriksaans' => function($q) {
+        $pemeriksaan_balita->load(['balita.keluarga', 'balita.pemeriksaans' => function($q) {
             $q->orderBy('tanggal_kunjungan', 'asc');
         }]);
-        $pemeriksaan = $pemeriksaanBalita;
+        $pemeriksaan = $pemeriksaan_balita;
         $history = $pemeriksaan->balita->pemeriksaans ?? collect();
         return view('pemeriksaan.balita.print', compact('pemeriksaan', 'history'));
     }
 
-    public function edit(PemeriksaanBalita $pemeriksaanBalita)
+    public function edit(PemeriksaanBalita $pemeriksaan_balita)
     {
         $balitas = Balita::orderBy('nama_bayi')->get();
-        $pemeriksaan = $pemeriksaanBalita;
+        $pemeriksaan = $pemeriksaan_balita;
         return view('pemeriksaan.balita.edit', compact('pemeriksaan', 'balitas'));
     }
 
-    public function update(Request $request, PemeriksaanBalita $pemeriksaanBalita)
+    public function update(Request $request, PemeriksaanBalita $pemeriksaan_balita)
     {
         $validated = $request->validate([
             'balita_identitas_id' => 'required|exists:balita_identitas,id',
             'tanggal_kunjungan' => 'required|date',
+            'umur' => 'nullable|integer|min:0',
             'berat_badan' => 'required|numeric|min:0',
             'naik_tidak_naik' => 'nullable|string',
             'panjang_badan' => 'required|numeric|min:0',
@@ -271,15 +272,15 @@ class PemeriksaanBalitaController extends Controller
             'rujukan' => 'nullable|string',
         ]);
 
-        $pemeriksaanBalita->update($validated);
-        $this->calculateStatuses($pemeriksaanBalita);
+        $pemeriksaan_balita->update($validated);
+        $this->calculateStatuses($pemeriksaan_balita);
         return redirect()->route('pemeriksaan-balita.index')->with('success', 'Data pemeriksaan berhasil diperbarui');
     }
 
-    public function destroy(PemeriksaanBalita $pemeriksaanBalita)
+    public function destroy(PemeriksaanBalita $pemeriksaan_balita)
     {
-        $id = $pemeriksaanBalita->id;
-        $pemeriksaanBalita->delete();
+        $id = $pemeriksaan_balita->id;
+        $pemeriksaan_balita->delete();
 
         try {
             ActivityLog::create([

@@ -1,3 +1,66 @@
-No KK,NIK,Nama,Tanggal Lahir,Umur,No HP,Status Perkawinan,Pekerjaan,Riwayat Keluarga,Riwayat Diri,Merokok,Konsumsi Gula,Konsumsi Garam,Konsumsi Lemak
+﻿"No KK",NIK,Nama,"Tanggal Lahir",Umur,"No HP","Status Perkawinan",Pekerjaan,"Riwayat Keluarga","Riwayat Diri",Merokok,"Konsumsi Gula","Konsumsi Garam","Konsumsi Lemak"
 3201234567890123,3201234567890400,Kartomulyono,1955-04-12,71,081234567890,Kawin,Tani,Hipertensi,Diabetes,Tidak,Ya,Ya,Tidak
-3201234567899999,3201234567890401,Sudarmi,1960-09-25,65,081298765432,Cerai Mati,IRT,Tidak Ada,Asam Urat,Tidak,Tidak,Ya,Ya
+3201234567899999,3201234567890401,Sudarmi,1960-09-25,65,081298765432,"Cerai Mati",IRT,"Tidak Ada","Asam Urat",Tidak,Tidak,Ya,Ya
+3201700886944022,3201174960547499,"Hadi Pratama",1963-02-07,63,081258437016,Kawin,IRT,Stroke,"Asam Urat",Ya,Tidak,Ya,Tidak
+3201373736951768,3201147881775466,"Indah Haryanto",1945-01-09,81,081249195435,"Cerai Mati","Tidak Bekerja","Asam Urat",Asma,Tidak,Tidak,Tidak,Tidak
+3201389090608148,3201230017845585,"Gita Purnama",1953-09-08,72,081234796269,"Cerai Mati",Swasta,Stroke,Asma,Ya,Tidak,Tidak,Ya
+3201756234831357,3201871303935182,"Yanto Nugraha",1960-05-27,66,081298421424,"Belum Kawin",Buruh,Hipertensi,"Tidak Ada",Ya,Ya,Tidak,Ya
+3201720538333450,3201768667326440,"Eka Subarjo",1960-03-19,66,081241485371,"Cerai Mati",PNS,Stroke,Jantung,Tidak,Tidak,Tidak,Ya
+3201709616608862,3201707000921405,"Rina Saputra",1962-01-05,64,081229258338,"Cerai Hidup","Tidak Bekerja",Stroke,Hipertensi,Ya,Tidak,Tidak,Tidak
+3201626644286539,3201525045170168,"Siti Wibowo",1949-09-13,76,081233884841,Kawin,IRT,Diabetes,"Tidak Ada",Ya,Tidak,Ya,Tidak
+3201292104752414,3201713161554489,"Widi Nugraha",1949-10-24,76,081252809018,"Cerai Mati","Tidak Bekerja",Alergi,"Tidak Ada",Ya,Tidak,Ya,Ya
+3201555339224767,3201630446143731,"Siti Pratama",1946-10-24,79,081261358910,"Cerai Mati",Pensiunan,Stroke,Asma,Tidak,Ya,Tidak,Ya
+3201374807815005,3201651366171601,"Ratna Budiman",1960-03-02,66,081265750078,Kawin,Pedagang,Diabetes,"Asam Urat",Tidak,Tidak,Tidak,Tidak
+3201558830344695,3201122963232136,"Umar Saputra",1960-12-12,65,081214472022,Kawin,Buruh,Stroke,"Tidak Ada",Ya,Ya,Ya,Ya
+3201979236065245,3201770243631872,"Rahmat Gunawan",1965-09-06,60,081277631874,Kawin,Pedagang,"Asam Urat","Asam Urat",Tidak,Tidak,Ya,Ya
+3201320991080434,3201333420409593,"Gita Santoso",1961-10-19,64,081236020187,"Cerai Mati",Tani,"Tidak Ada",Hipertensi,Tidak,Tidak,Ya,Ya
+3201441034820776,3201722077044120,"Fajar Nugraha",1958-09-05,67,081275687553,"Belum Kawin",Swasta,Diabetes,"Asam Urat",Ya,Tidak,Ya,Ya
+3201361234662417,3201758921791151,"Zahra Setiawan",1941-11-02,84,081220282804,Kawin,Tani,Alergi,"Asam Urat",Ya,Ya,Tidak,Ya
+3201643013299859,3201715210008045,"Wahyu Tanjung",1951-01-07,75,081225792597,"Cerai Mati",IRT,Diabetes,"Asam Urat",Tidak,Tidak,Tidak,Ya
+3201700527970293,3201504240989819,"Novi Santoso",1955-10-18,70,081247869445,Kawin,Tani,Stroke,Diabetes,Tidak,Ya,Ya,Ya
+3201554114862668,3201652886110714,"Siti Santoso",1949-05-23,77,081243425134,"Cerai Hidup",Buruh,Jantung,Stroke,Tidak,Ya,Tidak,Ya
+3201754891352434,3201477642162599,"Ani Pratama",1940-12-03,85,081277486683,"Belum Kawin","Tidak Bekerja",Diabetes,Diabetes,Ya,Ya,Tidak,Ya
+3201654611545968,3201826349048883,"Mega Wahyudi",1950-09-22,75,081297374293,"Cerai Hidup","Tidak Bekerja",Diabetes,Asma,Ya,Ya,Ya,Ya
+3201537512383658,3201743944778319,"Juli Tanjung",1946-10-16,79,081272950704,"Belum Kawin",PNS,Hipertensi,Stroke,Ya,Ya,Tidak,Ya
+3201555914086813,3201909407426760,"Suryo Hidayat",1945-06-29,81,081277548954,Kawin,"Tidak Bekerja","Tidak Ada","Asam Urat",Ya,Tidak,Tidak,Ya
+3201256856027983,3201866636283039,"Juli Nasution",1940-12-16,85,081297180449,"Cerai Hidup",Pensiunan,"Tidak Ada","Tidak Ada",Ya,Tidak,Tidak,Ya
+3201459430372097,3201465867504337,"Fitri Tanjung",1950-02-19,76,081245440797,"Cerai Mati",Tani,Diabetes,"Tidak Ada",Tidak,Ya,Ya,Tidak
+3201240012246458,3201741507309904,"Juli Hidayat",1961-04-20,65,081212938977,"Cerai Hidup","Tidak Bekerja",Alergi,Jantung,Tidak,Tidak,Ya,Tidak
+3201377959737652,3201556076759571,"Fajar Gunawan",1961-08-26,64,081293983009,"Cerai Mati",Tani,Jantung,Hipertensi,Tidak,Tidak,Tidak,Ya
+3201627260408357,3201826345756381,"Zainal Wibowo",1958-02-25,68,081294405900,"Cerai Hidup",Pedagang,"Asam Urat",Jantung,Ya,Tidak,Tidak,Tidak
+3201291667382803,3201763707142598,"Dewi Wijaya",1956-04-02,70,081270849225,Kawin,"Tidak Bekerja","Asam Urat",Alergi,Ya,Ya,Tidak,Ya
+3201356297159460,3201947860321706,"Ani Sutrisno",1947-12-05,78,081255648874,Kawin,PNS,"Asam Urat",Hipertensi,Tidak,Ya,Tidak,Tidak
+3201183344165113,3201593292427406,"Edy Wahyudi",1945-08-13,80,081223401925,"Cerai Hidup",Swasta,Jantung,"Asam Urat",Ya,Ya,Tidak,Tidak
+3201331287021284,3201102686489401,"Hesti Nugraha",1948-06-10,78,081288714792,"Cerai Mati",Pensiunan,Diabetes,Stroke,Ya,Ya,Ya,Tidak
+3201244350617773,3201967998153497,"Taufik Lubis",1947-09-10,78,081274771398,"Cerai Mati",IRT,Alergi,Alergi,Ya,Ya,Tidak,Tidak
+3201644475419770,3201400104144270,"Zahra Kusuma",1962-08-02,63,081262525340,Kawin,IRT,Jantung,Alergi,Ya,Tidak,Ya,Ya
+3201906994961243,3201892735968102,"Zahra Saputra",1950-09-23,75,081271329147,"Belum Kawin",Buruh,Asma,"Tidak Ada",Tidak,Tidak,Tidak,Ya
+3201946798926052,3201924531014455,"Joko Nugraha",1964-04-03,62,081222396386,"Cerai Hidup",Pensiunan,Stroke,Jantung,Ya,Tidak,Ya,Ya
+3201735378946325,3201414304072942,"Bunga Sutrisno",1958-03-01,68,081246387739,"Cerai Hidup",Buruh,Asma,Hipertensi,Ya,Tidak,Tidak,Tidak
+3201928758900036,3201104677954394,"Rina Kusuma",1949-09-18,76,081229643741,"Belum Kawin",Pedagang,Alergi,Hipertensi,Tidak,Ya,Tidak,Ya
+3201821582085093,3201591190744018,"Kurniawan Subarjo",1961-03-22,65,081234312417,Kawin,PNS,Jantung,"Asam Urat",Ya,Ya,Tidak,Ya
+3201169128754640,3201686091419686,"Tri Wahyudi",1961-03-29,65,081271075116,"Cerai Mati",IRT,Jantung,Diabetes,Ya,Ya,Ya,Tidak
+3201934866417733,3201694722477174,"Gita Tanjung",1961-01-08,65,081212396659,"Belum Kawin",Tani,Hipertensi,Hipertensi,Tidak,Tidak,Ya,Tidak
+3201993674377713,3201550398862925,"Hesti Kusuma",1961-01-31,65,081296833288,"Belum Kawin","Tidak Bekerja","Asam Urat",Diabetes,Ya,Tidak,Ya,Tidak
+3201579042261710,3201714720159056,"Bunga Kusuma",1956-01-25,70,081242264061,Kawin,Tani,Stroke,Stroke,Tidak,Tidak,Tidak,Ya
+3201369820731927,3201138834309569,"Umar Lubis",1950-11-25,75,081293407913,Kawin,Swasta,Stroke,Diabetes,Tidak,Ya,Ya,Tidak
+3201430563526687,3201296334036336,"Widi Purnama",1961-10-03,64,081271280978,"Cerai Mati",Buruh,"Tidak Ada",Hipertensi,Ya,Tidak,Ya,Tidak
+3201512734344973,3201470025680013,"Dharma Setiawan",1963-05-31,63,081269240316,"Cerai Mati",Tani,Jantung,Asma,Ya,Tidak,Ya,Tidak
+3201697874129647,3201657581641643,"Bunga Pratama",1941-07-28,84,081251089066,"Belum Kawin",Tani,Diabetes,"Asam Urat",Ya,Tidak,Tidak,Tidak
+3201367881505394,3201177524424344,"Sari Kusuma",1956-08-02,69,081292791617,"Cerai Mati",PNS,Alergi,Diabetes,Ya,Tidak,Ya,Ya
+3201186297192357,3201783696128230,"Sari Lubis",1941-10-16,84,081296747437,Kawin,Tani,Stroke,Stroke,Tidak,Tidak,Tidak,Ya
+3201726504204775,3201743199500795,"Rian Gunawan",1947-07-05,79,081238533051,"Cerai Mati",Swasta,Diabetes,Stroke,Tidak,Tidak,Tidak,Tidak
+3201507648551708,3201510317882266,"Zahra Lubis",1966-05-10,60,081217839811,Kawin,PNS,Stroke,"Asam Urat",Tidak,Tidak,Ya,Ya
+3201775898945062,3201504069458607,"Sari Sutrisno",1957-10-28,68,081271485395,"Belum Kawin","Tidak Bekerja",Diabetes,Alergi,Ya,Ya,Ya,Tidak
+3201129200601586,3201249327065654,"Triana Nugraha",1942-05-31,84,081232685534,Kawin,"Tidak Bekerja",Hipertensi,Asma,Ya,Ya,Tidak,Ya
+3201287744204632,3201247451639796,"Kartika Budiman",1953-04-28,73,081234948964,"Cerai Mati",Pensiunan,Alergi,Diabetes,Ya,Tidak,Tidak,Tidak
+3201601576679441,3201984701930529,"Juli Tanjung",1954-11-10,71,081255449645,"Belum Kawin",PNS,Stroke,Stroke,Tidak,Ya,Tidak,Ya
+3201535687900326,3201809261867893,"Triana Subarjo",1957-01-16,69,081229193349,"Cerai Mati",Buruh,Alergi,"Tidak Ada",Tidak,Tidak,Tidak,Tidak
+3201840869335575,3201110463354286,"Bunga Santoso",1949-10-02,76,081225523182,"Cerai Hidup","Tidak Bekerja","Asam Urat",Diabetes,Ya,Ya,Tidak,Ya
+3201321915470744,3201172577609731,"Wulan Kusuma",1945-08-20,80,081224887658,"Cerai Mati",Pedagang,"Asam Urat",Alergi,Ya,Tidak,Tidak,Ya
+3201461589256654,3201699776084038,"Fajar Gunawan",1949-06-29,77,081251590753,"Cerai Mati",Pensiunan,Asma,Alergi,Tidak,Tidak,Tidak,Tidak
+3201573631326789,3201815305259537,"Nugroho Wibowo",1959-03-20,67,081247841791,"Belum Kawin",Pensiunan,"Tidak Ada","Asam Urat",Ya,Tidak,Tidak,Ya
+3201191337409177,3201515556077128,"Prabowo Subarjo",1944-01-06,82,081246867960,"Belum Kawin",IRT,Asma,Alergi,Tidak,Ya,Ya,Ya
+3201157693839867,3201818949862119,"Fitri Nugraha",1963-06-29,63,081296782365,"Belum Kawin","Tidak Bekerja",Hipertensi,Jantung,Tidak,Tidak,Ya,Ya
+3201743327991989,3201858508678037,"Dedi Tanjung",1966-05-29,60,081280439689,Kawin,PNS,Stroke,Asma,Tidak,Tidak,Tidak,Ya
+3201167321576940,3201355112071899,"Bambang Wahyudi",1945-02-12,81,081273361407,"Belum Kawin",Swasta,Alergi,Alergi,Ya,Tidak,Tidak,Tidak

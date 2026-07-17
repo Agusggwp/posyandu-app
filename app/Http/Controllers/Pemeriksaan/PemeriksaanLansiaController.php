@@ -122,32 +122,32 @@ class PemeriksaanLansiaController extends Controller
         return redirect()->route('pemeriksaan-lansia.create')->with('success', "Tahap {$stage} berhasil disimpan.");
     }
 
-    public function show(PemeriksaanLansia $pemeriksaanLansia)
+    public function show(PemeriksaanLansia $pemeriksaan_lansia)
     {
-        $pemeriksaanLansia->load(['lansia.keluarga']);
-        $pemeriksaan = $pemeriksaanLansia;
+        $pemeriksaan_lansia->load(['lansia.keluarga']);
+        $pemeriksaan = $pemeriksaan_lansia;
         return view('pemeriksaan.lansia.show', compact('pemeriksaan'));
     }
 
-    public function print(PemeriksaanLansia $pemeriksaanLansia)
+    public function print(PemeriksaanLansia $pemeriksaan_lansia)
     {
-        $pemeriksaanLansia->load(['lansia.keluarga']);
-        $history = PemeriksaanLansia::where('dewasa_identitas_id', $pemeriksaanLansia->dewasa_identitas_id)
+        $pemeriksaan_lansia->load(['lansia.keluarga']);
+        $history = PemeriksaanLansia::where('dewasa_identitas_id', $pemeriksaan_lansia->dewasa_identitas_id)
             ->where('tahap_terakhir', 4)
             ->orderBy('tanggal_kunjungan', 'asc')
             ->get();
-        $pemeriksaan = $pemeriksaanLansia;
+        $pemeriksaan = $pemeriksaan_lansia;
         return view('pemeriksaan.lansia.print', compact('pemeriksaan', 'history'));
     }
 
-    public function edit(PemeriksaanLansia $pemeriksaanLansia)
+    public function edit(PemeriksaanLansia $pemeriksaan_lansia)
     {
         $lansias = Lansia::orderBy('nama')->get();
-        $pemeriksaan = $pemeriksaanLansia;
+        $pemeriksaan = $pemeriksaan_lansia;
         return view('pemeriksaan.lansia.edit', compact('pemeriksaan', 'lansias'));
     }
 
-    public function update(Request $request, PemeriksaanLansia $pemeriksaanLansia)
+    public function update(Request $request, PemeriksaanLansia $pemeriksaan_lansia)
     {
         $validated = $request->validate([
             'dewasa_identitas_id' => 'required|exists:dewasa_identitas,id',
@@ -177,13 +177,13 @@ class PemeriksaanLansiaController extends Controller
             'rujukan' => 'nullable|string|max:255',
         ]);
 
-        $pemeriksaanLansia->update($validated);
+        $pemeriksaan_lansia->update($validated);
         return redirect()->route('pemeriksaan-lansia.index')->with('success', 'Data pemeriksaan berhasil diperbarui');
     }
 
-    public function destroy(PemeriksaanLansia $pemeriksaanLansia)
+    public function destroy(PemeriksaanLansia $pemeriksaan_lansia)
     {
-        $pemeriksaanLansia->delete();
+        $pemeriksaan_lansia->delete();
         return redirect()->route('pemeriksaan-lansia.index')->with('success', 'Data pemeriksaan berhasil dihapus');
     }
 }

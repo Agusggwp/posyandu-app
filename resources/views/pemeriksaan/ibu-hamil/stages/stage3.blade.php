@@ -85,7 +85,7 @@
                 <!-- Tahap 1 -->
                 <div class="mb-3 pb-3 border-b border-purple-300">
                     <p class="text-xs font-semibold text-purple-700 mb-2">TAHAP 1: Penimbangan & Pengukuran</p>
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 text-sm">
                         <div>
                             <p class="text-purple-700 font-medium">Usia Kehamilan</p>
                             <p class="text-purple-900">{{ $data['usia_kehamilan'] ?? '-' }} minggu</p>
@@ -112,7 +112,7 @@
                 <!-- Tahap 2 -->
                 <div>
                     <p class="text-xs font-semibold text-purple-700 mb-2">TAHAP 2: Pemeriksaan Tekanan Darah</p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                         <div>
                             <p class="text-purple-700 font-medium">Tekanan Darah</p>
                             <p class="text-purple-900">{{ $data['tekanan_darah'] ?? '-' }}</p>

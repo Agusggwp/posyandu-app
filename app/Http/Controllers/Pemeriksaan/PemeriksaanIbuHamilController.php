@@ -247,32 +247,32 @@ class PemeriksaanIbuHamilController extends Controller
         return redirect()->route('pemeriksaan-ibu-hamil.index')->with('success', 'Data pemeriksaan berhasil ditambahkan');
     }
 
-    public function show(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
+    public function show(PemeriksaanIbuHamil $pemeriksaan_ibu_hamil)
     {
-        $pemeriksaanIbuHamil->load(['ibuHamil.keluarga']);
-        $pemeriksaan = $pemeriksaanIbuHamil;
+        $pemeriksaan_ibu_hamil->load(['ibuHamil.keluarga']);
+        $pemeriksaan = $pemeriksaan_ibu_hamil;
         return view('pemeriksaan.ibu-hamil.show', compact('pemeriksaan'));
     }
 
-    public function print(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
+    public function print(PemeriksaanIbuHamil $pemeriksaan_ibu_hamil)
     {
-        $pemeriksaanIbuHamil->load(['ibuHamil.keluarga']);
-        $history = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $pemeriksaanIbuHamil->ibu_hamil_identitas_id)
+        $pemeriksaan_ibu_hamil->load(['ibuHamil.keluarga']);
+        $history = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $pemeriksaan_ibu_hamil->ibu_hamil_identitas_id)
             ->where('tahap_terakhir', 4)
             ->orderBy('tanggal_kunjungan', 'asc')
             ->get();
-        $pemeriksaan = $pemeriksaanIbuHamil;
+        $pemeriksaan = $pemeriksaan_ibu_hamil;
         return view('pemeriksaan.ibu-hamil.print', compact('pemeriksaan', 'history'));
     }
 
-    public function edit(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
+    public function edit(PemeriksaanIbuHamil $pemeriksaan_ibu_hamil)
     {
         $ibuHamils = IbuHamil::orderBy('nama_ibu')->get();
-        $pemeriksaan = $pemeriksaanIbuHamil;
+        $pemeriksaan = $pemeriksaan_ibu_hamil;
         return view('pemeriksaan.ibu-hamil.edit', compact('pemeriksaan', 'ibuHamils'));
     }
 
-    public function update(Request $request, PemeriksaanIbuHamil $pemeriksaanIbuHamil)
+    public function update(Request $request, PemeriksaanIbuHamil $pemeriksaan_ibu_hamil)
     {
         $validated = $request->validate([
             'ibu_hamil_identitas_id' => 'required|exists:ibu_hamil_identitas,id',
@@ -289,15 +289,15 @@ class PemeriksaanIbuHamilController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        $pemeriksaanIbuHamil->update($validated);
+        $pemeriksaan_ibu_hamil->update($validated);
 
         try {
             ActivityLog::create([
                 'user_id' => auth()->id(),
                 'action' => 'updated',
                 'model' => 'PemeriksaanIbuHamil',
-                'model_id' => $pemeriksaanIbuHamil->id,
-                'description' => 'Memperbarui PemeriksaanIbuHamil [' . $pemeriksaanIbuHamil->id . ']',
+                'model_id' => $pemeriksaan_ibu_hamil->id,
+                'description' => 'Memperbarui PemeriksaanIbuHamil [' . $pemeriksaan_ibu_hamil->id . ']',
                 'properties' => [
                     'route' => request()->route()?->getName(),
                 ],
@@ -311,10 +311,10 @@ class PemeriksaanIbuHamilController extends Controller
         return redirect()->route('pemeriksaan-ibu-hamil.index')->with('success', 'Data pemeriksaan berhasil diperbarui');
     }
 
-    public function destroy(PemeriksaanIbuHamil $pemeriksaanIbuHamil)
+    public function destroy(PemeriksaanIbuHamil $pemeriksaan_ibu_hamil)
     {
-        $id = $pemeriksaanIbuHamil->id;
-        $pemeriksaanIbuHamil->delete();
+        $id = $pemeriksaan_ibu_hamil->id;
+        $pemeriksaan_ibu_hamil->delete();
 
         try {
             ActivityLog::create([

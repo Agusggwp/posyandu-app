@@ -23,6 +23,10 @@
                     return '-';
                 }
 
+                if ($key === 'umur') {
+                    return $raw . ' Bulan';
+                }
+
                 if (is_string($raw) && $key === 'waktu_kunjungan') {
                     try {
                         return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y');

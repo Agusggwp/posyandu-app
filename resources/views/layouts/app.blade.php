@@ -78,9 +78,31 @@
         }
 
         .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 12px 12px 20px 12px;
             border-bottom: 1px solid var(--line);
             margin-bottom: 18px;
+        }
+
+        .sidebar-close-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar-close-btn:hover {
+            background: #f1f5f9;
+            color: #1e293b;
         }
 
         .sidebar-logo {
@@ -291,6 +313,12 @@
             transform: scale(1.05);
         }
 
+        .menu-toggle.active {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -334,6 +362,7 @@
                 cursor: pointer;
                 opacity: 1;
                 visibility: visible;
+                transition: opacity 0.3s, visibility 0.3s;
             }
 
             .main-content {
@@ -346,6 +375,10 @@
 
             .menu-section-title {
                 margin-top: 6px;
+            }
+
+            .sidebar-close-btn {
+                display: flex;
             }
         }
 
@@ -397,6 +430,9 @@
                         <h2>Sistem Posyandu</h2>
                     </div>
                 </div>
+                <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close sidebar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
 
             <nav class="sidebar-menu">
@@ -513,6 +549,9 @@
 
             function openSidebar() {
                 sidebar.classList.add('active');
+                if (menuToggle) {
+                    menuToggle.classList.add('active');
+                }
                 if (sidebarOverlay) {
                     sidebarOverlay.classList.add('active');
                 }
@@ -520,6 +559,9 @@
 
             function closeSidebar() {
                 sidebar.classList.remove('active');
+                if (menuToggle) {
+                    menuToggle.classList.remove('active');
+                }
                 if (sidebarOverlay) {
                     sidebarOverlay.classList.remove('active');
                 }
@@ -543,6 +585,11 @@
 
                 if (sidebarOverlay) {
                     sidebarOverlay.addEventListener('click', closeSidebar);
+                }
+
+                const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+                if (sidebarCloseBtn) {
+                    sidebarCloseBtn.addEventListener('click', closeSidebar);
                 }
 
                 sidebar.querySelectorAll('.menu-item').forEach(function (menuLink) {

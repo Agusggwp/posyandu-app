@@ -171,6 +171,45 @@
             padding: 18px;
         }
     }
+
+    @media (max-width: 640px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            padding: 12px 14px;
+            border-radius: 14px;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+
+        .stat-label i {
+            font-size: 11px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .stat-change {
+            font-size: 9px;
+            padding: 1px 6px;
+        }
+
+        .stat-watermark {
+            font-size: 32px;
+            right: 10px;
+            top: 8px;
+        }
+    }
 </style>
 @endpush
 

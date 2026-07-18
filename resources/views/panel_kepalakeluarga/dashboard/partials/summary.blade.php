@@ -1,6 +1,6 @@
 <div id="dashboard" class="section">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Anggota</p>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Periksa Bulan Ini</p>
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Status Kesehatan</p>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Jadwal Berikutnya</p>

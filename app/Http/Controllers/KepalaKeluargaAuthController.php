@@ -110,16 +110,20 @@ class KepalaKeluargaAuthController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
             'no_kk.required' => 'Nomor KK wajib diisi.',
-            'no_kk.size' => 'Nomor KK harus berisi tepat 16 digit.',
-            'no_kk.regex' => 'Nomor KK hanya boleh berisi angka.',
+            'no_kk.size' => 'Masukkan 16 Digit No KK',
+            'no_kk.regex' => 'Masukkan 16 Digit No KK',
             'no_kk.unique' => 'Nomor KK sudah terdaftar.',
             
             'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
             'nama_lengkap.max' => 'Nama lengkap tidak boleh lebih dari 30 karakter.',
             'nama_lengkap.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
             
-            'no_nik.size' => 'NIK harus berisi tepat 16 digit.',
-            'no_nik.regex' => 'NIK hanya boleh berisi angka.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar/digunakan.',
+            
+            'no_nik.size' => 'Masukkan 16 Digit NIK',
+            'no_nik.regex' => 'Masukkan 16 Digit NIK',
             'no_nik.unique' => 'NIK sudah terdaftar.',
             
             'no_telepon.between' => 'Nomor telepon harus terdiri dari 11 sampai 13 digit.',

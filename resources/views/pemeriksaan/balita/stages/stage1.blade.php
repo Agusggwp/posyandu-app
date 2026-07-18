@@ -100,7 +100,23 @@
                             Berat Sebelumnya
                         </label>
                         <div id="previous_weight" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-slate-50 text-gray-800">
-                            {{ $data['naik_tidak_naik'] ?? 'Pilih balita dan masukkan berat badan untuk melihat akumulasi' }}
+                            @if($pemeriksaan)
+                                @php
+                                    $prev = \App\Models\PemeriksaanBalita::where('balita_identitas_id', $pemeriksaan->balita_identitas_id)
+                                        ->where('id', '!=', $pemeriksaan->id)
+                                        ->whereNotNull('berat_badan')
+                                        ->whereNotNull('tanggal_kunjungan')
+                                        ->orderByDesc('tanggal_kunjungan')
+                                        ->first();
+                                @endphp
+                                @if($prev)
+                                    Terakhir tercatat {{ number_format($prev->berat_badan, 1) }} kg pada {{ \Carbon\Carbon::parse($prev->tanggal_kunjungan)->translatedFormat('d F Y') }}
+                                @else
+                                    Belum ada pemeriksaan sebelumnya untuk balita ini.
+                                @endif
+                            @else
+                                Pilih balita untuk melihat data pemeriksaan sebelumnya.
+                            @endif
                         </div>
                     </div>
 

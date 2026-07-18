@@ -567,50 +567,81 @@
                     return;
                 }
 
-                const allOptions = Array.from(keluargaSelect.options).map(function (opt) {
-                    return {
+                // Hide native select dropdown
+                keluargaSelect.classList.add('hidden');
+
+                // Create the floating suggestions box
+                const suggestionsBox = document.createElement('div');
+                suggestionsBox.className = 'absolute z-50 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto hidden';
+
+                // Wrap searchInput in a relative div to hold absolute positioned suggestion list correctly
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative w-full';
+                searchInput.parentNode.insertBefore(wrapper, searchInput);
+                wrapper.appendChild(searchInput);
+                wrapper.appendChild(suggestionsBox);
+
+                // Collect all options from the select
+                const allOptions = Array.from(keluargaSelect.options)
+                    .filter(opt => opt.value !== '')
+                    .map(opt => ({
                         value: opt.value,
-                        text: opt.text,
-                        selected: opt.selected,
-                    };
+                        text: opt.text
+                    }));
+
+                // Sync on page load (e.g. for Laravel validation old() values)
+                if (keluargaSelect.value) {
+                    const selectedOpt = Array.from(keluargaSelect.options).find(opt => opt.value === keluargaSelect.value);
+                    if (selectedOpt) {
+                        searchInput.value = selectedOpt.text.trim();
+                    }
+                }
+
+                function renderSuggestions(searchTerm) {
+                    suggestionsBox.innerHTML = '';
+                    const term = searchTerm.toLowerCase().trim();
+                    const filtered = allOptions.filter(opt => opt.text.toLowerCase().includes(term));
+
+                    if (filtered.length === 0) {
+                        const noResult = document.createElement('div');
+                        noResult.className = 'px-4 py-2 text-gray-500 text-sm';
+                        noResult.textContent = 'Tidak ditemukan';
+                        suggestionsBox.appendChild(noResult);
+                    } else {
+                        filtered.forEach(opt => {
+                            const item = document.createElement('div');
+                            item.className = 'px-4 py-2 hover:bg-slate-100 cursor-pointer text-gray-700 text-sm border-b border-gray-100 last:border-0';
+                            item.textContent = opt.text;
+                            item.addEventListener('click', function() {
+                                keluargaSelect.value = opt.value;
+                                keluargaSelect.dispatchEvent(new Event('change'));
+                                searchInput.value = opt.text.trim();
+                                suggestionsBox.classList.add('hidden');
+                            });
+                            suggestionsBox.appendChild(item);
+                        });
+                    }
+                    suggestionsBox.classList.remove('hidden');
+                }
+
+                searchInput.addEventListener('input', function() {
+                    if (this.value.trim() === '') {
+                        keluargaSelect.value = '';
+                        keluargaSelect.dispatchEvent(new Event('change'));
+                        suggestionsBox.classList.add('hidden');
+                    } else {
+                        renderSuggestions(this.value);
+                    }
                 });
 
-                searchInput.addEventListener('input', function () {
-                    const keyword = searchInput.value.trim().toLowerCase();
-                    const currentValue = keluargaSelect.value;
+                searchInput.addEventListener('focus', function() {
+                    renderSuggestions(this.value);
+                });
 
-                    keluargaSelect.innerHTML = '';
-
-                    let firstMatchVal = null;
-                    let hasCurrentValueInMatches = false;
-
-                    allOptions.forEach(function (opt) {
-                        const isPlaceholder = opt.value === '';
-                        const matches = opt.text.toLowerCase().includes(keyword);
-
-                        if (isPlaceholder || matches) {
-                            const optionEl = document.createElement('option');
-                            optionEl.value = opt.value;
-                            optionEl.text = opt.text;
-
-                            if (opt.value !== '' && opt.value === currentValue && matches) {
-                                hasCurrentValueInMatches = true;
-                            }
-
-                            if (matches && !isPlaceholder && firstMatchVal === null) {
-                                firstMatchVal = opt.value;
-                            }
-
-                            keluargaSelect.appendChild(optionEl);
-                        }
-                    });
-
-                    if (keyword !== '') {
-                        if (!hasCurrentValueInMatches && firstMatchVal !== null) {
-                            keluargaSelect.value = firstMatchVal;
-                        }
-                    } else {
-                        keluargaSelect.value = currentValue;
+                // Close suggestions when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                        suggestionsBox.classList.add('hidden');
                     }
                 });
             });

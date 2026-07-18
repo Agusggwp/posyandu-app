@@ -63,8 +63,9 @@ class PemeriksaanBalitaController extends Controller
                 ->get()
                 ->unique('balita_identitas_id')
                 ->mapWithKeys(function ($item) {
+                    \Carbon\Carbon::setLocale('id');
                     $previousDate = $item->tanggal_kunjungan
-                        ? \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('Y-m-d')
+                        ? \Carbon\Carbon::parse($item->tanggal_kunjungan)->translatedFormat('d F Y')
                         : '-';
 
                     return [
@@ -253,6 +254,7 @@ class PemeriksaanBalitaController extends Controller
             'status_bb_u' => 'nullable|string',
             'status_pb_u' => 'nullable|string',
             'status_bb_pb' => 'nullable|string',
+            'status_lila' => 'nullable|string',
             'lingkar_lengan' => 'nullable|numeric|min:0',
             'lingkar_kepala' => 'nullable|numeric|min:0',
             'batuk' => 'nullable|boolean',
@@ -304,6 +306,7 @@ class PemeriksaanBalitaController extends Controller
 
     private function calculateStatuses(PemeriksaanBalita $pemeriksaan)
     {
+        $pemeriksaan->load('balita');
         $balita = $pemeriksaan->balita;
         if (!$balita || !$pemeriksaan->berat_badan || !$pemeriksaan->panjang_badan || !$pemeriksaan->tanggal_kunjungan) {
             return;

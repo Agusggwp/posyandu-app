@@ -1,10 +1,10 @@
 <div id="member-detail-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm items-center justify-center z-50 p-4">
     <div class="bg-white rounded-3xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-100">
-        <div class="text-white p-6 flex justify-between items-center sticky top-0 z-10 bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-[22px]">
+        <div class="text-white p-4 sm:p-6 flex justify-between items-center sticky top-0 z-10 bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-[22px]">
             <h2 id="modal-title" class="text-xl font-extrabold">Detail Anggota</h2>
             <button onclick="closeMemberDetail()" class="text-2xl hover:text-indigo-100 transition cursor-pointer">&times;</button>
         </div>
-        <div class="p-6 space-y-8">
+        <div class="p-4 sm:p-6 space-y-8">
             <div>
                 <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-circle-user text-indigo-500"></i>Data Diri</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end gap-3 rounded-b-[22px]">
+        <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-100 flex justify-end gap-3 rounded-b-[22px]">
             <button onclick="closeMemberDetail()" class="px-6 py-2.5 bg-slate-200 hover:bg-slate-350 text-slate-700 rounded-2xl font-bold transition text-sm cursor-pointer">Tutup</button>
         </div>
     </div>

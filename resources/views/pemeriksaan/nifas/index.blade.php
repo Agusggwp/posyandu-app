@@ -41,7 +41,7 @@
                     <tr>
                         <td class="px-6 py-4 text-sm">{{ $pemeriksaans->firstItem() + $index }}</td>
                         <td class="px-6 py-4 text-sm font-semibold">{{ $item->nifas->nama_ibu ?? '-' }}</td>
-                        <td class="px-6 py-4 text-sm">{{ $item->waktu_kunjungan ? \Illuminate\Support\Carbon::parse($item->waktu_kunjungan)->format('d/m/Y') : '-' }}</td>
+                        <td class="px-6 py-4 text-sm">{{ $item->tanggal_kunjungan ? \Illuminate\Support\Carbon::parse($item->tanggal_kunjungan)->format('d/m/Y') : '-' }}</td>
                         <td class="px-6 py-4 text-sm">{{ $item->berat_badan ?? '-' }}</td>
                         <td class="px-6 py-4 text-sm">{{ $item->sistole && $item->diastole ? $item->sistole . '/' . $item->diastole : '-' }}</td>
                         <td class="px-6 py-4 text-sm space-x-2">
@@ -69,7 +69,7 @@
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <h3 class="font-semibold text-slate-900">{{ $item->nifas->nama_ibu ?? '-' }}</h3>
-                        <p class="text-xs text-slate-500 mt-1">{{ $item->waktu_kunjungan ? \Illuminate\Support\Carbon::parse($item->waktu_kunjungan)->format('d/m/Y') : '-' }}</p>
+                        <p class="text-xs text-slate-500 mt-1">{{ $item->tanggal_kunjungan ? \Illuminate\Support\Carbon::parse($item->tanggal_kunjungan)->format('d/m/Y') : '-' }}</p>
                     </div>
                 </div>
 

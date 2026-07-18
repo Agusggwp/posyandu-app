@@ -1,7 +1,7 @@
 <div id="profile" class="section hidden">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 text-center">
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-6 text-center">
                 <img src="https://ui-avatars.com/api/?name={{ urlencode($kepalaKeluarga->nama_lengkap) }}&background=6366f1&color=fff&bold=true&size=150" alt="Avatar" class="w-24 h-24 rounded-2xl mx-auto mb-4 border border-slate-100">
                 <h3 class="text-lg font-extrabold text-slate-800">{{ $kepalaKeluarga->nama_lengkap }}</h3>
                 <span class="inline-block mt-1 text-xs px-2.5 py-1 rounded-full font-semibold bg-indigo-50 text-indigo-700">Kepala Keluarga</span>
@@ -11,7 +11,7 @@
         </div>
 
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-6">
                 <h3 class="text-lg font-extrabold text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-user-pen text-indigo-500"></i>Kelola Profile</h3>
                 <div class="mb-6">
                     <div class="flex gap-4 mb-6 border-b border-slate-100">

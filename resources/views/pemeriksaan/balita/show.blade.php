@@ -11,10 +11,10 @@
             $statusRujukan = ($pemeriksaan->rujukan && $pemeriksaan->rujukan !== 'Tidak Ada') ? 'Perlu Rujukan' : 'Tidak Perlu Rujukan';
             $data = $pemeriksaan->getAttributes();
             $displayData = array_merge(
-                ['nama_balita' => optional($pemeriksaan->balita)->nama ?? '-'],
-                ['umur' => $data['umur'] ?? null, 'waktu_kunjungan' => $data['waktu_kunjungan'] ?? null],
+                ['nama_balita' => optional($pemeriksaan->balita)->nama_bayi ?? '-'],
+                ['umur' => $data['umur'] ?? null, 'tanggal_kunjungan' => $data['tanggal_kunjungan'] ?? null],
                 ['status_rujukan' => $statusRujukan],
-                array_diff_key($data, array_flip(['balita_identitas_id', 'umur', 'waktu_kunjungan']))
+                array_diff_key($data, array_flip(['balita_identitas_id', 'umur', 'tanggal_kunjungan']))
             );
             $orderedKeys = array_keys($displayData);
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
@@ -27,7 +27,7 @@
                     return $raw . ' Bulan';
                 }
 
-                if (is_string($raw) && $key === 'waktu_kunjungan') {
+                if (is_string($raw) && $key === 'tanggal_kunjungan') {
                     try {
                         return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y');
                     } catch (\Throwable $e) {

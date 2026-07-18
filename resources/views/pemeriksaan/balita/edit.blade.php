@@ -16,6 +16,16 @@
             @csrf
             @method('PUT')
             
+            @if ($errors->any())
+                <div class="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="balita_identitas_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih Balita <span class="text-red-500">*</span></label>
@@ -24,7 +34,7 @@
                         <option value="">-- Pilih Balita --</option>
                         @foreach($balitas as $balita)
                             <option value="{{ $balita->id }}" {{ old('balita_identitas_id', $pemeriksaan->balita_identitas_id) == $balita->id ? 'selected' : '' }}>
-                                {{ $balita->nama }} - {{ $balita->nik }}
+                                {{ $balita->nama_bayi }} - {{ $balita->nik }}
                             </option>
                         @endforeach
                     </select>
@@ -193,8 +203,9 @@
                     <label for="perkembangan" class="block text-sm font-medium text-gray-700 mb-2">Perkembangan</label>
                     <select name="perkembangan" id="perkembangan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('perkembangan') border-red-500 @enderror">
                         <option value="">-- Pilih --</option>
-                        <option value="1" {{ old('perkembangan', $pemeriksaan->perkembangan) == '1' ? 'selected' : '' }}>Ya</option>
-                        <option value="0" {{ old('perkembangan', $pemeriksaan->perkembangan) == '0' ? 'selected' : '' }}>Tidak</option>
+                        <option value="Lengkap" {{ old('perkembangan', $pemeriksaan->perkembangan) === 'Lengkap' ? 'selected' : '' }}>Lengkap</option>
+                        <option value="Tidak Lengkap" {{ old('perkembangan', $pemeriksaan->perkembangan) === 'Tidak Lengkap' ? 'selected' : '' }}>Tidak Lengkap</option>
+                        <option value="Monitor" {{ old('perkembangan', $pemeriksaan->perkembangan) === 'Monitor' ? 'selected' : '' }}>Monitor</option>
                     </select>
                     @error('perkembangan')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

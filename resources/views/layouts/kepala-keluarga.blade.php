@@ -135,7 +135,7 @@
         </header>
 
         <!-- Main Content -->
-        <main class="flex-grow p-6">
+        <main class="flex-grow p-4 sm:p-6">
             @yield('content')
         </main>
     </div>

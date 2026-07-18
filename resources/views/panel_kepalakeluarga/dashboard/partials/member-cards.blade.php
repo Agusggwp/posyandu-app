@@ -1,9 +1,9 @@
 <div id="anggota-keluarga" class="section hidden">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         @forelse($memberCards as $member)
             <div class="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition overflow-hidden">
                 <div class="h-20 bg-gradient-to-r from-indigo-500/10 to-violet-500/10"></div>
-                <div class="px-6 pb-6">
+                <div class="px-4 pb-4 sm:px-6 sm:pb-6">
                     <div class="flex justify-center -mt-10 mb-4">
                         <img src="https://ui-avatars.com/api/?name={{ urlencode($member['name']) }}&background=6366f1&color=fff&bold=true" alt="Avatar" class="w-20 h-20 rounded-2xl border-4 border-white shadow-sm object-cover">
                     </div>

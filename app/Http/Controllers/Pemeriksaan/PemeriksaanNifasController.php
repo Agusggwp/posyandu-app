@@ -187,7 +187,7 @@ class PemeriksaanNifasController extends Controller
     {
         $validated = $request->validate([
             'nifas_identitas_id' => 'required|exists:nifas_identitas,id',
-            'waktu_kunjungan' => 'nullable|string|max:50',
+            'tanggal_kunjungan' => 'required|date',
             'berat_badan' => 'nullable|numeric|min:0',
             'naik_turun' => 'nullable|string|max:10',
             'tinggi_badan' => 'nullable|numeric|min:0',
@@ -240,7 +240,7 @@ class PemeriksaanNifasController extends Controller
     {
         $validated = $request->validate([
             'nifas_identitas_id' => 'required|exists:nifas_identitas,id',
-            'waktu_kunjungan' => 'nullable|string|max:50',
+            'tanggal_kunjungan' => 'required|date',
             'berat_badan' => 'nullable|numeric|min:0',
             'naik_turun' => 'nullable|string|max:10',
             'tinggi_badan' => 'nullable|numeric|min:0',

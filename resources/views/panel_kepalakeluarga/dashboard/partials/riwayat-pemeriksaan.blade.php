@@ -1,5 +1,5 @@
 <div id="riwayat-pemeriksaan" class="section hidden">
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 mb-6">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-6 mb-6">
         <h3 class="text-lg font-extrabold text-slate-800 mb-6 flex items-center gap-2">
             <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i>
             Riwayat Pemeriksaan Keluarga

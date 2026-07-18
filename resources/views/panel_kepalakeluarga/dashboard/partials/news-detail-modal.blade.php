@@ -8,7 +8,7 @@
             <span id="news-badge" class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full text-white bg-indigo-600 shadow-sm">Kategori</span>
         </div>
 
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
             <h2 id="news-title" class="text-xl font-extrabold text-slate-800 mb-2">Judul Berita</h2>
             <p id="news-date" class="text-xs text-slate-400 font-bold mb-4">Tanggal</p>
             <div id="news-content" class="text-slate-600 leading-relaxed text-sm mb-6">Konten berita akan ditampilkan di sini</div>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end gap-3 rounded-b-[22px]">
+        <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-100 flex justify-end gap-3 rounded-b-[22px]">
             <button onclick="closeNewsDetail()" class="px-6 py-2.5 bg-slate-200 hover:bg-slate-350 text-slate-700 rounded-2xl font-bold transition text-sm cursor-pointer">Tutup</button>
         </div>
     </div>

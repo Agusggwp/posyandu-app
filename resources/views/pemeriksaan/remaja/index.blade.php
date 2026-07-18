@@ -44,14 +44,16 @@
                         <td class="px-6 py-4 text-sm">{{ $item->waktu_kunjungan ? \Illuminate\Support\Carbon::parse($item->waktu_kunjungan)->format('d/m/Y') : '-' }}</td>
                         <td class="px-6 py-4 text-sm">{{ $item->berat_badan ?? '-' }}</td>
                         <td class="px-6 py-4 text-sm">{{ $item->tinggi_badan ?? '-' }}</td>
-                        <td class="px-6 py-4 text-sm space-x-2">
-                            <a href="{{ route('pemeriksaan-remaja.show', $item->id) }}" class="inline-flex px-2 py-1 rounded bg-emerald-100 text-emerald-800 hover:bg-emerald-200">Detail</a>
-                            <a href="{{ route('pemeriksaan-remaja.edit', $item->id) }}" class="inline-flex px-2 py-1 rounded bg-amber-100 text-amber-800 hover:bg-amber-200">Edit</a>
-                            <form action="{{ route('pemeriksaan-remaja.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="inline-flex px-2 py-1 rounded bg-rose-100 text-rose-800 hover:bg-rose-200">Hapus</button>
-                            </form>
+                        <td class="px-6 py-4 text-sm">
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('pemeriksaan-remaja.show', $item->id) }}" class="inline-flex px-2 py-1 rounded bg-emerald-100 text-emerald-800 hover:bg-emerald-200">Detail</a>
+                                <a href="{{ route('pemeriksaan-remaja.edit', $item->id) }}" class="inline-flex px-2 py-1 rounded bg-amber-100 text-amber-800 hover:bg-amber-200">Edit</a>
+                                <form action="{{ route('pemeriksaan-remaja.destroy', $item->id) }}" method="POST" style="display: contents" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="inline-flex px-2 py-1 rounded bg-rose-100 text-rose-800 hover:bg-rose-200">Hapus</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty

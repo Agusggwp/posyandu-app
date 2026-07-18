@@ -101,10 +101,10 @@
                             {{ $user->created_at->format('d M Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div class="flex justify-end space-x-2">
+                            <div class="flex justify-end items-center gap-2">
                                 <a href="{{ route('users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">Edit</a>
                                 @if($user->id !== auth()->id())
-                                <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                                <form action="{{ route('users.destroy', $user) }}" method="POST" style="display: contents" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">Hapus</button>

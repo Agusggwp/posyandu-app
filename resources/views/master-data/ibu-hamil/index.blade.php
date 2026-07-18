@@ -36,7 +36,7 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="overflow-x-auto">
+        <div class="hidden md:block overflow-x-auto">
             <table class="min-w-[980px] md:min-w-full divide-y divide-gray-200">
                 <thead class="bg-gradient-to-r from-violet-500 to-purple-600 text-white">
                     <tr>
@@ -75,7 +75,7 @@
                                 </a>
                                 @endcan
                                 @can('delete_data')
-                                <form action="{{ route('ibu-hamil.destroy', $ibuHamil->id) }}" method="POST" class="inline" 
+                                <form action="{{ route('ibu-hamil.destroy', $ibuHamil->id) }}" method="POST" style="display: contents" 
                                       onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -95,6 +95,49 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <div class="md:hidden p-4 space-y-4 bg-gray-50">
+            @forelse($ibuHamils as $index => $ibuHamil)
+                <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                    <div class="flex justify-between items-start gap-3">
+                        <div>
+                            <p class="text-xs text-gray-500">No. {{ $ibuHamils->firstItem() + $index }}</p>
+                            <h3 class="text-base font-semibold text-gray-900 break-words">{{ $ibuHamil->nama }}</h3>
+                            <p class="text-sm text-gray-600 mt-1 break-words">NIK: {{ $ibuHamil->nik }}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-semibold text-purple-800 bg-purple-100 rounded-full">Ke-{{ $ibuHamil->hamil_ke }}</span>
+                    </div>
+
+                    <div class="mt-3 space-y-1 text-sm text-gray-700">
+                        <p><span class="font-medium">Nama Suami:</span> {{ $ibuHamil->nama_suami ?: '-' }}</p>
+                        <p><span class="font-medium">HPL:</span> {{ $ibuHamil->hpl ? $ibuHamil->hpl->format('d/m/Y') : '-' }}</p>
+                        <p class="break-words"><span class="font-medium">Keluarga:</span> {{ $ibuHamil->keluarga->nama_kepala_keluarga ?? '-' }}</p>
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-2 gap-2">
+                        <a href="{{ route('ibu-hamil.show', $ibuHamil->id) }}" class="inline-flex items-center justify-center px-3 py-2 bg-violet-100 hover:bg-violet-200 text-violet-700 rounded-lg text-xs font-semibold transition-all duration-200">
+                            Detail
+                        </a>
+                        @can('manage_ibu_hamil')
+                        <a href="{{ route('ibu-hamil.edit', $ibuHamil->id) }}" class="inline-flex items-center justify-center px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg text-xs font-semibold transition-all duration-200">
+                            Edit
+                        </a>
+                        @endcan
+                        @can('delete_data')
+                        <form action="{{ route('ibu-hamil.destroy', $ibuHamil->id) }}" method="POST" class="col-span-2" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="w-full inline-flex items-center justify-center px-3 py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-lg text-xs font-semibold transition-all duration-200">
+                                Hapus
+                            </button>
+                        </form>
+                        @endcan
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white border border-gray-200 rounded-xl p-6 text-center text-gray-500">Tidak ada data ibu hamil</div>
+            @endforelse
         </div>
 
         <div class="px-6 py-4 bg-gray-50">

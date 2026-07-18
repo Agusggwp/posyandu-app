@@ -57,10 +57,10 @@
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $remaja->jenis_kelamin ?? '-' }}</td>
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $remaja->keluarga->nama_kepala_keluarga ?? '-' }}</td>
                         <td class="px-6 py-4 text-sm font-medium">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-2">
                                 <a href="{{ route('remaja.show', $remaja->id) }}" class="inline-flex px-2 py-1 rounded bg-emerald-100 text-emerald-800 hover:bg-emerald-200">Detail</a>
                                 <a href="{{ route('remaja.edit', $remaja->id) }}" class="inline-flex px-2 py-1 rounded bg-amber-100 text-amber-800 hover:bg-amber-200">Edit</a>
-                                <form action="{{ route('remaja.destroy', $remaja->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                <form action="{{ route('remaja.destroy', $remaja->id) }}" method="POST" style="display: contents" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="inline-flex px-2 py-1 rounded bg-rose-100 text-rose-800 hover:bg-rose-200">Hapus</button>

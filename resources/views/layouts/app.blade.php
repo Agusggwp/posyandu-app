@@ -197,6 +197,7 @@
             display: flex;
             flex-direction: column;
             animation: slideInRight 0.5s ease-out;
+            min-width: 0;
         }
 
         .topbar {

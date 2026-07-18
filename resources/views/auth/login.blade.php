@@ -183,7 +183,7 @@
                             type="submit"
                             class="btn-login w-full text-white font-bold py-3.5 px-6 rounded-xl mt-8 text-base uppercase tracking-wide shadow-lg hover:shadow-2xl"
                         >
-                            Sign In
+                            Login
                         </button>
                     </form>
 

@@ -70,7 +70,7 @@
                             <div class="flex flex-wrap gap-1">
                                 @foreach(array_slice($role->permissions, 0, 3) as $permission)
                                     <span class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded">
-                                        {{ str_replace('-', ' ', ucfirst($permission)) }}
+                                        {{ str_replace(['-', '_'], ' ', ucfirst($permission)) }}
                                     </span>
                                 @endforeach
                                 @if(count($role->permissions) > 3)

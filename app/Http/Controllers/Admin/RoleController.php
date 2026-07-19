@@ -30,16 +30,19 @@ class RoleController extends Controller
     public function create()
     {
         $availablePermissions = [
-            'user-management' => 'User Management',
-            'role-management' => 'Role Management',
-            'keluarga-management' => 'Keluarga Management',
-            'balita-management' => 'Balita Management',
-            'ibu-hamil-management' => 'Ibu Hamil Management',
-            'lansia-management' => 'Lansia Management',
-            'pemeriksaan-balita' => 'Pemeriksaan Balita',
-            'pemeriksaan-ibu-hamil' => 'Pemeriksaan Ibu Hamil',
-            'pemeriksaan-lansia' => 'Pemeriksaan Lansia',
-            'view-reports' => 'View Reports',
+            'manage_users' => 'User Management',
+            'manage_roles' => 'Role Management',
+            'manage_keluarga' => 'Keluarga Management',
+            'manage_balita' => 'Balita Management',
+            'manage_ibu_hamil' => 'Ibu Hamil & Nifas Management',
+            'manage_lansia' => 'Remaja & Lansia Management',
+            'manage_pemeriksaan' => 'Input Pemeriksaan',
+            'edit_pemeriksaan' => 'Edit Pemeriksaan',
+            'view_data' => 'View Health Data',
+            'view_reports' => 'View Reports',
+            'delete_data' => 'Delete Data',
+            'export_data' => 'Export Data',
+            'manage_settings' => 'Manage Settings',
         ];
 
         return view('admin.roles.create', compact('availablePermissions'));
@@ -70,16 +73,19 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $availablePermissions = [
-            'user-management' => 'User Management',
-            'role-management' => 'Role Management',
-            'keluarga-management' => 'Keluarga Management',
-            'balita-management' => 'Balita Management',
-            'ibu-hamil-management' => 'Ibu Hamil Management',
-            'lansia-management' => 'Lansia Management',
-            'pemeriksaan-balita' => 'Pemeriksaan Balita',
-            'pemeriksaan-ibu-hamil' => 'Pemeriksaan Ibu Hamil',
-            'pemeriksaan-lansia' => 'Pemeriksaan Lansia',
-            'view-reports' => 'View Reports',
+            'manage_users' => 'User Management',
+            'manage_roles' => 'Role Management',
+            'manage_keluarga' => 'Keluarga Management',
+            'manage_balita' => 'Balita Management',
+            'manage_ibu_hamil' => 'Ibu Hamil & Nifas Management',
+            'manage_lansia' => 'Remaja & Lansia Management',
+            'manage_pemeriksaan' => 'Input Pemeriksaan',
+            'edit_pemeriksaan' => 'Edit Pemeriksaan',
+            'view_data' => 'View Health Data',
+            'view_reports' => 'View Reports',
+            'delete_data' => 'Delete Data',
+            'export_data' => 'Export Data',
+            'manage_settings' => 'Manage Settings',
         ];
 
         return view('admin.roles.edit', compact('role', 'availablePermissions'));

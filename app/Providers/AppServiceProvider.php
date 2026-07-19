@@ -88,6 +88,10 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasPermission('manage_users');
         });
 
+        \Illuminate\Support\Facades\Gate::define('manage_roles', function ($user) {
+            return $user->hasPermission('manage_roles');
+        });
+
         \Illuminate\Support\Facades\Gate::define('manage_keluarga', function ($user) {
             return $user->hasPermission('manage_keluarga');
         });
@@ -126,6 +130,10 @@ class AppServiceProvider extends ServiceProvider
 
         \Illuminate\Support\Facades\Gate::define('export_data', function ($user) {
             return $user->hasPermission('export_data');
+        });
+
+        \Illuminate\Support\Facades\Gate::define('manage_settings', function ($user) {
+            return $user->hasPermission('manage_settings');
         });
 
         // Blade Directives for Permission Check

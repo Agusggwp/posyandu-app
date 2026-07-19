@@ -74,7 +74,7 @@
                 </div>
 
                 <div>
-                          <label for="panjang_badan" class="block text-sm font-medium text-gray-700 mb-2">Panjang Badan (cm)</label>
+                          <label for="panjang_badan" class="block text-sm font-medium text-gray-700 mb-2">Tinggi Badan (cm)</label>
                           <input type="number" step="0.01" name="panjang_badan" id="panjang_badan" 
                               value="{{ old('panjang_badan', $pemeriksaan->panjang_badan) }}"
                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('panjang_badan') border-red-500 @enderror">
@@ -120,7 +120,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
-                    <label for="status_pb_u" class="block text-sm font-medium text-gray-700 mb-2">Status PB/U</label>
+                    <label for="status_pb_u" class="block text-sm font-medium text-gray-700 mb-2">Status TB/U</label>
                     <input type="text" name="status_pb_u" id="status_pb_u" 
                            value="{{ old('status_pb_u', $pemeriksaan->status_pb_u) }}"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('status_pb_u') border-red-500 @enderror">

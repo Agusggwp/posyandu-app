@@ -58,15 +58,29 @@ class PemeriksaanBalita extends Model
 
     public function getStatusGiziAttribute()
     {
-        if (in_array($this->status_pb_u, ['SP', 'P'])) {
+        if (in_array($this->status_pb_u, ['SP', 'P', 'Sangat Pendek', 'Pendek'])) {
             return 'stunting';
         }
-        if ($this->status_bb_pb == 'K' || $this->status_bb_u == 'SK') {
+        if (in_array($this->status_bb_pb, ['K', 'Kurang', 'Buruk']) || 
+            in_array($this->status_bb_u, ['SK', 'K', 'Sangat Kurang', 'Kurang'])) {
             return 'kurang';
         }
-        if ($this->status_bb_pb == 'B' || $this->status_bb_u == 'N' || $this->status_pb_u == 'N') {
+        if (in_array($this->status_bb_pb, ['B', 'Normal', 'Baik', 'Gizi Baik']) || 
+            in_array($this->status_bb_u, ['N', 'Normal']) || 
+            in_array($this->status_pb_u, ['N', 'Normal', 'Tinggi'])) {
             return 'normal';
         }
-        return 'stunting';
+        return 'normal';
+    }
+
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            if (empty($model->waktu_kunjungan) && !empty($model->tanggal_kunjungan)) {
+                $model->waktu_kunjungan = $model->tanggal_kunjungan;
+            } elseif (empty($model->tanggal_kunjungan) && !empty($model->waktu_kunjungan)) {
+                $model->tanggal_kunjungan = $model->waktu_kunjungan;
+            }
+        });
     }
 }

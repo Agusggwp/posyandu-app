@@ -46,14 +46,19 @@
 
                     <div>
                         <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">Password Baru</label>
-                        <input
-                            id="password"
-                            type="password"
-                            name="password"
-                            required
-                            class="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-800 outline-none transition focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-100"
-                            placeholder="••••••••"
-                        >
+                        <div class="relative">
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                required
+                                class="w-full rounded-2xl border border-gray-200 bg-white pl-4 pr-12 py-3 text-gray-800 outline-none transition focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-100"
+                                placeholder="••••••••"
+                            >
+                            <button type="button" class="absolute right-4 top-3 text-slate-400 hover:text-slate-600 cursor-pointer" id="toggle-password" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye" id="icon-password"></i>
+                            </button>
+                        </div>
                         @error('password')
                             <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
                         @enderror
@@ -61,14 +66,19 @@
 
                     <div>
                         <label for="password_confirmation" class="mb-2 block text-sm font-semibold text-slate-700">Konfirmasi Password</label>
-                        <input
-                            id="password_confirmation"
-                            type="password"
-                            name="password_confirmation"
-                            required
-                            class="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-800 outline-none transition focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-100"
-                            placeholder="••••••••"
-                        >
+                        <div class="relative">
+                            <input
+                                id="password_confirmation"
+                                type="password"
+                                name="password_confirmation"
+                                required
+                                class="w-full rounded-2xl border border-gray-200 bg-white pl-4 pr-12 py-3 text-gray-800 outline-none transition focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-100"
+                                placeholder="••••••••"
+                            >
+                            <button type="button" class="absolute right-4 top-3 text-slate-400 hover:text-slate-600 cursor-pointer" id="toggle-password-confirm" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye" id="icon-password-confirm"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="flex flex-col-reverse gap-3 sm:flex-row">
@@ -79,5 +89,29 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function setupToggle(buttonId, inputId, iconId) {
+                const btn = document.getElementById(buttonId);
+                const input = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                if (btn && input && icon) {
+                    btn.addEventListener('click', function () {
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        } else {
+                            input.type = 'password';
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        }
+                    });
+                }
+            }
+            setupToggle('toggle-password', 'password', 'icon-password');
+            setupToggle('toggle-password-confirm', 'password-confirm', 'icon-password-confirm');
+        });
+    </script>
 </body>
 </html>

@@ -104,7 +104,7 @@ class PemeriksaanRemajaController extends Controller
     {
         $baseRules = [
             'remaja_identitas_id' => 'required|exists:remaja_identitas,id',
-            'waktu_kunjungan' => 'required|date',
+            'tanggal_kunjungan' => 'required|date',
         ];
 
         return match ($stage) {
@@ -161,7 +161,7 @@ class PemeriksaanRemajaController extends Controller
     {
         $validated = $request->validate([
             'remaja_identitas_id' => 'required|exists:remaja_identitas,id',
-            'waktu_kunjungan' => 'nullable|string|max:50',
+            'tanggal_kunjungan' => 'nullable|string|max:50',
             'berat_badan' => 'nullable|numeric|min:0',
             'tinggi_badan' => 'nullable|numeric|min:0',
             'imt_status' => 'nullable|string|max:20',
@@ -187,6 +187,34 @@ class PemeriksaanRemajaController extends Controller
             'edukasi' => 'nullable|string',
             'rujukan' => 'nullable|string|max:100',
         ]);
+
+        if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
+            $berat = (float) $validated['berat_badan'];
+            $tinggi = (float) $validated['tinggi_badan'] / 100;
+            if ($berat > 0 && $tinggi > 0) {
+                $imt = $berat / ($tinggi * $tinggi);
+                if ($imt < 18.5) {
+                    $validated['imt_status'] = 'Kurus';
+                } elseif ($imt >= 18.5 && $imt < 25) {
+                    $validated['imt_status'] = 'Normal';
+                } elseif ($imt >= 25 && $imt < 30) {
+                    $validated['imt_status'] = 'Gemuk';
+                } else {
+                    $validated['imt_status'] = 'Obesitas';
+                }
+            }
+        }
+        if (isset($validated['sistole']) && isset($validated['diastole'])) {
+            $sistole = (int) $validated['sistole'];
+            $diastole = (int) $validated['diastole'];
+            if ($sistole < 90 || $diastole < 60) {
+                $validated['tekanan_darah_status'] = 'Rendah';
+            } elseif (($sistole >= 90 && $sistole <= 120) || ($diastole >= 60 && $diastole <= 80)) {
+                $validated['tekanan_darah_status'] = 'Normal';
+            } else {
+                $validated['tekanan_darah_status'] = 'Tinggi';
+            }
+        }
 
         PemeriksaanRemaja::create($validated);
 
@@ -221,7 +249,7 @@ class PemeriksaanRemajaController extends Controller
     {
         $validated = $request->validate([
             'remaja_identitas_id' => 'required|exists:remaja_identitas,id',
-            'waktu_kunjungan' => 'nullable|string|max:50',
+            'tanggal_kunjungan' => 'nullable|string|max:50',
             'berat_badan' => 'nullable|numeric|min:0',
             'tinggi_badan' => 'nullable|numeric|min:0',
             'imt_status' => 'nullable|string|max:20',
@@ -247,6 +275,34 @@ class PemeriksaanRemajaController extends Controller
             'edukasi' => 'nullable|string',
             'rujukan' => 'nullable|string|max:100',
         ]);
+
+        if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
+            $berat = (float) $validated['berat_badan'];
+            $tinggi = (float) $validated['tinggi_badan'] / 100;
+            if ($berat > 0 && $tinggi > 0) {
+                $imt = $berat / ($tinggi * $tinggi);
+                if ($imt < 18.5) {
+                    $validated['imt_status'] = 'Kurus';
+                } elseif ($imt >= 18.5 && $imt < 25) {
+                    $validated['imt_status'] = 'Normal';
+                } elseif ($imt >= 25 && $imt < 30) {
+                    $validated['imt_status'] = 'Gemuk';
+                } else {
+                    $validated['imt_status'] = 'Obesitas';
+                }
+            }
+        }
+        if (isset($validated['sistole']) && isset($validated['diastole'])) {
+            $sistole = (int) $validated['sistole'];
+            $diastole = (int) $validated['diastole'];
+            if ($sistole < 90 || $diastole < 60) {
+                $validated['tekanan_darah_status'] = 'Rendah';
+            } elseif (($sistole >= 90 && $sistole <= 120) || ($diastole >= 60 && $diastole <= 80)) {
+                $validated['tekanan_darah_status'] = 'Normal';
+            } else {
+                $validated['tekanan_darah_status'] = 'Tinggi';
+            }
+        }
 
         $pemeriksaan_remaja->update($validated);
 

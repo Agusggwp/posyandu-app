@@ -207,6 +207,28 @@ class PemeriksaanNifasController extends Controller
             'rujukan' => 'nullable|string|max:100',
         ]);
 
+        if (isset($validated['lila'])) {
+            $lila = (float) $validated['lila'];
+            if ($lila >= 23.5) {
+                $validated['status_gizi'] = 'Hijau';
+            } elseif ($lila >= 23.0) {
+                $validated['status_gizi'] = 'Kuning';
+            } elseif ($lila > 0) {
+                $validated['status_gizi'] = 'Merah';
+            }
+        }
+        if (isset($validated['sistole']) && isset($validated['diastole'])) {
+            $sistole = (int) $validated['sistole'];
+            $diastole = (int) $validated['diastole'];
+            if ($sistole < 90 || $diastole < 60) {
+                $validated['tekanan_darah_status'] = 'Rendah';
+            } elseif (($sistole >= 90 && $sistole <= 120) || ($diastole >= 60 && $diastole <= 80)) {
+                $validated['tekanan_darah_status'] = 'Normal';
+            } else {
+                $validated['tekanan_darah_status'] = 'Tinggi';
+            }
+        }
+
         PemeriksaanNifas::create($validated);
 
         return redirect()->route('pemeriksaan-nifas.index')->with('success', 'Pemeriksaan nifas berhasil ditambahkan');
@@ -259,6 +281,28 @@ class PemeriksaanNifasController extends Controller
             'edukasi' => 'nullable|string',
             'rujukan' => 'nullable|string|max:100',
         ]);
+
+        if (isset($validated['lila'])) {
+            $lila = (float) $validated['lila'];
+            if ($lila >= 23.5) {
+                $validated['status_gizi'] = 'Hijau';
+            } elseif ($lila >= 23.0) {
+                $validated['status_gizi'] = 'Kuning';
+            } elseif ($lila > 0) {
+                $validated['status_gizi'] = 'Merah';
+            }
+        }
+        if (isset($validated['sistole']) && isset($validated['diastole'])) {
+            $sistole = (int) $validated['sistole'];
+            $diastole = (int) $validated['diastole'];
+            if ($sistole < 90 || $diastole < 60) {
+                $validated['tekanan_darah_status'] = 'Rendah';
+            } elseif (($sistole >= 90 && $sistole <= 120) || ($diastole >= 60 && $diastole <= 80)) {
+                $validated['tekanan_darah_status'] = 'Normal';
+            } else {
+                $validated['tekanan_darah_status'] = 'Tinggi';
+            }
+        }
 
         $pemeriksaan_nifas->update($validated);
 

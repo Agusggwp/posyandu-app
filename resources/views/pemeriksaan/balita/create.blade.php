@@ -25,7 +25,7 @@
                     <div class="w-12 h-12 rounded-xl bg-teal-600 text-white flex items-center justify-center text-xl font-bold">1</div>
                     <div>
                         <h3 class="text-xl font-bold text-gray-800">Penimbangan & Pengukuran</h3>
-                        <p class="text-sm text-gray-600">Berat badan, panjang badan, lingkar kepala</p>
+                        <p class="text-sm text-gray-600">Berat badan, tinggi badan, lingkar kepala</p>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     <div class="w-12 h-12 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-xl font-bold">2</div>
                     <div>
                         <h3 class="text-xl font-bold text-gray-800">Status Gizi & Pengukuran</h3>
-                        <p class="text-sm text-gray-600">Status BB/U, PB/U, BB/PB</p>
+                        <p class="text-sm text-gray-600">Status BB/U, TB/U, BB/TB</p>
                     </div>
                 </div>
             </div>

@@ -134,6 +134,12 @@
                         <p class="text-gray-600 text-base mt-4 leading-relaxed">{{ isset($loginSettings) ? $loginSettings['description'] : 'Silakan masuk ke akun Anda untuk melanjutkan pengelolaan kesehatan keluarga' }}</p>
                     </div>
 
+                    @if (session('status'))
+                        <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
                     @if ($errors->any())
                         <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                             {{ $errors->first('email') ?? $errors->first('password') ?? 'Login gagal. Periksa kembali data Anda.' }}
@@ -143,7 +149,7 @@
                     <form method="POST" action="{{ route('login') }}" class="space-y-6">
                         @csrf
 
-                        <div class="form-group">
+                        <div class="form-group">    
                             <label class="form-label" for="email">Email Address</label>
                             <input
                                 id="email"
@@ -173,8 +179,8 @@
                                     class="form-input pr-12"
                                     required
                                 >
-                                <button type="button" class="absolute right-4 top-3 text-gray-500 hover:text-gray-700 text-xl" id="toggle-password" aria-label="Toggle password visibility">
-                                    👁️
+                                <button type="button" class="absolute right-4 top-3 text-slate-400 hover:text-slate-600 cursor-pointer" id="toggle-password" aria-label="Toggle password visibility">
+                                    <i class="fas fa-eye" id="icon-password"></i>
                                 </button>
                             </div>
                         </div>
@@ -201,16 +207,19 @@
     <script>
         const passwordInput = document.getElementById('password-input');
         const toggleBtn = document.getElementById('toggle-password');
+        const toggleIcon = document.getElementById('icon-password');
 
-        if (passwordInput && toggleBtn) {
+        if (passwordInput && toggleBtn && toggleIcon) {
             toggleBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text';
-                    toggleBtn.innerHTML = '🙈';
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
                 } else {
                     passwordInput.type = 'password';
-                    toggleBtn.innerHTML = '👁️';
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
                 }
             });
         }

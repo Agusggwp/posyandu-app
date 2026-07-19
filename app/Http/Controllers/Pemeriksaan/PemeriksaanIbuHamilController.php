@@ -289,6 +289,33 @@ class PemeriksaanIbuHamilController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
+        if (isset($validated['tekanan_darah']) && str_contains($validated['tekanan_darah'], '/')) {
+            $parts = explode('/', $validated['tekanan_darah']);
+            if (count($parts) === 2) {
+                $sistole = (int) trim($parts[0]);
+                $diastole = (int) trim($parts[1]);
+                $validated['status_tekanan_darah'] = $this->calculateBloodPressureStatus($sistole, $diastole);
+            }
+        }
+
+        if (isset($validated['berat_badan']) && isset($validated['ibu_hamil_identitas_id'])) {
+            $previous = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $validated['ibu_hamil_identitas_id'])
+                ->whereNotNull('berat_badan')
+                ->where('id', '!=', $pemeriksaan_ibu_hamil->id)
+                ->orderByDesc('tanggal_kunjungan')
+                ->first();
+
+            if ($previous) {
+                $validated['status_bb'] = $validated['berat_badan'] > $previous->berat_badan ? 'Naik' : 'Tidak';
+            } else {
+                $validated['status_bb'] = null;
+            }
+        }
+
+        if (isset($validated['lingkar_lengan'])) {
+            $validated['status_lila'] = $validated['lingkar_lengan'] < 23.5 ? 'Merah' : 'Hijau';
+        }
+
         $pemeriksaan_ibu_hamil->update($validated);
 
         try {

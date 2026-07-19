@@ -119,11 +119,11 @@
                             <p class="text-amber-900">{{ $data['status_bb_u'] ?? '-' }}</p>
                         </div>
                         <div>
-                            <p class="text-amber-700 font-medium">Status PB/U</p>
+                            <p class="text-amber-700 font-medium">Status TB/U</p>
                             <p class="text-amber-900">{{ $data['status_pb_u'] ?? '-' }}</p>
                         </div>
                         <div>
-                            <p class="text-amber-700 font-medium">Status BB/PB</p>
+                            <p class="text-amber-700 font-medium">Status BB/TB</p>
                             <p class="text-amber-900">{{ $data['status_bb_pb'] ?? '-' }}</p>
                         </div>
                         <div>

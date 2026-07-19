@@ -66,4 +66,15 @@ class PemeriksaanLansia extends Model
     {
         return $this->belongsTo(Lansia::class, 'dewasa_identitas_id');
     }
+
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            if (empty($model->waktu_kunjungan) && !empty($model->tanggal_kunjungan)) {
+                $model->waktu_kunjungan = $model->tanggal_kunjungan;
+            } elseif (empty($model->tanggal_kunjungan) && !empty($model->waktu_kunjungan)) {
+                $model->tanggal_kunjungan = $model->waktu_kunjungan;
+            }
+        });
+    }
 }

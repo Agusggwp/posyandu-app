@@ -12,7 +12,7 @@
                     return '-';
                 }
 
-                if (is_string($raw) && $key === 'waktu_kunjungan') {
+                if (is_string($raw) && ($key === 'waktu_kunjungan' || $key === 'tanggal_kunjungan')) {
                     try {
                         return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y');
                     } catch (\Throwable $e) {

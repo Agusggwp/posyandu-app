@@ -29,7 +29,25 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
+
+    /**
+     * Reset the given user's password.
+     *
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $password
+     * @return void
+     */
+    protected function resetPassword($user, $password)
+    {
+        $user->password = \Illuminate\Support\Facades\Hash::make($password);
+
+        $user->setRememberToken(\Illuminate\Support\Str::random(60));
+
+        $user->save();
+
+        event(new \Illuminate\Auth\Events\PasswordReset($user));
+    }
 
     public function reset(Request $request)
     {

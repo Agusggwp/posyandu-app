@@ -15,7 +15,7 @@
                 <div class="relative">
                     <p class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide">Portal Petugas</p>
                     <h1 class="mt-6 text-4xl font-extrabold leading-tight">Buat Password Baru</h1>
-                    <p class="mt-4 text-sm text-white/90">Atur password baru untuk akun Admin, Kader, atau Bidan Anda.</p>
+                    <p class="mt-4 text-sm text-white/90">Atur password baru untuk akun Admin, Kader</p>
                 </div>
             </section>
 
@@ -51,28 +51,38 @@
 
                         <div>
                             <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">Password Baru</label>
-                            <input
-                                id="password"
-                                type="password"
-                                name="password"
-                                required
-                                autocomplete="new-password"
-                                placeholder="••••••••"
-                                class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
-                            >
+                            <div class="relative">
+                                <input
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    required
+                                    autocomplete="new-password"
+                                    placeholder="••••••••"
+                                    class="w-full rounded-xl border border-slate-200 bg-white pl-4 pr-12 py-3 text-slate-800 outline-none transition focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
+                                >
+                                <button type="button" class="absolute right-4 top-3 text-slate-400 hover:text-slate-600 cursor-pointer" id="toggle-password" aria-label="Toggle password visibility">
+                                    <i class="fas fa-eye" id="icon-password"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div>
                             <label for="password-confirm" class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Password</label>
-                            <input
-                                id="password-confirm"
-                                type="password"
-                                name="password_confirmation"
-                                required
-                                autocomplete="new-password"
-                                placeholder="••••••••"
-                                class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
-                            >
+                            <div class="relative">
+                                <input
+                                    id="password-confirm"
+                                    type="password"
+                                    name="password_confirmation"
+                                    required
+                                    autocomplete="new-password"
+                                    placeholder="••••••••"
+                                    class="w-full rounded-xl border border-slate-200 bg-white pl-4 pr-12 py-3 text-slate-800 outline-none transition focus:border-purple-500 focus:ring-4 focus:ring-purple-100"
+                                >
+                                <button type="button" class="absolute right-4 top-3 text-slate-400 hover:text-slate-600 cursor-pointer" id="toggle-password-confirm" aria-label="Toggle password visibility">
+                                    <i class="fas fa-eye" id="icon-password-confirm"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-3 font-bold text-white transition hover:from-purple-700 hover:to-blue-700">
@@ -87,5 +97,29 @@
             </section>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function setupToggle(buttonId, inputId, iconId) {
+                const btn = document.getElementById(buttonId);
+                const input = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                if (btn && input && icon) {
+                    btn.addEventListener('click', function () {
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        } else {
+                            input.type = 'password';
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        }
+                    });
+                }
+            }
+            setupToggle('toggle-password', 'password', 'icon-password');
+            setupToggle('toggle-password-confirm', 'password-confirm', 'icon-password-confirm');
+        });
+    </script>
 </body>
 </html>

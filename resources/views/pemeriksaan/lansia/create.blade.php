@@ -123,7 +123,7 @@
                                     {{ $item->lansia->nama ?? $item->dewasa_identitas_id }}
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                                    {{ $item->waktu_kunjungan ? \Carbon\Carbon::parse($item->waktu_kunjungan)->format('d M Y') : '-' }}
+                                    {{ $item->tanggal_kunjungan ? \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('d M Y') : '-' }}
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                                     Tahap {{ $item->tahap_terakhir ?: 1 }}

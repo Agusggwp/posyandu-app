@@ -30,26 +30,28 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Waktu Kunjungan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama Lansia</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Sistole/Diastole</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Gula Darah</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status TD</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Edukasi</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NO</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">UMUR</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">TANGGAL KUNJUNGAN</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NAMA LANSIA</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">BERAT BADAN</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">TINGGI BADAN</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">STATUS TB/U</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">STATUS BB/U</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">AKSI</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($pemeriksaans as $index => $pemeriksaan)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaans->firstItem() + $index }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($pemeriksaan->waktu_kunjungan)->format('d/m/Y') ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->lansia && $pemeriksaan->lansia->tanggal_lahir ? (int)\Carbon\Carbon::parse($pemeriksaan->lansia->tanggal_lahir)->diffInYears($pemeriksaan->tanggal_kunjungan) . ' Tahun' : ($pemeriksaan->lansia->umur ? $pemeriksaan->lansia->umur . ' Tahun' : '-') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($pemeriksaan->tanggal_kunjungan)->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $pemeriksaan->lansia->nama ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->sistole && $pemeriksaan->diastole ? $pemeriksaan->sistole . '/' . $pemeriksaan->diastole : '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->gula_darah ? $pemeriksaan->gula_darah . ' mg/dL' : '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tekanan_darah_status ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->edukasi ?? '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->berat_badan ? $pemeriksaan->berat_badan . ' kg' : '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->tinggi_badan ? $pemeriksaan->tinggi_badan . ' cm' : '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->status_berat_badan ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center gap-2">
                                 <a href="{{ route('pemeriksaan-lansia.show', $pemeriksaan->id) }}" class="inline-flex items-center px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg text-xs font-semibold transition-all duration-200">
@@ -64,7 +66,7 @@
                                 @endcan
                                 @can('delete_data')
                                 <form action="{{ route('pemeriksaan-lansia.destroy', $pemeriksaan->id) }}" method="POST" style="display: contents"
-                                      onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                       onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-lg text-xs font-semibold transition-all duration-200">
@@ -78,7 +80,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">Tidak ada data pemeriksaan</td>
+                        <td colspan="9" class="px-6 py-4 text-center text-gray-500">Tidak ada data pemeriksaan</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -96,15 +98,15 @@
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <h3 class="font-semibold text-slate-900">{{ $pemeriksaan->lansia->nama ?? '-' }}</h3>
-                        <p class="text-xs text-slate-500 mt-1">{{ optional($pemeriksaan->waktu_kunjungan)->format('d/m/Y') ?? '-' }}</p>
+                        <p class="text-xs text-slate-500 mt-1">{{ optional($pemeriksaan->tanggal_kunjungan)->format('d/m/Y') ?? '-' }}</p>
                     </div>
                 </div>
 
                 <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
-                    <div><span class="text-slate-500">TD:</span> <span class="font-medium">{{ $pemeriksaan->sistole && $pemeriksaan->diastole ? $pemeriksaan->sistole . '/' . $pemeriksaan->diastole : '-' }}</span></div>
-                    <div><span class="text-slate-500">Gula:</span> <span class="font-medium">{{ $pemeriksaan->gula_darah ? $pemeriksaan->gula_darah . ' mg/dL' : '-' }}</span></div>
-                    <div><span class="text-slate-500">Status TD:</span> <span class="font-medium">{{ $pemeriksaan->tekanan_darah_status ?? '-' }}</span></div>
-                    <div><span class="text-slate-500">Edukasi:</span> <span class="font-medium">{{ $pemeriksaan->edukasi ?? '-' }}</span></div>
+                    <div><span class="text-slate-500">BB:</span> <span class="font-medium">{{ $pemeriksaan->berat_badan ? $pemeriksaan->berat_badan . ' kg' : '-' }}</span></div>
+                    <div><span class="text-slate-500">TB:</span> <span class="font-medium">{{ $pemeriksaan->tinggi_badan ? $pemeriksaan->tinggi_badan . ' cm' : '-' }}</span></div>
+                    <div><span class="text-slate-500">Status TB/U:</span> <span class="font-medium">-</span></div>
+                    <div><span class="text-slate-500">Status BB/U:</span> <span class="font-medium">{{ $pemeriksaan->status_berat_badan ?? '-' }}</span></div>
                 </div>
 
                 <div class="mt-4 flex flex-col gap-2">

@@ -14,7 +14,7 @@
                 <div class="absolute -bottom-20 -right-8 h-64 w-64 rounded-full bg-cyan-300/25 blur-3xl"></div>
                 <div class="relative">
                     <p class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide">Portal Petugas</p>
-                    <h1 class="mt-6 text-4xl font-extrabold leading-tight">Reset Password Admin, Kader, dan Bidan</h1>
+                    <h1 class="mt-6 text-4xl font-extrabold leading-tight">Reset Password Admin, Kader</h1>
                     <p class="mt-4 text-sm text-white/90">Masukkan email akun petugas. Kami akan kirim tautan untuk membuat password baru.</p>
                 </div>
             </section>
@@ -22,7 +22,7 @@
             <section class="flex items-center p-6 sm:p-10 md:p-12">
                 <div class="w-full max-w-md mx-auto">
                     <h2 class="text-3xl font-bold text-slate-900">Lupa Password?</h2>
-                    <p class="mt-2 text-sm text-slate-500">Khusus akun Admin, Kader, dan Bidan.</p>
+                    <p class="mt-2 text-sm text-slate-500">Khusus akun Admin, Kader.</p>
 
                     @if (session('status'))
                         <div class="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">

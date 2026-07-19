@@ -49,6 +49,9 @@ class DashboardController extends Controller
             'show_system_info' => Setting::getSetting('main_dashboard_show_system_info', 'active'),
         ];
 
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+
         $data = [
             'total_keluarga' => Keluarga::count(),
             'total_balita' => Balita::count(),
@@ -56,12 +59,26 @@ class DashboardController extends Controller
             'total_nifas' => Nifas::count(),
             'total_remaja' => Remaja::count(),
             'total_lansia' => Lansia::count(),
-            'total_pemeriksaan_balita' => PemeriksaanBalita::whereMonth('created_at', date('m'))->count(),
-            'total_pemeriksaan_ibu_hamil' => PemeriksaanIbuHamil::whereMonth('created_at', date('m'))->count(),
-            'total_pemeriksaan_nifas' => PemeriksaanNifas::whereMonth('created_at', date('m'))->count(),
-            'total_pemeriksaan_remaja' => PemeriksaanRemaja::whereMonth('created_at', date('m'))->count(),
-            'total_pemeriksaan_lansia' => PemeriksaanLansia::whereMonth('created_at', date('m'))->count(),
-            'balita_stunting' => PemeriksaanBalita::whereIn('status_pb_u', ['SP', 'P'])->distinct('balita_identitas_id')->count(),
+            'total_pemeriksaan_balita' => PemeriksaanBalita::whereMonth('tanggal_kunjungan', $currentMonth)
+                ->whereYear('tanggal_kunjungan', $currentYear)
+                ->count(),
+            'total_pemeriksaan_ibu_hamil' => PemeriksaanIbuHamil::whereMonth('tanggal_kunjungan', $currentMonth)
+                ->whereYear('tanggal_kunjungan', $currentYear)
+                ->count(),
+            'total_pemeriksaan_nifas' => PemeriksaanNifas::whereMonth('tanggal_kunjungan', $currentMonth)
+                ->whereYear('tanggal_kunjungan', $currentYear)
+                ->count(),
+            'total_pemeriksaan_remaja' => PemeriksaanRemaja::whereMonth('tanggal_kunjungan', $currentMonth)
+                ->whereYear('tanggal_kunjungan', $currentYear)
+                ->count(),
+            'total_pemeriksaan_lansia' => PemeriksaanLansia::whereMonth('tanggal_kunjungan', $currentMonth)
+                ->whereYear('tanggal_kunjungan', $currentYear)
+                ->count(),
+            'balita_stunting' => PemeriksaanBalita::whereMonth('tanggal_kunjungan', $currentMonth)
+                ->whereYear('tanggal_kunjungan', $currentYear)
+                ->whereIn('status_pb_u', ['SP', 'P', 'Sangat Pendek', 'Pendek'])
+                ->distinct('balita_identitas_id')
+                ->count(),
         ];
         
         return view('dashboard', compact('data', 'dashboardSettings'));

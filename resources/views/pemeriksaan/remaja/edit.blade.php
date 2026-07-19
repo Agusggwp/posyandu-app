@@ -22,8 +22,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan</label>
-                    <input type="date" name="waktu_kunjungan" value="{{ old('waktu_kunjungan', $pemeriksaanRemaja->waktu_kunjungan ? \Illuminate\Support\Carbon::parse($pemeriksaanRemaja->waktu_kunjungan)->format('Y-m-d') : '') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kunjungan</label>
+                    <input type="date" name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan', $pemeriksaanRemaja->tanggal_kunjungan ? \Illuminate\Support\Carbon::parse($pemeriksaanRemaja->tanggal_kunjungan)->format('Y-m-d') : '') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Berat Badan</label>

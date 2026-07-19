@@ -109,7 +109,7 @@
                             @endphp
                             <tr>
                                 <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->remaja->nama_anak ?? $item->remaja_identitas_id }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{{ $item->waktu_kunjungan ? \Carbon\Carbon::parse($item->waktu_kunjungan)->format('d M Y') : '-' }}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{{ $item->tanggal_kunjungan ? \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('d M Y') : '-' }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">Tahap {{ $item->tahap_terakhir ?: 1 }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap text-sm">
                                     <a href="{{ route('pemeriksaan-remaja.stage', ['stage' => $nextStage, 'pemeriksaan_id' => $item->id]) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white font-medium">Lanjutkan</a>

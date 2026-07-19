@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Diagram Sistem Posyandu - Tugas Akhir</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #131b2e;
+            --bg-tertiary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --accent-glow: rgba(79, 70, 229, 0.35);
+            --border: #1e293b;
+            --error: #ef4444;
+            --success: #10b981;
+            --card-shadow: 0 10px 30px -10px rgba(2, 6, 23, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-title p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        select {
+            appearance: none;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 10px 40px 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .select-wrapper::after {
+            content: "▼";
+            font-size: 10px;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-secondary);
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            background-color: var(--bg-primary);
+        }
+
+        .editor-pane {
+            width: 38%;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .pane-header {
+            padding: 12px 20px;
+            background-color: rgba(2, 6, 23, 0.2);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pane-header h2 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        textarea {
+            flex: 1;
+            background-color: rgba(15, 23, 42, 0.5);
+            border: none;
+            color: #e2e8f0;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            padding: 20px;
+            resize: none;
+            outline: none;
+            overflow-y: auto;
+        }
+
+        textarea:focus {
+            background-color: rgba(15, 23, 42, 0.7);
+        }
+
+        .preview-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: var(--bg-primary);
+            position: relative;
+        }
+
+        .toolbar {
+            padding: 12px 20px;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: #334155;
+            border-color: #475569;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .preview-content {
+            flex: 1;
+            overflow: auto;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(rgba(51, 65, 85, 0.1) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+
+        #diagram-preview {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            max-width: 100%;
+            display: inline-block;
+        }
+
+        .error-box {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: #fca5a5;
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .loading {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .success-toast {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Editor Diagram Tugas Akhir</h1>
+            <p>Sistem Informasi Posyandu & Kesehatan Keluarga</p>
+        </div>
+        <div class="select-wrapper">
+            <select id="diagram-select" onchange="loadDiagram(this.value)">
+                <option value="flowmap1">Flowmap 1: Registrasi & Approval KK</option>
+                <option value="flowmap2">Flowmap 2: Pencatatan & Pemeriksaan</option>
+                <option value="usecase">Use Case Diagram: Sistem Posyandu</option>
+                <option value="activity1">Activity Diagram 1: Login Multi-Role</option>
+                <option value="activity2">Activity Diagram 2: Input Pemeriksaan Balita</option>
+                <option value="sequence1">Sequence Diagram 1: Login Multi-Role</option>
+                <option value="sequence2">Sequence Diagram 2: Input Pemeriksaan</option>
+                <option value="sequence3">Sequence Diagram 3: Registrasi & Aktivasi KK</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="editor-pane">
+            <div class="pane-header">
+                <h2>Mermaid Code</h2>
+            </div>
+            <textarea id="editor-code" spellcheck="false"></textarea>
+        </div>
+
+        <div class="preview-pane">
+            <div class="toolbar">
+                <button class="btn" onclick="copyCode()">Salin Kode</button>
+                <button class="btn btn-primary" onclick="downloadSVG()">Unduh SVG</button>
+                <button class="btn btn-primary" onclick="downloadPNG()">Unduh PNG</button>
+            </div>
+            <div class="preview-content">
+                <div id="diagram-preview"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-toast" id="toast">Berhasil disalin ke clipboard!</div>
+
+    <script>
+        const DIAGRAMS = {
+            flowmap1: {
+                code: `graph TD
+    subgraph "Kepala Keluarga"
+        StartKK([Mulai]) --> RegForm[Mengisi Form Registrasi]
+        RegForm --> RegSubmit[Submit Data Registrasi]
+        RegSubmit -.-> SistemKK
+        
+        EmailWait[Menunggu Email Aktivasi] --> ActLink[Klik Link Aktivasi]
+        ActLink -.-> SistemKK
+        
+        LoginKK[Login Akun KK] --> ViewDashboard[Akses Dashboard & Data Keluarga]
+    end
+
+    subgraph "Sistem Posyandu"
+        SistemKK{Proses Data KK}
+        SistemKK -->|Validasi Sukses| SavePending[Simpan Data & Status Pending]
+        SavePending --> SendMail[Kirim Link Aktivasi ke Email]
+        SendMail -.-> EmailWait
+        
+        SistemKK -->|Aktivasi Link| UpdateUnapproved[Update Status: Aktif & Belum Disetujui]
+        
+        SistemAdmin{Proses Admin}
+        SistemAdmin -->|Klik Approve| UpdateApproved[Update Status: Approved]
+        UpdateApproved -.-> LoginKK
+    end
+
+    subgraph "Database"
+        SavePending --> DB[(Database)]
+        UpdateUnapproved --> DB
+        UpdateApproved --> DB
+    end
+
+    subgraph "Admin"
+        AdminLogin[Login Admin] --> AccessApproval[Akses Menu Approval KK]
+        AccessApproval -.-> SistemAdmin
+        AccessApproval --> ReviewKK[Review Data KK]
+        ReviewKK --> ApproveKK[Approve Registrasi KK]
+        ApproveKK -.-> SistemAdmin
+    end`
+            },
+            flowmap2: {
+                code: `graph TD
+    subgraph "Kader / Bidan"
+        StartPetugas([Mulai]) --> LoginPetugas[Login Petugas]
+        
+        LoginPetugas --> KaderAction{Peran Petugas}
+        KaderAction -->|Kader| InputWarga[Input/Update Master Data Warga<br>Keluarga, Balita, Hamil, Lansia]
+        InputWarga -.-> Sistem
+        
+        KaderAction -->|Bidan| InputPeriksa[Input/Update Pemeriksaan<br>Balita, Ibu Hamil, Lansia, dll]
+        InputPeriksa -.-> Sistem
+        
+        LoginPetugas --> DownloadLap[Download Laporan PDF/Excel]
+        DownloadLap -.-> Sistem
+    end
+
+    subgraph "Sistem Posyandu"
+        Sistem{Proses Sistem}
+        Sistem -->|Simpan Master Data| SaveMaster[Simpan Master Data]
+        Sistem -->|Hitung Status Gizi| AutoCalculate[Kalkulasi Status Kesehatan & Gizi secara Otomatis]
+        Sistem -->|Simpan Pemeriksaan| SavePeriksa[Simpan Data Pemeriksaan]
+        Sistem -->|Generate Laporan| GenerateReport[Generate Laporan]
+        
+        GenerateReport -.-> DownloadLap
+    end
+
+    subgraph "Database"
+        SaveMaster --> DB[(Database)]
+        SavePeriksa --> DB
+        AutoCalculate --> DB
+    end`
+            },
+            usecase: {
+                code: `graph LR
+    Admin[Actor: Admin]
+    Kader[Actor: Kader]
+    Bidan[Actor: Bidan]
+    KK[Actor: Kepala Keluarga]
+
+    subgraph "Sistem Informasi Posyandu"
+        UC_Login((UC01: Login))
+        UC_Register((UC02: Register KK))
+        UC_Activate((UC03: Aktivasi Akun via Email))
+        
+        UC_ManageKK((UC04: Kelola Data Keluarga))
+        UC_ManageBalita((UC05: Kelola Data Balita))
+        UC_ManageBumil((UC06: Kelola Data Ibu Hamil & Nifas))
+        UC_ManageLansia((UC07: Kelola Data Remaja & Lansia))
+        
+        UC_InputPeriksa((UC08: Input Pemeriksaan))
+        UC_EditPeriksa((UC09: Edit Pemeriksaan))
+        UC_DeleteData((UC10: Hapus Data))
+        
+        UC_ViewReports((UC11: Lihat & Ekspor Laporan))
+        UC_ViewKKHealth((UC12: Lihat Data Kesehatan Keluarga))
+        
+        UC_ManageUsers((UC13: Kelola User & Role))
+        UC_ManageSettings((UC14: Kelola Pengaturan Sistem))
+        UC_ViewLogs((UC15: Monitoring Activity Logs))
+    end
+
+    KK --> UC_Register
+    KK --> UC_Activate
+    KK --> UC_Login
+    KK --> UC_ViewKKHealth
+
+    Kader --> UC_Login
+    Kader --> UC_ManageKK
+    Kader --> UC_ManageBalita
+    Kader --> UC_ManageBumil
+    Kader --> UC_ManageLansia
+    Kader --> UC_ViewReports
+
+    Bidan --> UC_Login
+    Bidan --> UC_InputPeriksa
+    Bidan --> UC_EditPeriksa
+    Bidan --> UC_ViewReports
+
+    Admin --> UC_Login
+    Admin --> UC_ManageKK
+    Admin --> UC_ManageBalita
+    Admin --> UC_ManageBumil
+    Admin --> UC_ManageLansia
+    Admin --> UC_InputPeriksa
+    Admin --> UC_EditPeriksa
+    Admin --> UC_DeleteData
+    Admin --> UC_ViewReports
+    Admin --> UC_ManageUsers
+    Admin --> UC_ManageSettings
+    Admin --> UC_ViewLogs
+
+    UC_ManageKK -.->|include| UC_Login
+    UC_ManageBalita -.->|include| UC_Login
+    UC_InputPeriksa -.->|include| UC_Login
+    UC_ManageUsers -.->|include| UC_Login
+    UC_ViewKKHealth -.->|include| UC_Login`
+            },
+            activity1: {
+                code: `stateDiagram-v2
+    [*] --> AksesHalamanLogin
+    AksesHalamanLogin --> MenampilkanFormLogin
+    MenampilkanFormLogin --> MengisiKredensial : Menginput Email & Password
+    MengisiKredensial --> KirimData
+    KirimData --> ValidasiSistem : Sistem Memeriksa Kredensial
+    
+    state ValidasiSistem <<choice>>
+    ValidasiSistem --> LoginGagal : Jika Kredensial Tidak Valid
+    ValidasiSistem --> LoginBerhasil : Jika Kredensial Valid
+    
+    LoginGagal --> MenampilkanAlertError
+    MenampilkanAlertError --> MenampilkanFormLogin : Kembali Mengisi
+    
+    LoginBerhasil --> CekPeranUser : Mengidentifikasi Role
+    
+    state CekPeranUser <<choice>>
+    CekPeranUser --> RedirectAdmin : Role = Admin
+    CekPeranUser --> RedirectStaff : Role = Kader / Bidan
+    CekPeranUser --> RedirectKK : Role = Kepala Keluarga
+    
+    RedirectAdmin --> MenampilkanDashboardAdmin
+    RedirectStaff --> MenampilkanDashboardPetugas
+    RedirectKK --> MenampilkanDashboardKK
+    
+    MenampilkanDashboardAdmin --> [*]
+    MenampilkanDashboardPetugas --> [*]
+    MenampilkanDashboardKK --> [*]`
+            },
+            activity2: {
+                code: `stateDiagram-v2
+    [*] --> BidanLogin
+    BidanLogin --> PilihMenuPemeriksaanBalita
+    PilihMenuPemeriksaanBalita --> CariDataBalita
+    CariDataBalita --> MenampilkanDataBalita
+    MenampilkanDataBalita --> KlikInputPemeriksaan
+    KlikInputPemeriksaan --> MenampilkanFormPemeriksaan : Form Kunjungan & Pengukuran
+    MenampilkanFormPemeriksaan --> InputDataKesehatan : BB, TB/PB, Imunisasi, Vitamin, dll
+    InputDataKesehatan --> KlikSimpan
+    
+    KlikSimpan --> ValidasiForm
+    state ValidasiForm <<choice>>
+    ValidasiForm --> FormTidakLengkap : Ada Data Kosong / Invalid
+    ValidasiForm --> FormValid : Data Lengkap & Valid
+    
+    FormTidakLengkap --> MenampilkanPesanError
+    MenampilkanPesanError --> MenampilkanFormPemeriksaan
+    
+    FormValid --> HitungStatusGizi_Otomatis : Kalkulasi BB/U, PB/U, TB/U
+    HitungStatusGizi_Otomatis --> SimpanKeDatabase
+    SimpanKeDatabase --> MenampilkanAlertSukses
+    MenampilkanAlertSukses --> KembaliKeDaftarPemeriksaan
+    KembaliKeDaftarPemeriksaan --> [*]`
+            },
+            sequence1: {
+                code: `sequenceDiagram
+    autonumber
+    actor User as User (Admin/Petugas/KK)
+    participant LoginPage as LoginPage (Form Login)
+    participant AuthCtrl as AuthController
+    participant UserModel as User (Model)
+    participant DB as Database
+
+    User->>LoginPage: Akses Halaman Login & Input Kredensial
+    User->>LoginPage: Klik Tombol "Login"
+    LoginPage->>AuthCtrl: postLogin(email, password)
+    AuthCtrl->>UserModel: validateCredentials(email, password)
+    UserModel->>DB: selectUserByEmail(email)
+    DB-->>UserModel: dataUser (hashed password)
+    
+    alt Kredensial Valid
+        UserModel-->>AuthCtrl: validationSuccess(userObject)
+        AuthCtrl->>AuthCtrl: startSession(userObject)
+        AuthCtrl-->>LoginPage: redirectDashboard(role)
+        LoginPage-->>User: Tampilkan Dashboard Utama
+    else Kredensial/Password Salah
+        UserModel-->>AuthCtrl: validationFailed()
+        AuthCtrl-->>LoginPage: returnWithError("Email/Password salah")
+        LoginPage-->>User: Tampilkan Alert "Login Error"
+    end`
+            },
+            sequence2: {
+                code: `sequenceDiagram
+    autonumber
+    actor Bidan as Bidan (Petugas)
+    participant FormPeriksa as FormPemeriksaanBalita
+    participant PeriksaCtrl as PemeriksaanBalitaController
+    participant PeriksaModel as PemeriksaanBalita (Model)
+    participant DB as Database
+
+    Bidan->>FormPeriksa: Pilih Balita & Input Data Pengukuran (BB, PB, Status Asi)
+    Bidan->>FormPeriksa: Klik Tombol "Simpan"
+    FormPeriksa->>PeriksaCtrl: store(requestData)
+    
+    Note over PeriksaCtrl: Validasi input data pemeriksaan
+    PeriksaCtrl->>PeriksaCtrl: calculateStatusGizi(BB, PB, Umur)
+    
+    PeriksaCtrl->>PeriksaModel: create(validatedData + statusGizi)
+    PeriksaModel->>DB: INSERT INTO pemeriksaan_balita VALUES (...)
+    DB-->>PeriksaModel: insertSuccess(recordID)
+    
+    PeriksaModel-->>PeriksaCtrl: successResponse()
+    PeriksaCtrl-->>FormPeriksa: redirectIndex() with successMsg()
+    FormPeriksa-->>Bidan: Tampilkan Alert Sukses & Update Tabel Data`
+            },
+            sequence3: {
+                code: `sequenceDiagram
+    autonumber
+    actor KK as Kepala Keluarga
+    participant RegPage as RegistrationPage
+    participant KKAuthCtrl as KepalaKeluargaAuthController
+    participant KKModel as KepalaKeluarga (Model)
+    participant DB as Database
+    participant Mailer as Mail Server
+
+    KK->>RegPage: Input Data KK (Nama, No KK, Email, Password)
+    KK->>RegPage: Klik Tombol "Daftar"
+    RegPage->>KKAuthCtrl: register(requestData)
+    
+    KKAuthCtrl->>KKModel: create(requestData + statusPending)
+    KKModel->>DB: INSERT INTO kepala_keluarga VALUES (...)
+    DB-->>KKModel: insertSuccess(kkID)
+    
+    KKAuthCtrl->>Mailer: sendActivationEmail(email, activationToken)
+    Mailer-->>KK: Mengirimkan email berisi link aktivasi
+    
+    KKAuthCtrl-->>RegPage: redirectLogin() with successMsg()
+    RegPage-->>KK: Tampilkan Informasi Verifikasi Email
+    
+    Note over KK, Mailer: Proses Aktivasi Link
+    KK->>Mailer: Klik Link Aktivasi Email
+    Mailer->>KKAuthCtrl: activate(kkID, token)
+    KKAuthCtrl->>KKModel: verifyToken(token)
+    KKModel->>DB: UPDATE kepala_keluarga SET status = active-unapproved
+    DB-->>KKModel: updateSuccess()
+    KKAuthCtrl-->>KK: Menampilkan Halaman "Aktivasi Sukses, Menunggu Approval Admin"`
+            }
+        };
+
+        const editor = document.getElementById('editor-code');
+        const select = document.getElementById('diagram-select');
+        let currentId = 'flowmap1';
+
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
+        });
+
+        const loadDiagram = (id) => {
+            currentId = id;
+            editor.value = DIAGRAMS[id].code;
+            drawDiagram();
+        };
+
+        const drawDiagram = async () => {
+            const code = editor.value;
+            const output = document.getElementById('diagram-preview');
+            output.innerHTML = '<div class="loading">Mengevaluasi dan Menggambar Diagram...</div>';
+            
+            try {
+                const { svg } = await mermaid.render('rendered-svg-diagram', code);
+                output.innerHTML = svg;
+            } catch (error) {
+                console.error(error);
+                output.innerHTML = `
+                    <div class="error-box">
+                        <strong>Syntax Error ditemukan:</strong><br>
+                        ${error.message || 'Harap periksa kembali sintaksis Mermaid Anda.'}
+                    </div>
+                `;
+                const tempSvg = document.getElementById('drendered-svg-diagram');
+                if (tempSvg) tempSvg.remove();
+            }
+        };
+
+        let debounce;
+        editor.addEventListener('input', () => {
+            clearTimeout(debounce);
+            debounce = setTimeout(drawDiagram, 400);
+        });
+
+        const copyCode = () => {
+            editor.select();
+            document.execCommand('copy');
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        };
+
+        const downloadSVG = () => {
+            const svgEl = document.querySelector('#diagram-preview svg');
+            if (!svgEl) return;
+            const svgString = new XMLSerializer().serializeToString(svgEl);
+            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentId}_posyandu.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        const downloadPNG = () => {
+            const svgEl = document.querySelector('#diagram-preview svg');
+            if (!svgEl) return;
+            const svgString = new XMLSerializer().serializeToString(svgEl);
+            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const bbox = svgEl.getBoundingClientRect();
+                
+                // Add margins around diagram
+                const margin = 40;
+                canvas.width = bbox.width + margin * 2;
+                canvas.height = bbox.height + margin * 2;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.drawImage(img, margin, margin, bbox.width, bbox.height);
+                
+                const pngUrl = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = pngUrl;
+                a.download = `${currentId}_posyandu.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        };
+
+        // Initial Load
+        loadDiagram('flowmap1');
+    </script>
+</body>
+</html>

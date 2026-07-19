@@ -104,7 +104,7 @@
                     @forelse($pemeriksaans as $index => $p)
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ \Carbon\Carbon::parse($p->waktu_kunjungan)->format('d/m/Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ optional($p->tanggal_kunjungan)->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ $p->remaja->nama_anak ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->berat_badan ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $p->tinggi_badan ?? '-' }}</td>

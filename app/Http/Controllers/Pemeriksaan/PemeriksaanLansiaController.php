@@ -21,7 +21,7 @@ class PemeriksaanLansiaController extends Controller
             });
         }
         
-        $pemeriksaans = $query->orderByDesc('waktu_kunjungan')->paginate(10);
+        $pemeriksaans = $query->orderByDesc('tanggal_kunjungan')->paginate(10);
         return view('pemeriksaan.lansia.index', compact('pemeriksaans'));
     }
 
@@ -31,7 +31,7 @@ class PemeriksaanLansiaController extends Controller
         $pemeriksaanBelumSelesai = PemeriksaanLansia::where('tahap_terakhir', '<', 4)
             ->orWhereNull('tahap_terakhir')
             ->with('lansia')
-            ->latest('waktu_kunjungan')
+            ->latest('tanggal_kunjungan')
             ->get();
         return view('pemeriksaan.lansia.create', compact('lansias', 'pemeriksaanBelumSelesai'));
     }
@@ -60,12 +60,12 @@ class PemeriksaanLansiaController extends Controller
         // Validation based on stage
         $validationRules = [
             'dewasa_identitas_id' => 'nullable|exists:dewasa_identitas,id',
-            'waktu_kunjungan' => 'nullable|date',
+            'tanggal_kunjungan' => 'nullable|date',
         ];
 
         if (!$pemeriksaan_id) {
             $validationRules['dewasa_identitas_id'] = 'required|exists:dewasa_identitas,id';
-            $validationRules['waktu_kunjungan'] = 'required|date';
+            $validationRules['tanggal_kunjungan'] = 'required|date';
         }
 
         if ($stage == 1) {
@@ -109,6 +109,43 @@ class PemeriksaanLansiaController extends Controller
 
         $validated = $request->validate($validationRules);
 
+        if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
+            $berat = (float) $validated['berat_badan'];
+            $tinggi = (float) $validated['tinggi_badan'] / 100;
+            if ($berat > 0 && $tinggi > 0) {
+                $imt = round($berat / ($tinggi * $tinggi), 1);
+                $validated['imt'] = $imt;
+                
+                if ($imt < 18.5) {
+                    $validated['status_berat_badan'] = 'Kurus (Underweight)';
+                } elseif ($imt >= 18.5 && $imt < 25) {
+                    $validated['status_berat_badan'] = 'Normal';
+                } elseif ($imt >= 25 && $imt < 30) {
+                    $validated['status_berat_badan'] = 'Kelebihan Berat Badan (Overweight)';
+                } else {
+                    $validated['status_berat_badan'] = 'Obesitas';
+                }
+            }
+        }
+        if (isset($validated['sistole']) && isset($validated['diastole'])) {
+            $sistole = (float) $validated['sistole'];
+            $diastole = (float) $validated['diastole'];
+            
+            if ($sistole == 0 && $diastole == 0) {
+                $validated['tekanan_darah_status'] = '';
+            } elseif ($sistole < 90 && $diastole < 60) {
+                $validated['tekanan_darah_status'] = 'Hypotension';
+            } elseif ($sistole < 120 && $diastole < 80) {
+                $validated['tekanan_darah_status'] = 'Normal';
+            } elseif ($sistole >= 120 && $sistole <= 129 && $diastole < 80) {
+                $validated['tekanan_darah_status'] = 'Elevated';
+            } elseif ($sistole >= 130 && $sistole <= 139 && $diastole >= 80 && $diastole <= 89) {
+                $validated['tekanan_darah_status'] = 'Stage 1 Hypertension';
+            } elseif ($sistole >= 140 || $diastole >= 90) {
+                $validated['tekanan_darah_status'] = 'Stage 2 Hypertension';
+            }
+        }
+
         if ($pemeriksaan_id) {
             $pemeriksaan = PemeriksaanLansia::findOrFail($pemeriksaan_id);
             $pemeriksaan->update($validated);
@@ -151,7 +188,7 @@ class PemeriksaanLansiaController extends Controller
     {
         $validated = $request->validate([
             'dewasa_identitas_id' => 'required|exists:dewasa_identitas,id',
-            'waktu_kunjungan' => 'required|date',
+            'tanggal_kunjungan' => 'required|date',
             'berat_badan' => 'nullable|numeric|min:0',
             'tinggi_badan' => 'nullable|numeric|min:0',
             'imt' => 'nullable|numeric|min:0',
@@ -176,6 +213,43 @@ class PemeriksaanLansiaController extends Controller
             'edukasi' => 'nullable|string|max:255',
             'rujukan' => 'nullable|string|max:255',
         ]);
+
+        if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
+            $berat = (float) $validated['berat_badan'];
+            $tinggi = (float) $validated['tinggi_badan'] / 100;
+            if ($berat > 0 && $tinggi > 0) {
+                $imt = round($berat / ($tinggi * $tinggi), 1);
+                $validated['imt'] = $imt;
+                
+                if ($imt < 18.5) {
+                    $validated['status_berat_badan'] = 'Kurus (Underweight)';
+                } elseif ($imt >= 18.5 && $imt < 25) {
+                    $validated['status_berat_badan'] = 'Normal';
+                } elseif ($imt >= 25 && $imt < 30) {
+                    $validated['status_berat_badan'] = 'Kelebihan Berat Badan (Overweight)';
+                } else {
+                    $validated['status_berat_badan'] = 'Obesitas';
+                }
+            }
+        }
+        if (isset($validated['sistole']) && isset($validated['diastole'])) {
+            $sistole = (float) $validated['sistole'];
+            $diastole = (float) $validated['diastole'];
+            
+            if ($sistole == 0 && $diastole == 0) {
+                $validated['tekanan_darah_status'] = '';
+            } elseif ($sistole < 90 && $diastole < 60) {
+                $validated['tekanan_darah_status'] = 'Hypotension';
+            } elseif ($sistole < 120 && $diastole < 80) {
+                $validated['tekanan_darah_status'] = 'Normal';
+            } elseif ($sistole >= 120 && $sistole <= 129 && $diastole < 80) {
+                $validated['tekanan_darah_status'] = 'Elevated';
+            } elseif ($sistole >= 130 && $sistole <= 139 && $diastole >= 80 && $diastole <= 89) {
+                $validated['tekanan_darah_status'] = 'Stage 1 Hypertension';
+            } elseif ($sistole >= 140 || $diastole >= 90) {
+                $validated['tekanan_darah_status'] = 'Stage 2 Hypertension';
+            }
+        }
 
         $pemeriksaan_lansia->update($validated);
         return redirect()->route('pemeriksaan-lansia.index')->with('success', 'Data pemeriksaan berhasil diperbarui');

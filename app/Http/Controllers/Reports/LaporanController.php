@@ -71,9 +71,9 @@ class LaporanController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         
         $pemeriksaans = PemeriksaanLansia::with('lansia')
-            ->whereMonth('waktu_kunjungan', $bulan)
-            ->whereYear('waktu_kunjungan', $tahun)
-            ->orderBy('waktu_kunjungan', 'desc')
+            ->whereMonth('tanggal_kunjungan', $bulan)
+            ->whereYear('tanggal_kunjungan', $tahun)
+            ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
             
         $statistik = [
@@ -111,9 +111,9 @@ class LaporanController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         
         $pemeriksaans = PemeriksaanRemaja::with('remaja')
-            ->whereMonth('waktu_kunjungan', $bulan)
-            ->whereYear('waktu_kunjungan', $tahun)
-            ->orderBy('waktu_kunjungan', 'desc')
+            ->whereMonth('tanggal_kunjungan', $bulan)
+            ->whereYear('tanggal_kunjungan', $tahun)
+            ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
             
         $statistik = [

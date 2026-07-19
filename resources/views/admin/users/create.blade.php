@@ -36,8 +36,13 @@
 
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password <span class="text-red-500">*</span></label>
-                    <input type="password" name="password" id="password" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('password') border-red-500 @enderror">
+                    <div class="relative">
+                        <input type="password" name="password" id="password" required
+                               class="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('password') border-red-500 @enderror">
+                        <button type="button" class="absolute right-4 top-2 text-slate-400 hover:text-slate-600 cursor-pointer" id="toggle-password" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye" id="icon-password"></i>
+                        </button>
+                    </div>
                     @error('password')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -45,8 +50,13 @@
 
                 <div>
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password <span class="text-red-500">*</span></label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <div class="relative">
+                        <input type="password" name="password_confirmation" id="password_confirmation" required
+                               class="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <button type="button" class="absolute right-4 top-2 text-slate-400 hover:text-slate-600 cursor-pointer" id="toggle-password-confirm" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye" id="icon-password-confirm"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="md:col-span-2">
@@ -78,3 +88,30 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupToggle(buttonId, inputId, iconId) {
+            const btn = document.getElementById(buttonId);
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (btn && input && icon) {
+                btn.addEventListener('click', function () {
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            }
+        }
+        setupToggle('toggle-password', 'password', 'icon-password');
+        setupToggle('toggle-password-confirm', 'password_confirmation', 'icon-password-confirm');
+    });
+</script>
+@endpush

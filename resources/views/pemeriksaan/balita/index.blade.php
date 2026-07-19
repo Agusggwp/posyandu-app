@@ -30,15 +30,15 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Umur</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Waktu Kunjungan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama Balita</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Berat Badan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Panjang Badan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status PB/U</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status BB/U</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NO</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">UMUR</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">TANGGAL KUNJUNGAN</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NAMA BALITA</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">BERAT BADAN</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">TINGGI BADAN</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">STATUS TB/U</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">STATUS BB/U</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">AKSI</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -48,8 +48,8 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->umur ? $pemeriksaan->umur . ' Bulan' : '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($pemeriksaan->tanggal_kunjungan)->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $pemeriksaan->balita->nama_bayi ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->berat_badan }} kg</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->panjang_badan }} cm</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->berat_badan ? $pemeriksaan->berat_badan . ' kg' : '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->panjang_badan ? $pemeriksaan->panjang_badan . ' cm' : '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->status_pb_u ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $pemeriksaan->status_bb_u ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -105,8 +105,8 @@
 
                 <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
                     <div><span class="text-slate-500">BB:</span> <span class="font-medium">{{ $pemeriksaan->berat_badan }} kg</span></div>
-                    <div><span class="text-slate-500">PB:</span> <span class="font-medium">{{ $pemeriksaan->panjang_badan }} cm</span></div>
-                    <div><span class="text-slate-500">Status PB/U:</span> <span class="font-medium">{{ $pemeriksaan->status_pb_u ?? '-' }}</span></div>
+                    <div><span class="text-slate-500">TB:</span> <span class="font-medium">{{ $pemeriksaan->panjang_badan }} cm</span></div>
+                    <div><span class="text-slate-500">Status TB/U:</span> <span class="font-medium">{{ $pemeriksaan->status_pb_u ?? '-' }}</span></div>
                     <div><span class="text-slate-500">Status BB/U:</span> <span class="font-medium">{{ $pemeriksaan->status_bb_u ?? '-' }}</span></div>
                 </div>
 

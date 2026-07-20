@@ -71,6 +71,9 @@ class PemeriksaanBalitaController extends Controller
                     return [
                         $item->balita_identitas_id => [
                             'berat_badan' => $item->berat_badan,
+                            'panjang_badan' => $item->panjang_badan,
+                            'lingkar_kepala' => $item->lingkar_kepala,
+                            'lingkar_lengan' => $item->lingkar_lengan,
                             'tanggal_kunjungan' => $previousDate,
                         ],
                     ];
@@ -99,8 +102,9 @@ class PemeriksaanBalitaController extends Controller
             ->first();
 
         if ($existing) {
-            // Add info message but continue
-            session()->flash('info', 'Peringatan: Sudah ada pemeriksaan untuk balita ini pada tanggal yang sama.');
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk balita ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
         }
 
         if (empty($pemeriksaanId)) {
@@ -163,10 +167,7 @@ class PemeriksaanBalitaController extends Controller
 
         if ($stage < 4) {
             return redirect()
-                ->route('pemeriksaan-balita.stage', [
-                    'stage' => $stage + 1,
-                    'pemeriksaan_id' => $pemeriksaan->id,
-                ])
+                ->route('pemeriksaan-balita.create')
                 ->with('success', "Tahap {$stage} berhasil disimpan.");
         }
 
@@ -273,6 +274,17 @@ class PemeriksaanBalitaController extends Controller
             'catatan_kesehatan' => 'nullable|string',
             'rujukan' => 'nullable|string',
         ]);
+
+        $existing = PemeriksaanBalita::where('balita_identitas_id', $validated['balita_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->where('id', '!=', $pemeriksaan_balita->id)
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk balita ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
 
         $pemeriksaan_balita->update($validated);
         $this->calculateStatuses($pemeriksaan_balita);

@@ -62,10 +62,20 @@ class PemeriksaanIbuHamilController extends Controller
                 ->get()
                 ->unique('ibu_hamil_identitas_id')
                 ->mapWithKeys(function ($item) {
+                    \Carbon\Carbon::setLocale('id');
+                    $previousDate = '-';
+                    if ($item->tanggal_kunjungan) {
+                        try {
+                            $previousDate = \Carbon\Carbon::parse($item->tanggal_kunjungan)->translatedFormat('d F Y');
+                        } catch (\Throwable $e) {
+                            $previousDate = (string) $item->tanggal_kunjungan;
+                        }
+                    }
                     return [
                         $item->ibu_hamil_identitas_id => [
                             'berat_badan' => $item->berat_badan,
-                            'tanggal_kunjungan' => optional($item->tanggal_kunjungan)->format('Y-m-d') ?? '-',
+                            'lingkar_lengan' => $item->lingkar_lengan,
+                            'tanggal_kunjungan' => $previousDate,
                         ],
                     ];
                 })
@@ -126,8 +136,9 @@ class PemeriksaanIbuHamilController extends Controller
             ->first();
 
         if ($existing) {
-            // Add info message but continue
-            session()->flash('info', 'Peringatan: Sudah ada pemeriksaan untuk ibu hamil ini pada tanggal yang sama.');
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk ibu hamil ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
         }
 
         if ($stage === 1 && empty($pemeriksaanId)) {
@@ -225,6 +236,16 @@ class PemeriksaanIbuHamilController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
+        $existing = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $validated['ibu_hamil_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk ibu hamil ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
+
         $pemeriksaan = PemeriksaanIbuHamil::create($validated);
 
         try {
@@ -288,6 +309,17 @@ class PemeriksaanIbuHamilController extends Controller
             'petugas' => 'nullable|string|max:255',
             'catatan' => 'nullable|string',
         ]);
+
+        $existing = PemeriksaanIbuHamil::where('ibu_hamil_identitas_id', $validated['ibu_hamil_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->where('id', '!=', $pemeriksaan_ibu_hamil->id)
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk ibu hamil ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
 
         if (isset($validated['tekanan_darah']) && str_contains($validated['tekanan_darah'], '/')) {
             $parts = explode('/', $validated['tekanan_darah']);

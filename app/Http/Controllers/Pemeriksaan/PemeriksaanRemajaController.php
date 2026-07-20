@@ -78,6 +78,17 @@ class PemeriksaanRemajaController extends Controller
         }
         $pemeriksaanId = $request->input('pemeriksaan_id');
 
+        $existing = PemeriksaanRemaja::where('remaja_identitas_id', $validated['remaja_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->when($pemeriksaanId, fn($q) => $q->where('id', '!=', $pemeriksaanId))
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk remaja ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
+
         if (empty($pemeriksaanId)) {
             $pemeriksaan = PemeriksaanRemaja::create([
                 'tahap_terakhir' => $stage,
@@ -188,6 +199,21 @@ class PemeriksaanRemajaController extends Controller
             'rujukan' => 'nullable|string|max:100',
         ]);
 
+        $checkId = $validated['remaja_identitas_id'] ?? null;
+        $checkDate = $validated['tanggal_kunjungan'] ?? null;
+
+        if ($checkId && $checkDate) {
+            $existing = PemeriksaanRemaja::where('remaja_identitas_id', $checkId)
+                ->where('tanggal_kunjungan', $checkDate)
+                ->first();
+
+            if ($existing) {
+                return back()->withErrors([
+                    'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk remaja ini pada tanggal kunjungan yang sama.'
+                ])->withInput();
+            }
+        }
+
         if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
             $berat = (float) $validated['berat_badan'];
             $tinggi = (float) $validated['tinggi_badan'] / 100;
@@ -275,6 +301,22 @@ class PemeriksaanRemajaController extends Controller
             'edukasi' => 'nullable|string',
             'rujukan' => 'nullable|string|max:100',
         ]);
+
+        $checkId = $validated['remaja_identitas_id'] ?? null;
+        $checkDate = $validated['tanggal_kunjungan'] ?? null;
+
+        if ($checkId && $checkDate) {
+            $existing = PemeriksaanRemaja::where('remaja_identitas_id', $checkId)
+                ->where('tanggal_kunjungan', $checkDate)
+                ->where('id', '!=', $pemeriksaan_remaja->id)
+                ->first();
+
+            if ($existing) {
+                return back()->withErrors([
+                    'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk remaja ini pada tanggal kunjungan yang sama.'
+                ])->withInput();
+            }
+        }
 
         if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
             $berat = (float) $validated['berat_badan'];

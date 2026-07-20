@@ -305,10 +305,11 @@
                 return;
             }
 
+            const prevLilaText = previous.lingkar_lengan ? `, LILA sebelumnya: ${previous.lingkar_lengan} cm` : '';
             if (isNaN(currentWeight)) {
                 statusDisplay.textContent = 'Masukkan berat badan untuk menghitung naik/turun/tetap dibanding pemeriksaan sebelumnya.';
                 statusInput.value = '';
-                setSummary('Data berat sebelumnya ditemukan.', `Berat sebelumnya: ${formatKg(previous.berat_badan)} pada ${previous.tanggal_kunjungan}.`, 'Masukkan berat badan saat ini untuk melihat perubahan.');
+                setSummary('Data berat sebelumnya ditemukan.', `Berat sebelumnya: ${formatKg(previous.berat_badan)}${prevLilaText} pada ${previous.tanggal_kunjungan}.`, 'Masukkan berat badan saat ini untuk melihat perubahan.');
                 return;
             }
 
@@ -324,7 +325,7 @@
 
             statusDisplay.textContent = `${status} (sebelumnya ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}).`;
             statusInput.value = status;
-            setSummary(`Perubahan berat: ${status}.`, `Berat sebelumnya: ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}.`, `Selisih: ${(currentWeight - prevWeight).toFixed(2)} kg.`);
+            setSummary(`Perubahan berat: ${status}.`, `Berat sebelumnya: ${formatKg(prevWeight)}${prevLilaText} pada ${previous.tanggal_kunjungan}.`, `Selisih: ${(currentWeight - prevWeight).toFixed(2)} kg.`);
         }
 
         if (ibuSelect) {

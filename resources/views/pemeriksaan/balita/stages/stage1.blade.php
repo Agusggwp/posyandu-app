@@ -134,6 +134,31 @@
                     </div>
 
                     <div>
+                        <label for="previous_height" class="block text-sm font-medium text-gray-700 mb-2">
+                            Tinggi Badan Sebelumnya
+                        </label>
+                        <div id="previous_height" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-slate-50 text-gray-800">
+                            @if($pemeriksaan)
+                                @php
+                                    $prev = \App\Models\PemeriksaanBalita::where('balita_identitas_id', $pemeriksaan->balita_identitas_id)
+                                        ->where('id', '!=', $pemeriksaan->id)
+                                        ->whereNotNull('panjang_badan')
+                                        ->whereNotNull('tanggal_kunjungan')
+                                        ->orderByDesc('tanggal_kunjungan')
+                                        ->first();
+                                @endphp
+                                @if($prev)
+                                    Terakhir tercatat {{ number_format($prev->panjang_badan, 1) }} cm pada {{ \Carbon\Carbon::parse($prev->tanggal_kunjungan)->translatedFormat('d F Y') }}
+                                @else
+                                    Belum ada pemeriksaan sebelumnya untuk balita ini.
+                                @endif
+                            @else
+                                Pilih balita untuk melihat data pemeriksaan sebelumnya.
+                            @endif
+                        </div>
+                    </div>
+
+                    <div>
                         <label for="lingkar_kepala" class="block text-sm font-medium text-gray-700 mb-2">
                             Lingkar Kepala (cm)
                         </label>
@@ -146,6 +171,31 @@
                     </div>
 
                     <div>
+                        <label for="previous_head" class="block text-sm font-medium text-gray-700 mb-2">
+                            Lingkar Kepala Sebelumnya
+                        </label>
+                        <div id="previous_head" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-slate-50 text-gray-800">
+                            @if($pemeriksaan)
+                                @php
+                                    $prev = \App\Models\PemeriksaanBalita::where('balita_identitas_id', $pemeriksaan->balita_identitas_id)
+                                        ->where('id', '!=', $pemeriksaan->id)
+                                        ->whereNotNull('lingkar_kepala')
+                                        ->whereNotNull('tanggal_kunjungan')
+                                        ->orderByDesc('tanggal_kunjungan')
+                                        ->first();
+                                @endphp
+                                @if($prev)
+                                    Terakhir tercatat {{ number_format($prev->lingkar_kepala, 1) }} cm pada {{ \Carbon\Carbon::parse($prev->tanggal_kunjungan)->translatedFormat('d F Y') }}
+                                @else
+                                    Belum ada pemeriksaan sebelumnya untuk balita ini.
+                                @endif
+                            @else
+                                Pilih balita untuk melihat data pemeriksaan sebelumnya.
+                            @endif
+                        </div>
+                    </div>
+
+                    <div>
                         <label for="lingkar_lengan" class="block text-sm font-medium text-gray-700 mb-2">
                             LILA / Lingkar Lengan Atas (cm)
                         </label>
@@ -155,6 +205,31 @@
                         @error('lingkar_lengan')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <div>
+                        <label for="previous_arm" class="block text-sm font-medium text-gray-700 mb-2">
+                            LILA / Lingkar Lengan Atas Sebelumnya
+                        </label>
+                        <div id="previous_arm" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-slate-50 text-gray-800">
+                            @if($pemeriksaan)
+                                @php
+                                    $prev = \App\Models\PemeriksaanBalita::where('balita_identitas_id', $pemeriksaan->balita_identitas_id)
+                                        ->where('id', '!=', $pemeriksaan->id)
+                                        ->whereNotNull('lingkar_lengan')
+                                        ->whereNotNull('tanggal_kunjungan')
+                                        ->orderByDesc('tanggal_kunjungan')
+                                        ->first();
+                                @endphp
+                                @if($prev)
+                                    Terakhir tercatat {{ number_format($prev->lingkar_lengan, 1) }} cm pada {{ \Carbon\Carbon::parse($prev->tanggal_kunjungan)->translatedFormat('d F Y') }}
+                                @else
+                                    Belum ada pemeriksaan sebelumnya untuk balita ini.
+                                @endif
+                            @else
+                                Pilih balita untuk melihat data pemeriksaan sebelumnya.
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -285,13 +360,25 @@
             return Number(value).toFixed(1).replace(/\.0$/, '') + ' kg';
         }
 
+        function formatCm(value) {
+            if (value === null || value === undefined || value === '') return '-';
+            return Number(value).toFixed(1).replace(/\.0$/, '') + ' cm';
+        }
+
         function updateAccumulation() {
             const selectedId = balitaSelect ? balitaSelect.value : null;
             const currentWeight = parseFloat(beratInput.value);
             const previous = selectedId ? (previousWeights[selectedId] ?? null) : null;
 
+            const prevHeightBox = document.getElementById('previous_height');
+            const prevHeadBox = document.getElementById('previous_head');
+            const prevArmBox = document.getElementById('previous_arm');
+
             if (!selectedId) {
                 prevWeightBox.textContent = 'Pilih balita untuk melihat data pemeriksaan sebelumnya.';
+                if (prevHeightBox) prevHeightBox.textContent = 'Pilih balita untuk melihat data pemeriksaan sebelumnya.';
+                if (prevHeadBox) prevHeadBox.textContent = 'Pilih balita untuk melihat data pemeriksaan sebelumnya.';
+                if (prevArmBox) prevArmBox.textContent = 'Pilih balita untuk melihat data pemeriksaan sebelumnya.';
                 weightTrend.textContent = 'Pilih balita dan masukkan berat badan untuk melihat perubahan.';
                 weightDelta.textContent = '';
                 weightPreviousDate.textContent = '';
@@ -300,6 +387,9 @@
 
             if (!previous) {
                 prevWeightBox.textContent = 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
+                if (prevHeightBox) prevHeightBox.textContent = 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
+                if (prevHeadBox) prevHeadBox.textContent = 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
+                if (prevArmBox) prevArmBox.textContent = 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
                 weightTrend.textContent = currentWeight ? 'Ini adalah pengukuran pertama.' : 'Masukkan berat badan untuk menghitung perubahan.';
                 weightDelta.textContent = '';
                 weightPreviousDate.textContent = '';
@@ -308,6 +398,22 @@
 
             const previousDate = previous.tanggal_kunjungan || 'tanggal tidak tersedia';
             prevWeightBox.textContent = `Terakhir tercatat ${formatKg(previous.berat_badan)} pada ${previousDate}.`;
+            if (prevHeightBox) {
+                prevHeightBox.textContent = previous.panjang_badan 
+                    ? `Terakhir tercatat ${formatCm(previous.panjang_badan)} pada ${previousDate}.` 
+                    : 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
+            }
+            if (prevHeadBox) {
+                prevHeadBox.textContent = previous.lingkar_kepala 
+                    ? `Terakhir tercatat ${formatCm(previous.lingkar_kepala)} pada ${previousDate}.` 
+                    : 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
+            }
+            if (prevArmBox) {
+                prevArmBox.textContent = previous.lingkar_lengan 
+                    ? `Terakhir tercatat ${formatCm(previous.lingkar_lengan)} pada ${previousDate}.` 
+                    : 'Belum ada pemeriksaan sebelumnya untuk balita ini.';
+            }
+
             weightPreviousDate.textContent = previous.tanggal_kunjungan ? `Tanggal pemeriksaan sebelumnya: ${previous.tanggal_kunjungan}` : '';
 
             if (isNaN(currentWeight)) {

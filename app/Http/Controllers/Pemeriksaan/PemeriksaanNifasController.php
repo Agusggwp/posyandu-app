@@ -63,10 +63,21 @@ class PemeriksaanNifasController extends Controller
                 ->get()
                 ->unique('nifas_identitas_id')
                 ->mapWithKeys(function ($item) {
+                    \Carbon\Carbon::setLocale('id');
+                    $previousDate = '-';
+                    if ($item->tanggal_kunjungan) {
+                        try {
+                            $previousDate = \Carbon\Carbon::parse($item->tanggal_kunjungan)->translatedFormat('d F Y');
+                        } catch (\Throwable $e) {
+                            $previousDate = (string) $item->tanggal_kunjungan;
+                        }
+                    }
                     return [
                         $item->nifas_identitas_id => [
                             'berat_badan' => $item->berat_badan,
-                            'tanggal_kunjungan' => optional($item->tanggal_kunjungan)->format('Y-m-d') ?? '-',
+                            'tinggi_badan' => $item->tinggi_badan,
+                            'lila' => $item->lila,
+                            'tanggal_kunjungan' => $previousDate,
                         ],
                     ];
                 })
@@ -84,6 +95,17 @@ class PemeriksaanNifasController extends Controller
 
         $validated = $request->validate($this->stageRules($stage));
         $pemeriksaanId = $request->input('pemeriksaan_id');
+
+        $existing = PemeriksaanNifas::where('nifas_identitas_id', $validated['nifas_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->when($pemeriksaanId, fn($q) => $q->where('id', '!=', $pemeriksaanId))
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk nifas ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
 
         if ($stage === 1 && isset($validated['nifas_identitas_id'], $validated['berat_badan'])) {
             $previous = PemeriksaanNifas::where('nifas_identitas_id', $validated['nifas_identitas_id'])
@@ -207,6 +229,16 @@ class PemeriksaanNifasController extends Controller
             'rujukan' => 'nullable|string|max:100',
         ]);
 
+        $existing = PemeriksaanNifas::where('nifas_identitas_id', $validated['nifas_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk nifas ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
+
         if (isset($validated['lila'])) {
             $lila = (float) $validated['lila'];
             if ($lila >= 23.5) {
@@ -281,6 +313,17 @@ class PemeriksaanNifasController extends Controller
             'edukasi' => 'nullable|string',
             'rujukan' => 'nullable|string|max:100',
         ]);
+
+        $existing = PemeriksaanNifas::where('nifas_identitas_id', $validated['nifas_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->where('id', '!=', $pemeriksaan_nifas->id)
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk nifas ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
 
         if (isset($validated['lila'])) {
             $lila = (float) $validated['lila'];

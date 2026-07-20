@@ -9,10 +9,27 @@
     <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
         @php
             $data = $pemeriksaan->getAttributes();
+            $displayData = array_merge(
+                ['nama_lansia' => optional($pemeriksaan->lansia)->nama ?? '-'],
+                ['tanggal_kunjungan' => $data['tanggal_kunjungan'] ?? null],
+                array_diff_key($data, array_flip([
+                    'id', 'dewasa_identitas_id', 'tahap_terakhir', 
+                    'tanggal_pemeriksaan', 'waktu_kunjungan', 'tanggal_kunjungan',
+                    'created_at', 'updated_at'
+                ]))
+            );
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
                     return '-';
+                }
+
+                if (is_string($raw) && $key === 'tanggal_kunjungan') {
+                    try {
+                        return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y');
+                    } catch (\Throwable $e) {
+                        return $raw;
+                    }
                 }
 
                 if (is_string($raw) && $key === 'waktu_kunjungan') {
@@ -44,7 +61,7 @@
         @endphp
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach($data as $column => $raw)
+            @foreach($displayData as $column => $raw)
                 <div>
                     <label class="block text-sm font-medium text-gray-500 mb-1">{{ $label($column) }}</label>
                     @if($column === 'rujukan')

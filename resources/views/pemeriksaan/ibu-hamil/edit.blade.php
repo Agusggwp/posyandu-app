@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
                     <label for="lingkar_lengan" class="block text-sm font-medium text-gray-700 mb-2">Lingkar Lengan (cm)</label>
                     <input type="number" step="0.01" name="lingkar_lengan" id="lingkar_lengan" 
@@ -93,16 +93,6 @@
                            value="{{ old('denyut_jantung', $pemeriksaan->denyut_jantung) }}"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('denyut_jantung') border-red-500 @enderror">
                     @error('denyut_jantung')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="waktu_ke_posyandu" class="block text-sm font-medium text-gray-700 mb-2">Waktu ke Posyandu</label>
-                    <input type="time" name="waktu_ke_posyandu" id="waktu_ke_posyandu" 
-                           value="{{ old('waktu_ke_posyandu', $pemeriksaan->waktu_ke_posyandu) }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('waktu_ke_posyandu') border-red-500 @enderror">
-                    @error('waktu_ke_posyandu')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>

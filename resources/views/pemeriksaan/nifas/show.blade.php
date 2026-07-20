@@ -6,13 +6,22 @@
         <h2 class="text-2xl font-bold text-rose-800 mb-6">Detail Pemeriksaan Nifas</h2>
         @php
             $data = $pemeriksaan->getAttributes();
+            $displayData = array_merge(
+                ['nama_ibu' => optional($pemeriksaan->nifas)->nama_ibu ?? '-'],
+                ['tanggal_kunjungan' => $data['tanggal_kunjungan'] ?? null],
+                array_diff_key($data, array_flip([
+                    'id', 'nifas_identitas_id', 'tahap_terakhir', 
+                    'tanggal_pemeriksaan', 'waktu_kunjungan', 'tanggal_kunjungan',
+                    'created_at', 'updated_at'
+                ]))
+            );
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));
             $value = function ($key, $raw) {
                 if ($raw === null || $raw === '') {
                     return '-';
                 }
 
-                if (is_string($raw) && $key === 'waktu_kunjungan') {
+                if (is_string($raw) && ($key === 'waktu_kunjungan' || $key === 'tanggal_kunjungan')) {
                     try {
                         return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y');
                     } catch (\Throwable $e) {
@@ -41,7 +50,7 @@
         @endphp
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            @foreach($data as $column => $raw)
+            @foreach($displayData as $column => $raw)
                 <div>
                     <span class="text-gray-500">{{ $label($column) }}:</span>
                     @if($column === 'rujukan')

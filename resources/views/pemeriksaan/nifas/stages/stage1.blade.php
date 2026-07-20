@@ -314,10 +314,13 @@ function updateNifasSummary() {
         return;
     }
 
+    const prevHeightText = previous.tinggi_badan ? `, Tinggi sebelumnya: ${previous.tinggi_badan} cm` : '';
+    const prevLilaText = previous.lila ? `, LILA sebelumnya: ${previous.lila} cm` : '';
+
     if (isNaN(currentWeight)) {
         if (statusDisplay) statusDisplay.textContent = 'Masukkan berat badan untuk menghitung naik/turun/tetap dibanding pemeriksaan sebelumnya.';
         if (statusInput) statusInput.value = '';
-        setSummary('Data berat sebelumnya ditemukan.', `Berat sebelumnya: ${formatKg(previous.berat_badan)} pada ${previous.tanggal_kunjungan}.`, 'Masukkan berat badan saat ini untuk melihat perubahan.');
+        setSummary('Data berat sebelumnya ditemukan.', `Berat sebelumnya: ${formatKg(previous.berat_badan)}${prevHeightText}${prevLilaText} pada ${previous.tanggal_kunjungan}.`, 'Masukkan berat badan saat ini untuk melihat perubahan.');
         return;
     }
 
@@ -333,7 +336,7 @@ function updateNifasSummary() {
 
     if (statusDisplay) statusDisplay.textContent = `${status} (sebelumnya ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}).`;
     if (statusInput) statusInput.value = status;
-    setSummary(`Perubahan berat: ${status}.`, `Berat sebelumnya: ${formatKg(prevWeight)} pada ${previous.tanggal_kunjungan}.`, `Selisih: ${(currentWeight - prevWeight).toFixed(1)} kg.`);
+    setSummary(`Perubahan berat: ${status}.`, `Berat sebelumnya: ${formatKg(prevWeight)}${prevHeightText}${prevLilaText} pada ${previous.tanggal_kunjungan}.`, `Selisih: ${(currentWeight - prevWeight).toFixed(1)} kg.`);
 }
 
 if (document.getElementById('lila')) {

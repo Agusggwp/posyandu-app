@@ -109,6 +109,22 @@ class PemeriksaanLansiaController extends Controller
 
         $validated = $request->validate($validationRules);
 
+        $checkId = $validated['dewasa_identitas_id'] ?? null;
+        $checkDate = $validated['tanggal_kunjungan'] ?? null;
+
+        if ($checkId && $checkDate) {
+            $existing = PemeriksaanLansia::where('dewasa_identitas_id', $checkId)
+                ->where('tanggal_kunjungan', $checkDate)
+                ->when($pemeriksaan_id, fn($q) => $q->where('id', '!=', $pemeriksaan_id))
+                ->first();
+
+            if ($existing) {
+                return back()->withErrors([
+                    'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk lansia ini pada tanggal kunjungan yang sama.'
+                ])->withInput();
+            }
+        }
+
         if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
             $berat = (float) $validated['berat_badan'];
             $tinggi = (float) $validated['tinggi_badan'] / 100;
@@ -213,6 +229,17 @@ class PemeriksaanLansiaController extends Controller
             'edukasi' => 'nullable|string|max:255',
             'rujukan' => 'nullable|string|max:255',
         ]);
+
+        $existing = PemeriksaanLansia::where('dewasa_identitas_id', $validated['dewasa_identitas_id'])
+            ->where('tanggal_kunjungan', $validated['tanggal_kunjungan'])
+            ->where('id', '!=', $pemeriksaan_lansia->id)
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors([
+                'tanggal_kunjungan' => 'Peringatan: Sudah ada pemeriksaan untuk lansia ini pada tanggal kunjungan yang sama.'
+            ])->withInput();
+        }
 
         if (isset($validated['berat_badan']) && isset($validated['tinggi_badan'])) {
             $berat = (float) $validated['berat_badan'];

@@ -14,7 +14,11 @@
                 ['nama_balita' => optional($pemeriksaan->balita)->nama_bayi ?? '-'],
                 ['umur' => $data['umur'] ?? null, 'tanggal_kunjungan' => $data['tanggal_kunjungan'] ?? null],
                 ['status_rujukan' => $statusRujukan],
-                array_diff_key($data, array_flip(['balita_identitas_id', 'umur', 'tanggal_kunjungan']))
+                array_diff_key($data, array_flip([
+                    'id', 'balita_identitas_id', 'tahap_terakhir', 
+                    'tanggal_pemeriksaan', 'waktu_kunjungan', 
+                    'created_at', 'updated_at', 'umur', 'tanggal_kunjungan'
+                ]))
             );
             $orderedKeys = array_keys($displayData);
             $label = fn ($key) => ucwords(str_replace('_', ' ', $key));

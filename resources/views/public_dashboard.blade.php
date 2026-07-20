@@ -242,11 +242,11 @@
                             <div class="mt-6 space-y-5">
                                 <div class="flex gap-4">
                                     <div class="h-10 w-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600 flex-shrink-0">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                        <i class="fa-solid fa-calendar-days"></i>
                                     </div>
                                     <div>
-                                        <p class="text-xs text-slate-400 font-semibold uppercase">Jam Operasional</p>
-                                        <p class="text-sm font-bold text-slate-800">{{ $settings['hours_open'] }} - {{ $settings['hours_close'] }} WIB</p>
+                                        <p class="text-xs text-slate-400 font-semibold uppercase">Tanggal Posyandu</p>
+                                        <p class="text-sm font-bold text-slate-800">{{ $settings['posyandu_date'] ?? 'Setiap Tanggal 15' }}</p>
                                     </div>
                                 </div>
                                 <div class="flex gap-4">
@@ -470,8 +470,8 @@
                             <span>{{ $settings['email'] }}</span>
                         </li>
                         <li class="flex gap-3">
-                            <i class="fa-solid fa-clock text-violet-500 mt-1 flex-shrink-0"></i>
-                            <span>Jam Buka: {{ $settings['hours_open'] }} - {{ $settings['hours_close'] }} WIB</span>
+                            <i class="fa-solid fa-calendar-alt text-violet-500 mt-1 flex-shrink-0"></i>
+                            <span>Tanggal Posyandu: {{ $settings['posyandu_date'] ?? 'Setiap Tanggal 15' }}</span>
                         </li>
                     </ul>
                 </div>

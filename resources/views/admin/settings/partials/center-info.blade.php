@@ -23,16 +23,10 @@
                     @error('center_email')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
 
-                <div>
-                    <label for="center_hours_open" class="block text-sm font-semibold text-gray-700 mb-2">Jam Buka</label>
-                    <input type="time" id="center_hours_open" name="center_hours_open" value="{{ old('center_hours_open', $settings['center_hours_open']) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('center_hours_open') border-red-500 @enderror">
-                    @error('center_hours_open')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
-                </div>
-
-                <div>
-                    <label for="center_hours_close" class="block text-sm font-semibold text-gray-700 mb-2">Jam Tutup</label>
-                    <input type="time" id="center_hours_close" name="center_hours_close" value="{{ old('center_hours_close', $settings['center_hours_close']) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('center_hours_close') border-red-500 @enderror">
-                    @error('center_hours_close')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                <div class="md:col-span-2">
+                    <label for="center_posyandu_date" class="block text-sm font-semibold text-gray-700 mb-2">Tanggal Posyandu</label>
+                    <input type="text" id="center_posyandu_date" name="center_posyandu_date" value="{{ old('center_posyandu_date', $settings['center_posyandu_date'] ?? '') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('center_posyandu_date') border-red-500 @enderror" placeholder="Contoh: Setiap Tanggal 15, Jam 08:00 - 16:00 WIB">
+                    @error('center_posyandu_date')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
 
                 <div class="md:col-span-2">
@@ -49,7 +43,7 @@
                 </div>
                 <div class="mt-4 space-y-3 text-sm text-emerald-900">
                     <p><span class="font-semibold">Email:</span> <span data-preview-target="center_email">{{ old('center_email', $settings['center_email']) }}</span></p>
-                    <p><span class="font-semibold">Jam Operasional:</span> <span data-preview-target="center_hours_open">{{ old('center_hours_open', $settings['center_hours_open']) }}</span> - <span data-preview-target="center_hours_close">{{ old('center_hours_close', $settings['center_hours_close']) }}</span></p>
+                    <p><span class="font-semibold">Tanggal Posyandu:</span> <span data-preview-target="center_posyandu_date">{{ old('center_posyandu_date', $settings['center_posyandu_date'] ?? '') }}</span></p>
                     <p><span class="font-semibold">Alamat:</span> <span data-preview-target="center_address">{{ old('center_address', $settings['center_address']) }}</span></p>
                 </div>
             </div>

@@ -18,13 +18,8 @@
             </div>
             <div>
                 <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-stethoscope text-emerald-500"></i>Data Pemeriksaan Terakhir</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Tekanan Darah</p><p id="member-bp" class="text-sm font-bold text-slate-800 mt-1">-</p></div>
-                    <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Berat Badan</p><p id="member-weight" class="text-sm font-bold text-slate-800 mt-1">-</p></div>
-                    <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Tinggi Badan</p><p id="member-height" class="text-sm font-bold text-slate-800 mt-1">-</p></div>
-                    <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kolesterol</p><p id="member-cholesterol" class="text-sm font-bold text-slate-800 mt-1">-</p></div>
-                    <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Gula Darah</p><p id="member-glucose" class="text-sm font-bold text-slate-800 mt-1">-</p></div>
-                    <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Tanggal Pemeriksaan</p><p id="member-checkup-date" class="text-sm font-bold text-slate-800 mt-1">-</p></div>
+                <div id="latest-checkup-fields" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Dynamically populated in scripts.blade.php -->
                 </div>
             </div>
             <div>
@@ -47,6 +42,11 @@
                                 <p><span class="font-bold text-slate-400">Jenis:</span> Pemeriksaan Kesehatan</p>
                                 <p><span class="font-bold text-slate-400">Catatan:</span> <span class="member-checkup-note-mobile leading-relaxed"></span></p>
                             </div>
+                            <div class="mt-4">
+                                <a href="" target="_blank" class="member-checkup-print-mobile w-full text-center inline-flex justify-center items-center px-3 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 rounded-lg text-xs font-semibold transition">
+                                    <i class="fa-solid fa-print mr-1"></i> Cetak Laporan PDF
+                                </a>
+                            </div>
                         </div>
                     </template>
                     <div id="member-checkup-mobile" class="space-y-3"></div>
@@ -60,6 +60,7 @@
                                 <th class="px-4 py-3 text-left text-slate-400 text-xs font-bold uppercase tracking-wider">Jenis Pemeriksaan</th>
                                 <th class="px-4 py-3 text-left text-slate-400 text-xs font-bold uppercase tracking-wider">Hasil</th>
                                 <th class="px-4 py-3 text-left text-slate-400 text-xs font-bold uppercase tracking-wider">Catatan</th>
+                                <th class="px-4 py-3 text-left text-slate-400 text-xs font-bold uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="member-checkup-table" class="divide-y divide-slate-100"></tbody>

@@ -250,11 +250,32 @@
 
 <style>
 @media print {
-    @page { margin: 1.5cm; size: landscape; }
+    @page { margin: 1cm; size: landscape; }
     body { 
         -webkit-print-color-adjust: exact; 
         print-color-adjust: exact; 
         background: white !important;
+        color: black !important;
+    }
+    .sidebar, .topbar, .no-print, nav, footer, form, button, a[href*="kembali"], .no-print * {
+        display: none !important;
+    }
+    .app-layout {
+        display: block !important;
+    }
+    .main-panel {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        animation: none !important;
+    }
+    .max-w-7xl {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
     }
     .print-cards {
         display: flex !important;
@@ -267,17 +288,8 @@
         page-break-inside: avoid !important;
         break-inside: avoid !important;
     }
-    .no-print, nav, footer, form, button, a[href*="kembali"] {
-        display: none !important;
-    }
-    .max-w-7xl {
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-    }
     .card-print {
-        border: 1px solid #e2e8f0 !important;
+        border: 1px solid #cbd5e1 !important;
         color: black !important;
         background: white !important;
         box-shadow: none !important;
@@ -304,8 +316,8 @@
         font-size: 24pt !important;
         margin-bottom: 5px !important;
         background: none !important;
-        -webkit-text-fill-color: black !important;
-        color: black !important;
+        -webkit-text-fill-color: #0f766e !important;
+        color: #0f766e !important;
     }
     h2 + p {
         text-align: center;

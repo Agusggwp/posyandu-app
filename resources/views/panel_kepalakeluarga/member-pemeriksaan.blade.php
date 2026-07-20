@@ -117,6 +117,11 @@
                             <p class="text-xs font-bold uppercase text-slate-400 tracking-wider">Catatan Ringkas</p>
                             <p class="mt-1 text-sm text-slate-700 leading-relaxed">{{ $row['catatan'] ?: '-' }}</p>
                         </div>
+                        <div class="mt-4">
+                            <a href="{{ route('kepala-keluarga.pemeriksaan.print', ['tipe' => $memberType, 'id' => $row['id']]) }}" target="_blank" class="w-full text-center inline-flex justify-center items-center px-3 py-2.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 rounded-2xl text-xs font-bold transition shadow-sm">
+                                <i class="fa-solid fa-print mr-2"></i>Cetak Laporan PDF
+                            </a>
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -129,6 +134,7 @@
                             <th class="px-6 py-3.5 text-left text-xs font-bold uppercase text-slate-400 tracking-wider">No</th>
                             <th class="px-6 py-3.5 text-left text-xs font-bold uppercase text-slate-400 tracking-wider">Tanggal</th>
                             <th class="px-6 py-3.5 text-left text-xs font-bold uppercase text-slate-400 tracking-wider">Catatan Ringkas</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-bold uppercase text-slate-400 tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white text-sm text-slate-700">
@@ -139,6 +145,11 @@
                                     {{ !empty($row['tanggal']) ? \Illuminate\Support\Carbon::parse($row['tanggal'])->format('d M Y H:i') : '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-slate-600 leading-relaxed">{{ $row['catatan'] ?: '-' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{{ route('kepala-keluarga.pemeriksaan.print', ['tipe' => $memberType, 'id' => $row['id']]) }}" target="_blank" class="inline-flex items-center px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 rounded-lg text-xs font-semibold transition-all duration-200">
+                                        <i class="fa-solid fa-print mr-1"></i> Cetak PDF
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

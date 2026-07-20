@@ -86,7 +86,7 @@
             </button>
             <button type="button" data-tab-toggle="tab-landing-page" class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-left transition hover:bg-slate-50 cursor-pointer border-l-4 border-transparent">
                 <i class="fa-solid fa-house text-indigo-500 w-5 text-center text-base"></i>
-                <span>Landing Page</span>
+                <span>Jadwal & Landing Page</span>
             </button>
         </nav>
 
@@ -203,8 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'admin_dashboard_title',
         'admin_dashboard_subtitle',
         'center_email',
-        'center_hours_open',
-        'center_hours_close',
+        'center_posyandu_date',
         'center_address',
         'admin_login_title',
         'admin_login_subtitle',

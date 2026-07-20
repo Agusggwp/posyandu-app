@@ -8,6 +8,11 @@ use App\Models\IbuHamil;
 use App\Models\Lansia;
 use App\Models\Nifas;
 use App\Models\Remaja;
+use App\Models\PemeriksaanBalita;
+use App\Models\PemeriksaanIbuHamil;
+use App\Models\PemeriksaanLansia;
+use App\Models\PemeriksaanNifas;
+use App\Models\PemeriksaanRemaja;
 use App\Models\Setting;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -192,8 +197,7 @@ class KepalaKeluargaAuthController extends Controller
         $centerInfo = [
             'email' => Setting::getSetting('center_email', '-'),
             'address' => Setting::getSetting('center_address', '-'),
-            'hours_open' => Setting::getSetting('center_hours_open', '08:00'),
-            'hours_close' => Setting::getSetting('center_hours_close', '16:00'),
+            'posyandu_date' => Setting::getSetting('center_posyandu_date', 'Setiap Tanggal 15, Jam 08:00 - 16:00 WIB'),
         ];
 
         $news = [
@@ -308,12 +312,21 @@ class KepalaKeluargaAuthController extends Controller
                 'age' => $age,
                 'gender' => $memberModel->jenis_kelamin ?? '-',
                 'relation' => $memberMeta['label_tipe'],
+                'type' => $memberMeta['tipe'],
                 'bp' => $this->resolveDisplayBloodPressure($latest),
                 'weight' => $this->resolveDisplayWeight($latest),
                 'height' => $this->resolveDisplayHeight($latest),
                 'cholesterol' => $latest->kolesterol ?? '-',
                 'glucose' => isset($latest->gula_darah) && $latest->gula_darah !== null ? $latest->gula_darah . ' mg/dL' : '-',
                 'checkupDate' => $latestDate ? $latestDate->translatedFormat('d F Y') : '-',
+                'lila' => $latest ? (isset($latest->lingkar_lengan) ? $latest->lingkar_lengan . ' cm' : (isset($latest->lila) ? $latest->lila . ' cm' : '-')) : '-',
+                'lingkar_kepala' => $latest ? (isset($latest->lingkar_kepala) ? $latest->lingkar_kepala . ' cm' : '-') : '-',
+                'lingkar_perut' => $latest ? (isset($latest->lingkar_perut) ? $latest->lingkar_perut . ' cm' : '-') : '-',
+                'usia_kehamilan' => $latest ? (isset($latest->usia_kehamilan) ? $latest->usia_kehamilan . ' minggu' : '-') : '-',
+                'djj' => $latest ? (isset($latest->denyut_jantung) ? $latest->denyut_jantung . ' dpm' : '-') : '-',
+                'fundus' => $latest ? (isset($latest->tinggi_fundus) ? $latest->tinggi_fundus . ' cm' : '-') : '-',
+                'hb' => $latest ? (isset($latest->hemoglobin) ? $latest->hemoglobin . ' g/dL' : '-') : '-',
+                'gizi' => $latest ? ($latest->status_gizi ?? $latest->imt_status ?? $latest->status_bb_pb ?? $latest->status_berat_badan ?? '-') : '-',
                 'weightHistory' => $checkups
                     ->reverse()
                     ->pluck('berat_badan')
@@ -330,20 +343,53 @@ class KepalaKeluargaAuthController extends Controller
 
             $historyByMonth = $checkups
                 ->groupBy(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row))->translatedFormat('F Y'))
-                ->map(function ($rows, $monthLabel) {
+                ->map(function ($rows, $monthLabel) use ($memberMeta) {
                     $rows = $rows->sortByDesc(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row)))->values();
 
                     return [
                         'month' => $monthLabel,
-                        'checkups' => $rows->map(function ($row) {
-                            return [
+                        'checkups' => $rows->map(function ($row) use ($memberMeta) {
+                            $checkupData = [
+                                'id' => $row->id,
                                 'date' => Carbon::parse($this->resolvePemeriksaanDate($row))->translatedFormat('d F Y'),
                                 'weight' => $this->resolveDisplayWeight($row),
                                 'bp' => $this->resolveDisplayBloodPressure($row),
                                 'cholesterol' => $row->kolesterol ?? '-',
                                 'glucose' => isset($row->gula_darah) && $row->gula_darah !== null ? $row->gula_darah . ' mg/dL' : '-',
                                 'status' => $this->resolveHealthStatus($row),
+                                'type' => $memberMeta['tipe'],
                             ];
+
+                            if ($memberMeta['tipe'] === 'balita') {
+                                $checkupData['height'] = isset($row->panjang_badan) && $row->panjang_badan !== null ? $row->panjang_badan . ' cm' : '-';
+                                $checkupData['lila'] = isset($row->lingkar_lengan) && $row->lingkar_lengan !== null ? $row->lingkar_lengan . ' cm' : '-';
+                                $checkupData['lingkar_kepala'] = isset($row->lingkar_kepala) && $row->lingkar_kepala !== null ? $row->lingkar_kepala . ' cm' : '-';
+                                $checkupData['status_bb_u'] = $row->status_bb_u ?? '-';
+                                $checkupData['status_pb_u'] = $row->status_pb_u ?? '-';
+                                $checkupData['status_bb_pb'] = $row->status_bb_pb ?? '-';
+                            } elseif ($memberMeta['tipe'] === 'ibu-hamil') {
+                                $checkupData['height'] = isset($row->tinggi_badan) && $row->tinggi_badan !== null ? $row->tinggi_badan . ' cm' : '-';
+                                $checkupData['lila'] = isset($row->lingkar_lengan) && $row->lingkar_lengan !== null ? $row->lingkar_lengan . ' cm' : '-';
+                                $checkupData['usia_kehamilan'] = isset($row->usia_kehamilan) && $row->usia_kehamilan !== null ? $row->usia_kehamilan . ' minggu' : '-';
+                                $checkupData['djj'] = isset($row->denyut_jantung) && $row->denyut_jantung !== null ? $row->denyut_jantung . ' dpm' : '-';
+                                $checkupData['fundus'] = isset($row->tinggi_fundus) && $row->tinggi_fundus !== null ? $row->tinggi_fundus . ' cm' : '-';
+                            } elseif ($memberMeta['tipe'] === 'nifas') {
+                                $checkupData['height'] = isset($row->tinggi_badan) && $row->tinggi_badan !== null ? $row->tinggi_badan . ' cm' : '-';
+                                $checkupData['lila'] = isset($row->lila) && $row->lila !== null ? $row->lila . ' cm' : '-';
+                                $checkupData['status_gizi'] = $row->status_gizi ?? '-';
+                            } elseif ($memberMeta['tipe'] === 'remaja') {
+                                $checkupData['height'] = isset($row->tinggi_badan) && $row->tinggi_badan !== null ? $row->tinggi_badan . ' cm' : '-';
+                                $checkupData['lingkar_perut'] = isset($row->lingkar_perut) && $row->lingkar_perut !== null ? $row->lingkar_perut . ' cm' : '-';
+                                $checkupData['hb'] = isset($row->hemoglobin) && $row->hemoglobin !== null ? $row->hemoglobin . ' g/dL' : '-';
+                                $checkupData['imt_status'] = $row->imt_status ?? '-';
+                            } elseif ($memberMeta['tipe'] === 'lansia') {
+                                $checkupData['height'] = isset($row->tinggi_badan) && $row->tinggi_badan !== null ? $row->tinggi_badan . ' cm' : '-';
+                                $checkupData['lingkar_perut'] = isset($row->lingkar_perut) && $row->lingkar_perut !== null ? $row->lingkar_perut . ' cm' : '-';
+                                $checkupData['imt'] = $row->imt ?? '-';
+                                $checkupData['status_bb'] = $row->status_berat_badan ?? '-';
+                            }
+
+                            return $checkupData;
                         })->values()->all(),
                         'historicalWeights' => $rows
                             ->sortBy(fn ($row) => Carbon::parse($this->resolvePemeriksaanDate($row)))
@@ -588,7 +634,7 @@ class KepalaKeluargaAuthController extends Controller
             ->latest('created_at')
             ->limit(10)
             ->get()
-            ->map(function ($item) {
+            ->map(function ($item) use ($tipe) {
                 $tanggal = $item->created_at;
 
                 if (! empty($item->tanggal_kunjungan)) {
@@ -600,10 +646,7 @@ class KepalaKeluargaAuthController extends Controller
                 return [
                     'id' => $item->id,
                     'tanggal' => $tanggal,
-                    'catatan' => $item->catatan
-                        ?? $item->catatan_kesehatan
-                        ?? $item->edukasi
-                        ?? '-',
+                    'catatan' => $this->buildCheckupRichCatatan($item, $tipe),
                 ];
             });
 
@@ -673,14 +716,11 @@ class KepalaKeluargaAuthController extends Controller
             ->latest('created_at')
             ->limit(50)
             ->get()
-            ->map(function ($item) {
+            ->map(function ($item) use ($tipe) {
                 return [
                     'id' => $item->id,
                     'tanggal' => $this->resolvePemeriksaanDate($item),
-                    'catatan' => $item->catatan
-                        ?? $item->catatan_kesehatan
-                        ?? $item->edukasi
-                        ?? '-',
+                    'catatan' => $this->buildCheckupRichCatatan($item, $tipe),
                 ];
             });
 
@@ -723,6 +763,85 @@ class KepalaKeluargaAuthController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="' . $fileBase . '.pdf"',
         ]);
+    }
+
+    public function printPemeriksaan(string $tipe, int $id)
+    {
+        $kepalaKeluarga = Auth::guard('kepala_keluarga')->user();
+
+        $memberMap = [
+            'balita' => [
+                'model' => Balita::class,
+                'pemeriksaanModel' => PemeriksaanBalita::class,
+                'relation' => 'balita',
+                'view' => 'pemeriksaan.balita.print',
+                'foreignKey' => 'balita_identitas_id',
+                'loadExtra' => ['balita.keluarga', 'balita.pemeriksaans' => function($q) {
+                    $q->orderBy('tanggal_kunjungan', 'asc');
+                }]
+            ],
+            'ibu-hamil' => [
+                'model' => IbuHamil::class,
+                'pemeriksaanModel' => PemeriksaanIbuHamil::class,
+                'relation' => 'ibuHamil',
+                'view' => 'pemeriksaan.ibu-hamil.print',
+                'foreignKey' => 'ibu_hamil_identitas_id',
+                'loadExtra' => ['ibuHamil.keluarga']
+            ],
+            'nifas' => [
+                'model' => Nifas::class,
+                'pemeriksaanModel' => PemeriksaanNifas::class,
+                'relation' => 'nifas',
+                'view' => 'pemeriksaan.nifas.print',
+                'foreignKey' => 'nifas_identitas_id',
+                'loadExtra' => ['nifas.keluarga']
+            ],
+            'remaja' => [
+                'model' => Remaja::class,
+                'pemeriksaanModel' => PemeriksaanRemaja::class,
+                'relation' => 'remaja',
+                'view' => 'pemeriksaan.remaja.print',
+                'foreignKey' => 'remaja_identitas_id',
+                'loadExtra' => ['remaja.keluarga']
+            ],
+            'lansia' => [
+                'model' => Lansia::class,
+                'pemeriksaanModel' => PemeriksaanLansia::class,
+                'relation' => 'lansia',
+                'view' => 'pemeriksaan.lansia.print',
+                'foreignKey' => 'dewasa_identitas_id',
+                'loadExtra' => ['lansia.keluarga']
+            ],
+        ];
+
+        if (! isset($memberMap[$tipe])) {
+            abort(404);
+        }
+
+        $config = $memberMap[$tipe];
+
+        // 1. Fetch the checkup
+        $pemeriksaan = $config['pemeriksaanModel']::findOrFail($id);
+
+        // 2. Fetch the corresponding member and check permission
+        $memberId = $pemeriksaan->{$config['foreignKey']};
+        $member = $config['model']::where('kepala_keluarga_id', $kepalaKeluarga->id)->findOrFail($memberId);
+
+        // 3. Load relations exactly like the admin print method
+        $pemeriksaan->load($config['loadExtra']);
+
+        // 4. Fetch history exactly like the admin print method
+        if ($tipe === 'balita') {
+            $history = $pemeriksaan->balita->pemeriksaans ?? collect();
+        } else {
+            $history = $config['pemeriksaanModel']::where($config['foreignKey'], $memberId)
+                ->where('tahap_terakhir', 4)
+                ->orderBy('tanggal_kunjungan', 'asc')
+                ->get();
+        }
+
+        // 5. Render the exact same view as admin
+        return view($config['view'], compact('pemeriksaan', 'history'));
     }
 
     private function exportMemberPemeriksaanCsv(
@@ -852,6 +971,94 @@ class KepalaKeluargaAuthController extends Controller
         }
 
         return $hasil;
+    }
+
+    private function buildCheckupRichCatatan($item, string $tipe): string
+    {
+        $detailParts = [];
+        
+        if (isset($item->berat_badan) && $item->berat_badan !== null && $item->berat_badan !== '') {
+            $detailParts[] = 'Berat: ' . $item->berat_badan . ' kg';
+        }
+        
+        if ($tipe === 'balita') {
+            if (isset($item->panjang_badan) && $item->panjang_badan !== null && $item->panjang_badan !== '') {
+                $detailParts[] = 'Tinggi/Panjang: ' . $item->panjang_badan . ' cm';
+            }
+            if (isset($item->lingkar_lengan) && $item->lingkar_lengan !== null && $item->lingkar_lengan !== '') {
+                $detailParts[] = 'LILA: ' . $item->lingkar_lengan . ' cm';
+            }
+            if (isset($item->lingkar_kepala) && $item->lingkar_kepala !== null && $item->lingkar_kepala !== '') {
+                $detailParts[] = 'LK: ' . $item->lingkar_kepala . ' cm';
+            }
+        } elseif ($tipe === 'ibu-hamil') {
+            if (isset($item->tinggi_badan) && $item->tinggi_badan !== null && $item->tinggi_badan !== '') {
+                $detailParts[] = 'Tinggi: ' . $item->tinggi_badan . ' cm';
+            }
+            if (isset($item->tekanan_darah) && $item->tekanan_darah !== null && $item->tekanan_darah !== '') {
+                $detailParts[] = 'TD: ' . $item->tekanan_darah;
+            }
+            if (isset($item->lingkar_lengan) && $item->lingkar_lengan !== null && $item->lingkar_lengan !== '') {
+                $detailParts[] = 'LILA: ' . $item->lingkar_lengan . ' cm';
+            }
+            if (isset($item->usia_kehamilan) && $item->usia_kehamilan !== null && $item->usia_kehamilan !== '') {
+                $detailParts[] = 'UK: ' . $item->usia_kehamilan . ' minggu';
+            }
+            if (isset($item->denyut_jantung) && $item->denyut_jantung !== null && $item->denyut_jantung !== '') {
+                $detailParts[] = 'DJJ: ' . $item->denyut_jantung . ' dpm';
+            }
+        } elseif ($tipe === 'nifas') {
+            if (isset($item->tinggi_badan) && $item->tinggi_badan !== null && $item->tinggi_badan !== '') {
+                $detailParts[] = 'Tinggi: ' . $item->tinggi_badan . ' cm';
+            }
+            if (isset($item->sistole) && isset($item->diastole) && $item->sistole !== null && $item->diastole !== null) {
+                $detailParts[] = 'TD: ' . $item->sistole . '/' . $item->diastole . ' mmHg';
+            }
+            if (isset($item->lila) && $item->lila !== null && $item->lila !== '') {
+                $detailParts[] = 'LILA: ' . $item->lila . ' cm';
+            }
+        } elseif ($tipe === 'remaja') {
+            if (isset($item->tinggi_badan) && $item->tinggi_badan !== null && $item->tinggi_badan !== '') {
+                $detailParts[] = 'Tinggi: ' . $item->tinggi_badan . ' cm';
+            }
+            if (isset($item->sistole) && isset($item->diastole) && $item->sistole !== null && $item->diastole !== null) {
+                $detailParts[] = 'TD: ' . $item->sistole . '/' . $item->diastole . ' mmHg';
+            }
+            if (isset($item->lingkar_perut) && $item->lingkar_perut !== null && $item->lingkar_perut !== '') {
+                $detailParts[] = 'LP: ' . $item->lingkar_perut . ' cm';
+            }
+            if (isset($item->hemoglobin) && $item->hemoglobin !== null && $item->hemoglobin !== '') {
+                $detailParts[] = 'Hb: ' . $item->hemoglobin . ' g/dL';
+            }
+        } elseif ($tipe === 'lansia') {
+            if (isset($item->tinggi_badan) && $item->tinggi_badan !== null && $item->tinggi_badan !== '') {
+                $detailParts[] = 'Tinggi: ' . $item->tinggi_badan . ' cm';
+            }
+            if (isset($item->sistole) && isset($item->diastole) && $item->sistole !== null && $item->diastole !== null) {
+                $detailParts[] = 'TD: ' . $item->sistole . '/' . $item->diastole . ' mmHg';
+            }
+            if (isset($item->lingkar_perut) && $item->lingkar_perut !== null && $item->lingkar_perut !== '') {
+                $detailParts[] = 'LP: ' . $item->lingkar_perut . ' cm';
+            }
+            if (isset($item->gula_darah) && $item->gula_darah !== null && $item->gula_darah !== '') {
+                $detailParts[] = 'Gula Darah: ' . $item->gula_darah . ' mg/dL';
+            }
+            if (isset($item->kolesterol) && $item->kolesterol !== null && $item->kolesterol !== '') {
+                $detailParts[] = 'Kolesterol: ' . $item->kolesterol;
+            }
+        }
+
+        $catatan = $item->catatan
+            ?? $item->catatan_kesehatan
+            ?? $item->edukasi
+            ?? '';
+
+        $detailText = implode(', ', $detailParts);
+        if (! empty($catatan) && $catatan !== '-') {
+            $detailText .= ($detailText !== '' ? ' | ' : '') . 'Catatan: ' . $catatan;
+        }
+
+        return $detailText ?: '-';
     }
 
     private function resolvePemeriksaanDate($pemeriksaan)

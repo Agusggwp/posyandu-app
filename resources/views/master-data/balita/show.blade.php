@@ -31,6 +31,9 @@
 
                 if (is_string($raw) && (str_contains($key, 'tanggal') || str_contains($key, 'waktu') || str_ends_with($key, '_at'))) {
                     try {
+                        if ($key === 'tanggal_lahir' || $key === 'tanggal_bersalin') {
+                            return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y');
+                        }
                         return \Illuminate\Support\Carbon::parse($raw)->format('d/m/Y H:i');
                     } catch (\Throwable $e) {
                         return $raw;

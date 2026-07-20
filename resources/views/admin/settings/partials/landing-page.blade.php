@@ -6,7 +6,7 @@
         <button type="button" data-accordion-toggle="panel-landing-page" class="w-full flex items-center justify-between gap-3 px-4 py-4 sm:px-6 bg-indigo-50/70 border-b border-indigo-100 hover:bg-indigo-100/70 transition-colors duration-200">
             <h3 class="text-base sm:text-lg font-bold text-gray-800 text-left">
                 <i class="fa-solid fa-home text-indigo-600 mr-2"></i>
-                Pengaturan Landing Page
+                Pengaturan Jadwal & Landing Page
             </h3>
             <svg data-accordion-icon="panel-landing-page" class="w-5 h-5 text-indigo-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>

@@ -47,6 +47,7 @@ Route::prefix('kepala-keluarga')->name('kepala-keluarga.')->group(function () {
         Route::get('anggota/{tipe}/{id}', [KepalaKeluargaAuthController::class, 'showMemberDetail'])->name('anggota.show');
         Route::get('anggota/{tipe}/{id}/pemeriksaan', [KepalaKeluargaAuthController::class, 'showMemberPemeriksaanStats'])->name('anggota.pemeriksaan');
         Route::get('anggota/{tipe}/{id}/pemeriksaan/export/{format}', [KepalaKeluargaAuthController::class, 'exportMemberPemeriksaan'])->name('anggota.pemeriksaan.export');
+        Route::get('pemeriksaan/{tipe}/{id}/print', [KepalaKeluargaAuthController::class, 'printPemeriksaan'])->name('pemeriksaan.print');
         Route::put('profile/update', [KepalaKeluargaAuthController::class, 'updateProfile'])->name('profile.update');
         Route::put('profile/password', [KepalaKeluargaAuthController::class, 'updatePassword'])->name('profile.password');
         Route::post('logout', [KepalaKeluargaAuthController::class, 'logout'])->name('logout');

@@ -198,7 +198,7 @@ function updateStatusGizi() {
     }
 
     document.getElementById('status_lila').textContent = status;
-    document.getElementById('status_gizi').value = status.split(' ')[0] || '';
+    document.getElementById('status_gizi').value = status === '-' ? '' : status.split(' ')[0];
 }
 
 function setSummary(message, previous, note) {

@@ -696,6 +696,77 @@
         });
     </script>
 
+    <!-- Global validation and required attributes handler for Indonesian native browser tooltips -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const path = window.location.pathname;
+
+            // Target fields to make required dynamically based on current page path
+            const rules = [
+                { path: 'pemeriksaan-ibu-hamil/stage/1', selectors: ['#usia_kehamilan', '#berat_badan', '#lingkar_lengan'] },
+                { path: 'pemeriksaan-ibu-hamil/stage/2', selectors: ['#sistole', '#diastole'] },
+                { path: 'pemeriksaan-nifas/stage/1', selectors: ['#berat_badan', '#tinggi_badan', '#lila'] },
+                { path: 'pemeriksaan-nifas/stage/2', selectors: ['#sistole', '#diastole'] },
+                { path: 'pemeriksaan-remaja/stage/2', selectors: ['#sistole', '#diastole'] },
+                { path: 'pemeriksaan-lansia/stage/1', selectors: ['#berat_badan', '#tinggi_badan', '#lingkar_perut'] },
+                { path: 'pemeriksaan-lansia/stage/2', selectors: ['#sistole', '#diastole'] }
+            ];
+
+            rules.forEach(rule => {
+                if (path.includes(rule.path)) {
+                    rule.selectors.forEach(selector => {
+                        const el = document.querySelector(selector);
+                        if (el) {
+                            el.required = true;
+                            // Add red star next to the label if it exists
+                            const label = el.closest('div')?.querySelector('label');
+                            if (label && !label.innerHTML.includes('*')) {
+                                label.innerHTML += ' <span class="text-red-500">*</span>';
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Listen to invalid event to set native browser messages to Indonesian
+            function applyCustomValidity(input) {
+                input.addEventListener('invalid', function () {
+                    if (input.validity.valueMissing) {
+                        input.setCustomValidity('Harap isi bidang ini.');
+                    } else {
+                        input.setCustomValidity('');
+                    }
+                });
+
+                const clearValidity = function () {
+                    input.setCustomValidity('');
+                };
+
+                input.addEventListener('input', clearValidity);
+                input.addEventListener('change', clearValidity);
+            }
+
+            // Apply to existing inputs
+            document.querySelectorAll('input, select, textarea').forEach(applyCustomValidity);
+
+            // Dynamically observe DOM changes (e.g. for dynamic or autocomplete fields)
+            const observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    mutation.addedNodes.forEach(function (node) {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            if (node.matches('input, select, textarea')) {
+                                applyCustomValidity(node);
+                            }
+                            node.querySelectorAll('input, select, textarea').forEach(applyCustomValidity);
+                        }
+                    });
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+    </script>
+
     @stack('scripts')
 </body>
 </html>

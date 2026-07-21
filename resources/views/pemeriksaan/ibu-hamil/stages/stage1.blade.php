@@ -274,15 +274,15 @@
         function calculateStatusLila(lila) {
             const lilaValue = parseFloat(lila);
             if (isNaN(lilaValue)) {
-                return '-';
+                return '';
             }
-            return lilaValue < 23.5 ? 'Kurang' : 'Baik';
+            return lilaValue < 23.5 ? 'Merah' : 'Hijau';
         }
 
         function updateLilaStatus() {
             const lilaValue = lilaInput.value;
             const status = calculateStatusLila(lilaValue);
-            statusLilaDisplay.value = status;
+            statusLilaDisplay.value = status === 'Merah' ? '🔴 Merah' : (status === 'Hijau' ? '🟢 Hijau' : '-');
             statusLilaInput.value = status;
         }
 

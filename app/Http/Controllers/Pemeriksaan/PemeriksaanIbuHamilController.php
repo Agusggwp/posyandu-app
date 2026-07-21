@@ -124,8 +124,10 @@ class PemeriksaanIbuHamilController extends Controller
             }
 
             // Calculate status_lila
-            if (isset($validated['lingkar_lengan'])) {
+            if (isset($validated['lingkar_lengan']) && $validated['lingkar_lengan'] !== '') {
                 $validated['status_lila'] = $validated['lingkar_lengan'] < 23.5 ? 'Merah' : 'Hijau';
+            } else {
+                $validated['status_lila'] = null;
             }
         }
 
@@ -344,8 +346,10 @@ class PemeriksaanIbuHamilController extends Controller
             }
         }
 
-        if (isset($validated['lingkar_lengan'])) {
+        if (isset($validated['lingkar_lengan']) && $validated['lingkar_lengan'] !== '') {
             $validated['status_lila'] = $validated['lingkar_lengan'] < 23.5 ? 'Merah' : 'Hijau';
+        } else {
+            $validated['status_lila'] = null;
         }
 
         $pemeriksaan_ibu_hamil->update($validated);
@@ -404,15 +408,15 @@ class PemeriksaanIbuHamilController extends Controller
 
         return match ($stage) {
             1 => $baseRules + [
-                'usia_kehamilan' => 'nullable|integer|min:0|max:60',
-                'berat_badan' => 'nullable|numeric|min:0',
-                'lingkar_lengan' => 'nullable|numeric|min:0',
+                'usia_kehamilan' => 'required|integer|min:0|max:60',
+                'berat_badan' => 'required|numeric|min:0',
+                'lingkar_lengan' => 'required|numeric|min:0',
                 'status_bb' => 'nullable|string',
-                'status_lila' => 'nullable|string',
+                'status_lila' => 'nullable|in:Hijau,Kuning,Merah',
             ],
             2 => $baseRules + [
-                'sistole' => 'nullable|integer|min:50|max:260',
-                'diastole' => 'nullable|integer|min:30|max:180',
+                'sistole' => 'required|integer|min:50|max:260',
+                'diastole' => 'required|integer|min:30|max:180',
             ],
             3 => $baseRules + [
                 'tablet_tambah_darah' => 'nullable|boolean',

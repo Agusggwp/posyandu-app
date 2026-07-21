@@ -70,15 +70,15 @@ class PemeriksaanLansiaController extends Controller
 
         if ($stage == 1) {
             $validationRules = array_merge($validationRules, [
-                'berat_badan' => 'nullable|numeric|min:0',
-                'tinggi_badan' => 'nullable|numeric|min:0',
-                'lingkar_perut' => 'nullable|numeric|min:0',
+                'berat_badan' => 'required|numeric|min:0',
+                'tinggi_badan' => 'required|numeric|min:0',
+                'lingkar_perut' => 'required|numeric|min:0',
                 'imt' => 'nullable|numeric|min:0',
             ]);
         } elseif ($stage == 2) {
             $validationRules = array_merge($validationRules, [
-                'sistole' => 'nullable|numeric|min:0',
-                'diastole' => 'nullable|numeric|min:0',
+                'sistole' => 'required|numeric|min:0',
+                'diastole' => 'required|numeric|min:0',
                 'tekanan_darah_status' => 'nullable|string|max:255',
                 'gula_darah' => 'nullable|numeric|min:0',
             ]);

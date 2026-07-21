@@ -126,8 +126,8 @@ class PemeriksaanRemajaController extends Controller
                 'lingkar_perut' => 'nullable|numeric|min:0',
             ]),
             2 => array_merge($baseRules, [
-                'sistole' => 'nullable|integer|min:0',
-                'diastole' => 'nullable|integer|min:0',
+                'sistole' => 'required|integer|min:50|max:260',
+                'diastole' => 'required|integer|min:30|max:180',
                 'tekanan_darah_status' => 'nullable|string|max:20',
                 'gula_darah' => 'nullable|numeric|min:0|max:1000',
                 'hemoglobin' => 'nullable|string|max:20',

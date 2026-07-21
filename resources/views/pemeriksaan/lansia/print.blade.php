@@ -288,9 +288,15 @@
     <!-- Actions bar for browser view -->
     <div class="actions-header no-print" style="flex-wrap: wrap; gap: 10px;">
         <div style="display: flex; gap: 10px;">
-            <a href="{{ route('pemeriksaan-lansia.show', $pemeriksaan->id) }}" class="btn btn-secondary">
-                ← Kembali ke Detail
-            </a>
+            @if(Auth::guard('kepala_keluarga')->check())
+                <a href="{{ route('kepala-keluarga.anggota.pemeriksaan', ['tipe' => 'lansia', 'id' => $pemeriksaan->dewasa_identitas_id]) }}" class="btn btn-secondary">
+                    ← Kembali ke Detail
+                </a>
+            @else
+                <a href="{{ route('pemeriksaan-lansia.show', $pemeriksaan->id) }}" class="btn btn-secondary">
+                    ← Kembali ke Detail
+                </a>
+            @endif
             <button onclick="window.print()" class="btn btn-primary">
                 🖨️ Cetak Laporan
             </button>
@@ -422,43 +428,6 @@
             <strong>Edukasi / Terapi & Saran Medis:</strong><br>
             {{ $pemeriksaan->edukasi ?? 'Tidak ada catatan saran medis khusus.' }}
         </div>
-
-        <!-- Riwayat Kunjungan -->
-        <div class="section-title">Riwayat Kunjungan Lansia (Log Pemeriksaan)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Tanggal Kunjungan</th>
-                    <th>Berat (kg)</th>
-                    <th>IMT</th>
-                    <th>Lingkar Perut (cm)</th>
-                    <th>Tekanan Darah</th>
-                    <th>Status Tensi</th>
-                    <th>Gula Darah</th>
-                    <th>Rujukan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($history as $idx => $hist)
-                    <tr class="{{ $hist->id === $pemeriksaan->id ? 'active-row' : '' }}">
-                        <td contenteditable="true">{{ $idx + 1 }}</td>
-                        <td contenteditable="true">{{ optional($hist->tanggal_kunjungan)->format('d/m/Y') ?? '-' }}</td>
-                        <td contenteditable="true">{{ $hist->berat_badan ?? '-' }}</td>
-                        <td contenteditable="true">{{ $hist->imt ?? '-' }}</td>
-                        <td contenteditable="true">{{ $hist->lingkar_perut ?? '-' }}</td>
-                        <td contenteditable="true">{{ $hist->sistole && $hist->diastole ? $hist->sistole . '/' . $hist->diastole : '-' }}</td>
-                        <td contenteditable="true">{{ $hist->tekanan_darah_status ?? 'Normal' }}</td>
-                        <td contenteditable="true">{{ $hist->gula_darah ?? '-' }}</td>
-                        <td contenteditable="true">{{ $hist->rujukan ?? 'Tidak' }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="9">Tidak ada riwayat kunjungan lansia lain.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
 
         <!-- Signature -->
         <div class="signature-block">

@@ -78,7 +78,7 @@ class KepalaKeluargaAuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended(route('kepala-keluarga.dashboard'));
+            return redirect()->intended(route('kepala-keluarga.dashboard', ['section' => 'anggota-keluarga']));
         }
 
         return back()->withErrors([
@@ -272,7 +272,7 @@ class KepalaKeluargaAuthController extends Controller
 
             $latest = $checkups->first();
             $latestDate = $latest ? Carbon::parse($this->resolvePemeriksaanDate($latest)) : null;
-            $status = $this->resolveHealthStatus($latest);
+            $status = $this->resolveHealthStatus($latest, $memberMeta['tipe']);
 
             $allCheckups = $allCheckups->concat(
                 $checkups->map(function ($row) use ($memberMeta) {
@@ -356,7 +356,7 @@ class KepalaKeluargaAuthController extends Controller
                                 'bp' => $this->resolveDisplayBloodPressure($row),
                                 'cholesterol' => $row->kolesterol ?? '-',
                                 'glucose' => isset($row->gula_darah) && $row->gula_darah !== null ? $row->gula_darah . ' mg/dL' : '-',
-                                'status' => $this->resolveHealthStatus($row),
+                                'status' => $this->resolveHealthStatus($row, $memberMeta['tipe']),
                                 'type' => $memberMeta['tipe'],
                             ];
 
@@ -473,36 +473,146 @@ class KepalaKeluargaAuthController extends Controller
         return '-';
     }
 
-    private function resolveHealthStatus($latest): string
+    private function resolveHealthStatus($latest, ?string $type = null): string
     {
         if (! $latest) {
             return 'Belum Diperiksa';
         }
 
-        if (! empty($latest->tekanan_darah_status)) {
-            return str_contains(strtolower((string) $latest->tekanan_darah_status), 'normal') ? 'Sehat' : 'Perlu Kontrol';
-        }
-
-        $flags = [
-            $latest->status_bb_u ?? null,
-            $latest->status_pb_u ?? null,
-            $latest->status_bb_pb ?? null,
-            $latest->status_lila ?? null,
-        ];
-
-        $filledFlags = array_filter($flags, fn ($v) => $v !== null && $v !== '');
-
-        if (! empty($filledFlags)) {
-            foreach ($filledFlags as $flag) {
-                if (! str_contains(strtolower((string) $flag), 'normal')) {
-                    return 'Perlu Kontrol';
-                }
+        // Auto-detect type if not passed
+        if ($type === null) {
+            $class = get_class($latest);
+            if (str_contains($class, 'PemeriksaanBalita')) {
+                $type = 'balita';
+            } elseif (str_contains($class, 'PemeriksaanIbuHamil')) {
+                $type = 'ibu-hamil';
+            } elseif (str_contains($class, 'PemeriksaanNifas')) {
+                $type = 'nifas';
+            } elseif (str_contains($class, 'PemeriksaanRemaja')) {
+                $type = 'remaja';
+            } elseif (str_contains($class, 'PemeriksaanLansia')) {
+                $type = 'lansia';
             }
-
-            return 'Sehat';
         }
 
-        return 'Sehat';
+        $needsControl = false;
+
+        if ($type === 'balita') {
+            // Check status_bb_u (SK/K/Sangat Kurang/Kurang are abnormal)
+            if (isset($latest->status_bb_u) && in_array($latest->status_bb_u, ['Sangat Kurang', 'Kurang', 'SK', 'K'])) {
+                $needsControl = true;
+            }
+            // Check status_pb_u (SP/P/Sangat Pendek/Pendek are abnormal/stunting)
+            if (isset($latest->status_pb_u) && in_array($latest->status_pb_u, ['Sangat Pendek', 'Pendek', 'SP', 'P'])) {
+                $needsControl = true;
+            }
+            // Check status_bb_pb (Buruk/Kurang/K are abnormal)
+            if (isset($latest->status_bb_pb) && in_array($latest->status_bb_pb, ['Buruk', 'Kurang', 'K'])) {
+                $needsControl = true;
+            }
+            // Check status_lila (Kurang is abnormal)
+            if (isset($latest->status_lila) && $latest->status_lila === 'Kurang') {
+                $needsControl = true;
+            }
+            // Check TBC symptoms
+            if (!empty($latest->batuk) || !empty($latest->demam) || !empty($latest->bb_turun) || !empty($latest->kontak_tbc)) {
+                $needsControl = true;
+            }
+            // Check rujukan
+            if (!empty($latest->rujukan) && strtolower($latest->rujukan) !== 'tidak') {
+                $needsControl = true;
+            }
+        } elseif ($type === 'ibu-hamil') {
+            // Check blood pressure status
+            if (isset($latest->status_tekanan_darah) && in_array($latest->status_tekanan_darah, ['Tinggi', 'Rendah'])) {
+                $needsControl = true;
+            }
+            // Check LILA status
+            if (isset($latest->status_lila) && in_array($latest->status_lila, ['Kuning', 'Merah'])) {
+                $needsControl = true;
+            }
+            // Check TBC screening
+            if (!empty($latest->tb_skrining_batuk) || !empty($latest->tb_skrining_demam) || !empty($latest->tb_skrining_bb_turun) || !empty($latest->tb_skrining_kontak)) {
+                $needsControl = true;
+            }
+            if (isset($latest->tb_skrining_hasil) && in_array($latest->tb_skrining_hasil, ['Ya', 'Dirujuk'])) {
+                $needsControl = true;
+            }
+            // Check rujukan
+            if (!empty($latest->rujukan) && strtolower($latest->rujukan) !== 'tidak') {
+                $needsControl = true;
+            }
+        } elseif ($type === 'nifas') {
+            // Check blood pressure status
+            if (isset($latest->tekanan_darah_status) && in_array($latest->tekanan_darah_status, ['Tinggi', 'Rendah', 'T', 'R'])) {
+                $needsControl = true;
+            }
+            // Check nutritional status (gizi)
+            if (isset($latest->status_gizi) && in_array($latest->status_gizi, ['Kuning', 'Merah', 'K', 'M'])) {
+                $needsControl = true;
+            }
+            // Check TBC symptoms
+            $hasBatuk = in_array(strtolower((string)($latest->batuk ?? '')), ['ya', '1', 'true']);
+            $hasDemam = in_array(strtolower((string)($latest->demam ?? '')), ['ya', '1', 'true']);
+            $hasBbTurun = in_array(strtolower((string)($latest->bb_turun ?? '')), ['ya', '1', 'true']);
+            $hasKontak = in_array(strtolower((string)($latest->kontak_tbc ?? '')), ['ya', '1', 'true']);
+            if ($hasBatuk || $hasDemam || $hasBbTurun || $hasKontak || (isset($latest->status_tbc) && strtolower($latest->status_tbc) === 'ya')) {
+                $needsControl = true;
+            }
+            // Check rujukan
+            if (!empty($latest->rujukan) && strtolower($latest->rujukan) !== 'tidak') {
+                $needsControl = true;
+            }
+        } elseif ($type === 'remaja') {
+            // Check IMT status
+            if (isset($latest->imt_status) && in_array($latest->imt_status, ['Kurus', 'Gemuk', 'Obesitas'])) {
+                $needsControl = true;
+            }
+            // Check blood pressure status
+            if (isset($latest->tekanan_darah_status) && in_array($latest->tekanan_darah_status, ['Tinggi', 'Rendah'])) {
+                $needsControl = true;
+            }
+            // Check anemia status
+            if (isset($latest->anemia) && in_array(strtolower((string)$latest->anemia), ['ya', '1', 'true'])) {
+                $needsControl = true;
+            }
+            // Check TBC symptoms
+            $hasBatuk = in_array(strtolower((string)($latest->batuk ?? '')), ['ya', '1', 'true']);
+            $hasDemam = in_array(strtolower((string)($latest->demam ?? '')), ['ya', '1', 'true']);
+            $hasBbTurun = in_array(strtolower((string)($latest->bb_turun ?? '')), ['ya', '1', 'true']);
+            $hasKontak = in_array(strtolower((string)($latest->kontak_tbc ?? '')), ['ya', '1', 'true']);
+            if ($hasBatuk || $hasDemam || $hasBbTurun || $hasKontak) {
+                $needsControl = true;
+            }
+            // Check rujukan
+            if (!empty($latest->rujukan) && strtolower($latest->rujukan) !== 'tidak') {
+                $needsControl = true;
+            }
+        } elseif ($type === 'lansia') {
+            // Check blood pressure status
+            if (isset($latest->tekanan_darah_status) && $latest->tekanan_darah_status !== '' && strtolower($latest->tekanan_darah_status) !== 'normal') {
+                $needsControl = true;
+            }
+            // Check weight status
+            if (isset($latest->status_berat_badan) && $latest->status_berat_badan !== '' && strtolower($latest->status_berat_badan) !== 'normal') {
+                $needsControl = true;
+            }
+            // Check TBC symptoms
+            if (!empty($latest->batuk_tbc) || !empty($latest->demam) || !empty($latest->bb_turun) || !empty($latest->kontak_tbc)) {
+                $needsControl = true;
+            }
+            // Check rujukan
+            if (!empty($latest->rujukan) && strtolower($latest->rujukan) !== 'tidak') {
+                $needsControl = true;
+            }
+        } else {
+            // Fallback for generic checkup
+            if (! empty($latest->tekanan_darah_status)) {
+                $needsControl = ! str_contains(strtolower((string) $latest->tekanan_darah_status), 'normal');
+            }
+        }
+
+        return $needsControl ? 'Perlu Kontrol' : 'Sehat';
     }
 
     private function resolveDisplayBloodPressure($latest): string

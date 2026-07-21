@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectUsersTo(function (Request $request): string {
             if (Auth::guard('kepala_keluarga')->check()) {
-                return route('kepala-keluarga.dashboard');
+                return route('kepala-keluarga.dashboard', ['section' => 'anggota-keluarga']);
             }
 
             if (Auth::guard('web')->check()) {

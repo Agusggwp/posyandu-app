@@ -295,9 +295,15 @@
 
     <!-- Actions bar for browser view -->
     <div class="actions-header no-print">
-        <a href="{{ route('pemeriksaan-balita.show', $pemeriksaan->id) }}" class="btn btn-secondary">
-            ← Kembali ke Detail
-        </a>
+        @if(Auth::guard('kepala_keluarga')->check())
+            <a href="{{ route('kepala-keluarga.anggota.pemeriksaan', ['tipe' => 'balita', 'id' => $pemeriksaan->balita_identitas_id]) }}" class="btn btn-secondary">
+                ← Kembali ke Detail
+            </a>
+        @else
+            <a href="{{ route('pemeriksaan-balita.show', $pemeriksaan->id) }}" class="btn btn-secondary">
+                ← Kembali ke Detail
+            </a>
+        @endif
         <button onclick="window.print()" class="btn btn-primary">
             🖨️ Cetak Laporan
         </button>
@@ -429,43 +435,6 @@
             <strong>Materi Edukasi yang Diberikan:</strong><br>
             {{ $pemeriksaan->edukasi ?? 'Tidak ada catatan materi edukasi.' }}
         </div>
-
-        <!-- Riwayat Perkembangan -->
-        <div class="section-title">Riwayat Perkembangan Anak (Log Pemeriksaan)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Tanggal Kunjungan</th>
-                    <th>Umur (Bulan)</th>
-                    <th>Berat (kg)</th>
-                    <th>Tinggi (cm)</th>
-                    <th>LILA (cm)</th>
-                    <th>LK (cm)</th>
-                    <th>Status BB/U</th>
-                    <th>Rujukan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($history as $idx => $hist)
-                    <tr class="{{ $hist->id === $pemeriksaan->id ? 'active-row' : '' }}">
-                        <td>{{ $idx + 1 }}</td>
-                        <td>{{ optional($hist->tanggal_kunjungan)->format('d/m/Y') ?? '-' }}</td>
-                        <td>{{ $hist->umur ?? '-' }}</td>
-                        <td>{{ $hist->berat_badan ?? '-' }}</td>
-                        <td>{{ $hist->panjang_badan ?? '-' }}</td>
-                        <td>{{ $hist->lingkar_lengan ?? '-' }}</td>
-                        <td>{{ $hist->lingkar_kepala ?? '-' }}</td>
-                        <td>{{ $hist->status_bb_u ?? '-' }}</td>
-                        <td>{{ $hist->rujukan ?? 'Tidak Ada' }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="9">Tidak ada riwayat pemeriksaan lain.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
 
         <!-- Signature -->
         <div class="signature-block">
